@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-text-base: 255, 255, 255;
+    --color-text-muted: 199, 210, 254;
+    --color-text-inverted: 79, 70, 229;
+    --color-text-highlight: 255, 255, 255;
+    --color-fill: 67, 56, 202;
+    --color-button-accent: 255, 255, 255;
+    --color-button-accent-hover: 238, 242, 255;
+    --color-button-muted: 99, 102, 241;
+  }
+
+  .theme-neon {
+    --color-text-base: 17, 24, 2;
+    --color-text-muted: 47, 67, 6;
+    --color-text-inverted: 235, 250, 204;
+    --color-text-highlight: 17, 24, 2;
+    --color-fill: 179, 255, 23;
+    --color-button-accent: 36, 52, 3;
+    --color-button-accent-hover: 55, 79, 5;
+    --color-button-muted: 212, 255, 122;
+  }
+
+  .theme-sage {
+    --color-text-base: 255, 255, 255;
+    --color-text-muted: 235, 243, 232;
+    --color-text-inverted: 68, 93, 72;
+    --color-text-highlight: 255, 186, 0;
+    --color-fill: 12, 59, 46;
+    --color-button-accent: 235, 243, 232;
+    --color-button-accent-hover: 55, 79, 5;
+    --color-button-muted: 109, 151, 115;
+  }
+}

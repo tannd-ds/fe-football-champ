@@ -1,6 +1,7 @@
 <template>
   <div class="flex items-center gap-4">
-    <AdminSidebar />
+    <SidebarContainer />
+
     <div class="w-screen h-screen flex flex-row items-center justify-center">
       <slot></slot>
     </div>

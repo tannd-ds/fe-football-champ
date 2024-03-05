@@ -30,7 +30,7 @@ const columns = [
   { key: 'name_season', label: 'Tên Mùa Giải' }, 
   { key: 'start_day', label: 'Ngày Bắt Đầu' }, 
   { key: 'end_day', label: 'Ngày Kết Thúc' }, 
-  { key: 'quatity_team', label: 'SL Đội' }, 
+  { key: 'quantity_team', label: 'SL Đội' }, 
   { key: 'actions' }
 ]
 

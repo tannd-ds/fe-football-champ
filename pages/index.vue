@@ -1,5 +1,9 @@
 <template>
-  <h1 class="text-3xl font-bold underline">Hello world!</h1>
+    <AppForm class="w-[768px]">
+        Hello world
+    </AppForm>
 </template>
 
-<script setup></script>
+<script setup>
+let season = await useFetch('http://localhost:8000/api/season');
+</script>

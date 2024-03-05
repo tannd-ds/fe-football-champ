@@ -10,11 +10,11 @@
 
       <div class="w-full flex gap-4 items-stretch">
         <UFormGroup class="flex-grow" label="Start Date" name="start_date">
-          <UInput v-model="state.start_date" />
+          <UInput type="date" v-model="state.start_date" />
         </UFormGroup>
 
         <UFormGroup class="flex-grow" label="End Date" name="end_date">
-          <UInput v-model="state.end_date" />
+          <UInput type="date" v-model="state.end_date" />
         </UFormGroup>
       </div>
 
@@ -29,6 +29,7 @@
 </template>
 
 <script setup>
+const router = useRouter();
 const state = ref({
   id: 99,
   name_season: '',
@@ -47,6 +48,10 @@ async function handleSubmit() {
     },
     body: JSON.stringify(state.value),
   });
+
+  // TODO: handle using status code instead
+  if (response === "Season added successfully")
+    router.push('/season');
 
 }
 </script>

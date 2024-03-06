@@ -4,7 +4,7 @@
       <h1 class="text-3xl font-bold">
         <slot name="header"></slot>
       </h1>
-      <UTable :rows="data.data.value" :columns="columns" >
+      <UTable :rows="data.data.value" :columns="columns" @select="select" >
         <template #actions-data="{ row }">
           <UDropdown :items="items(row)">
             <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
@@ -32,5 +32,10 @@ const props = defineProps({
     default: () => {}
   }
 })
+
+function select (row) {
+  // don't do anything if the "action" columns is clicked
+  console.log(row.id)
+}
 
 </script>

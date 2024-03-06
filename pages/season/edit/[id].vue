@@ -4,25 +4,29 @@
       Chỉnh Sửa Mùa Giải
     </template>
     <template #main>
-      <UFormGroup label="Name Season" name="name_season">
-        <UInput v-model="state.name_season" />
-      </UFormGroup>
-
-      <div class="w-full flex gap-4 items-stretch">
-        <UFormGroup class="flex-grow" label="Start Date" name="start_date">
-          <UInput type="date" v-model="state.start_date" />
+      <div class="flex flex-col gap-3">
+        <UFormGroup size="xl" label="Name Season" name="name_season">
+            <UInput v-model="state.name_season" />
         </UFormGroup>
 
-        <UFormGroup class="flex-grow" label="End Date" name="end_date">
-          <UInput type="date" v-model="state.end_date" />
+        <div class="w-full flex gap-4 items-stretch">
+            <UFormGroup class="flex-grow" size="xl" label="Start Date" name="start_date">
+            <UInput type="date" v-model="state.start_date" />
+            </UFormGroup>
+
+            <UFormGroup class="flex-grow" size="xl" label="End Date" name="end_date">
+            <UInput type="date" v-model="state.end_date" />
+            </UFormGroup>
+        </div>
+
+        <UFormGroup size="xl" label="Quantity Team" name="quantity_team">
+            <UInput v-model="state.quantity_team" />
         </UFormGroup>
+
+        <div>
+          <UButton size="xl" type="submit" @click.prevent="handleSubmit"> Submit </UButton>
+        </div>
       </div>
-
-      <UFormGroup label="Quantity Team" name="quantity_team">
-        <UInput v-model="state.quantity_team" />
-      </UFormGroup>
-
-      <UButton type="submit" @click.prevent="handleSubmit"> Submit </UButton>
     </template>
   </AppForm>
 </template>
@@ -33,7 +37,6 @@ const router = useRouter();
 
 const res = await useFetch('http://localhost:8000/api/season/edit/' + route.params.id);
 
-// const state = res.data.value[0];
 const state = ref({
   name_season: res.data.value[0].name_season,
   start_date: res.data.value[0].start_date,
@@ -42,8 +45,6 @@ const state = ref({
 })
 
 async function handleSubmit() {
-  console.log(state.value);
-
   const response = await $fetch(`http://localhost:8000/api/season/update/${route.params.id}`, {
     method: 'POST',
     headers: {

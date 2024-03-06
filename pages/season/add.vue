@@ -4,25 +4,29 @@
       Thêm Mùa Giải Mới
     </template>
     <template #main>
-      <UFormGroup label="Name Season" name="name_season">
-        <UInput v-model="state.name_season" />
-      </UFormGroup>
-
-      <div class="w-full flex gap-4 items-stretch">
-        <UFormGroup class="flex-grow" label="Start Date" name="start_date">
-          <UInput type="date" v-model="state.start_date" />
+      <div class="flex flex-col gap-3">
+        <UFormGroup required size="xl" label="Name Season" name="name_season">
+          <UInput v-model="state.name_season" />
         </UFormGroup>
 
-        <UFormGroup class="flex-grow" label="End Date" name="end_date">
-          <UInput type="date" v-model="state.end_date" />
+        <div class="w-full flex gap-4 items-stretch">
+          <UFormGroup class="flex-grow" size="xl" label="Start Date" name="start_date">
+            <UInput required type="date" v-model="state.start_date" />
+          </UFormGroup>
+
+          <UFormGroup class="flex-grow" size="xl" label="End Date" name="end_date">
+            <UInput type="date" v-model="state.end_date" />
+          </UFormGroup>
+        </div>
+
+        <UFormGroup size="xl" label="Quantity Team" name="quantity_team">
+          <UInput v-model="state.quantity_team" />
         </UFormGroup>
+
+        <div>
+          <UButton size="xl" type="submit" @click.prevent="handleSubmit"> Submit </UButton>
+        </div>
       </div>
-
-      <UFormGroup label="Quantity Team" name="quantity_team">
-        <UInput v-model="state.quantity_team" />
-      </UFormGroup>
-
-      <UButton type="submit" @click.prevent="handleSubmit"> Submit </UButton>
 
     </template>
   </AppForm>
@@ -31,7 +35,6 @@
 <script setup>
 const router = useRouter();
 const state = ref({
-  id: 99,
   name_season: '',
   start_date: '',
   end_date: '',

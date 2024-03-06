@@ -9,8 +9,8 @@
         <div>
           Season
         </div>
-        <UTooltip text="Thêm Mùa Giải" :popper="{ placement: 'bottom-end' }">
-          <UButton @click="router.push('season/add')">
+        <UTooltip text="Thêm Cầu Thủ" :popper="{ placement: 'bottom-end' }">
+          <UButton @click="router.push('soccer/add')">
             <UIcon name="i-heroicons-plus-20-solid" />
           </UButton>
         </UTooltip>
@@ -23,13 +23,13 @@
 
 const router = useRouter();
 
-const seasons = await useFetch('http://localhost:8000/api/season');
+const seasons = await useFetch('http://localhost:8000/api/soccer');
 
 const columns = [
-  { key: 'name_season', label: 'Tên Mùa Giải', sortable: true}, 
-  { key: 'start_date', label: 'Ngày Bắt Đầu', sortable: true}, 
-  { key: 'end_date', label: 'Ngày Kết Thúc', sortable: true}, 
-  { key: 'quantity_team', label: 'SL Đội' }, 
+  { key: 'name_soccer', label: 'Tên', sortable: true}, 
+  { key: 'birthday', label: 'Ngày Sinh', sortable: true}, 
+  { key: 'category', label: 'Loại Cầu Thủ', sortable: true}, 
+  { key: 'team_id', label: 'Mã Đội Bóng', sortable: true}, 
   { key: 'actions' }
 ]
 
@@ -39,14 +39,14 @@ const items = (row) => [
     label: 'Chỉnh Sửa',
     icon: 'i-heroicons-pencil-square-20-solid',
     click: () => {
-        router.push('season/edit/' + row.id);
+        router.push('soccer/edit/' + row.id);
     }
   }, {
     label: 'Xóa',
     icon: 'i-heroicons-trash-20-solid',
     click: () => {
         if (confirm('Bạn có chắc chắn muốn xóa mùa giải này không?')) {
-            fetch('http://localhost:8000/api/season/delete/' + row.id, {
+            fetch('http://localhost:8000/api/soccer/delete/' + row.id, {
                 method: 'GET' 
             }).then(() => {
                 reloadNuxtApp({force: true});

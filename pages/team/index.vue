@@ -21,7 +21,8 @@
 
 const router = useRouter();
 
-const seasons = await useFetch('http://localhost:8000/api/team');
+let seasons = ref({'data': []});
+seasons.value = await useFetch('http://localhost:8000/api/team');
 
 const columns = [
   { key: 'url_image', label: ''}, 
@@ -43,14 +44,12 @@ const items = (row) => [
   }, {
     label: 'Xóa',
     icon: 'i-heroicons-trash-20-solid',
-    click: () => {
-        if (confirm('Bạn có chắc chắn muốn xóa mùa giải này không?')) {
-            fetch('http://localhost:8000/api/team/delete/' + row.id, {
-                method: 'GET' 
-            }).then(() => {
-                reloadNuxtApp({force: true});
-            });
-        }
+    click: async () => {
+      if (confirm('Bạn có chắc chắn muốn xóa mùa giải này không?')) {
+        const res = await useFetch('http://localhost:8000/api/team/delete/' + row.id);
+        // TODO: Handle if delete fail
+        seasons.value = await useFetch('http://localhost:8000/api/team');
+      }
     }
   }]
 ]

@@ -21,7 +21,8 @@
 
 const router = useRouter();
 
-const seasons = await useFetch('http://localhost:8000/api/soccer');
+let seasons = ref({'data': []});
+seasons.value = await useFetch('http://localhost:8000/api/soccer');
 
 const columns = [
   { key: 'name_soccer', label: 'Tên', sortable: true}, 
@@ -41,13 +42,11 @@ const items = (row) => [
   }, {
     label: 'Xóa',
     icon: 'i-heroicons-trash-20-solid',
-    click: () => {
+    click: async () => {
       if (confirm('Bạn có chắc chắn muốn xóa mùa giải này không?')) {
-        fetch('http://localhost:8000/api/soccer/delete/' + row.id, {
-          method: 'GET' 
-        }).then(() => {
-          reloadNuxtApp({force: true});
-        });
+        const res = await useFetch('http://localhost:8000/api/soccer/delete/' + row.id);
+        // TODO: Handle if delete fail
+        seasons.value = await useFetch('http://localhost:8000/api/soccer');
       }
     }
   }]

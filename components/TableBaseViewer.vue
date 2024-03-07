@@ -5,7 +5,7 @@
         <h1 class="text-3xl font-bold">
           <slot name="header"></slot>
         </h1>
-        <UTable :rows="data.data.value" :columns="columns" @select="select" >
+        <UTable :rows="data.data" :columns="columns" @select="select" >
           <template #actions-data="{ row }">
             <UDropdown :items="items(row)">
               <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />

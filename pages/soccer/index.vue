@@ -10,7 +10,7 @@
           Season
         </div>
         <UTooltip text="Thêm Cầu Thủ" :popper="{ placement: 'bottom-end' }">
-          <UButton @click="router.push('soccer/add')">
+          <UButton @click="router.push('soccer/update')">
             <UIcon name="i-heroicons-plus-20-solid" />
           </UButton>
         </UTooltip>
@@ -30,28 +30,27 @@ const columns = [
   { key: 'birthday', label: 'Ngày Sinh', sortable: true}, 
   { key: 'category', label: 'Loại Cầu Thủ', sortable: true}, 
   { key: 'team_id', label: 'Mã Đội Bóng', sortable: true}, 
-  { key: 'actions' }
+  { key: 'actions' },
 ]
-
 
 const items = (row) => [
   [{
     label: 'Chỉnh Sửa',
     icon: 'i-heroicons-pencil-square-20-solid',
     click: () => {
-        router.push('soccer/edit/' + row.id);
+      router.push('soccer/update?soccer_id=' + row.id);
     }
   }, {
     label: 'Xóa',
     icon: 'i-heroicons-trash-20-solid',
     click: () => {
-        if (confirm('Bạn có chắc chắn muốn xóa mùa giải này không?')) {
-            fetch('http://localhost:8000/api/soccer/delete/' + row.id, {
-                method: 'GET' 
-            }).then(() => {
-                reloadNuxtApp({force: true});
-            });
-        }
+      if (confirm('Bạn có chắc chắn muốn xóa mùa giải này không?')) {
+        fetch('http://localhost:8000/api/soccer/delete/' + row.id, {
+          method: 'GET' 
+        }).then(() => {
+          reloadNuxtApp({force: true});
+        });
+      }
     }
   }]
 ]

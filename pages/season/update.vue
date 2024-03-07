@@ -1,11 +1,11 @@
 <template>
   <AppForm class="w-[768px] h-[4/5vh]">
     <template #header>
-      Chỉnh Sửa Mùa Giải
+      {{ PAGE_TITLE }}
     </template>
     <template #main>
       <div class="flex flex-col gap-3">
-        <UFormGroup size="xl" label="Name Season" name="name_season">
+        <UFormGroup size="xl" label="Name Season" name="name_seas</UFormGroup>on">
             <UInput v-model="state.name_season" />
         </UFormGroup>
 
@@ -35,17 +35,39 @@
 const route = useRoute();
 const router = useRouter();
 
-const res = await useFetch('http://localhost:8000/api/season/edit/' + route.params.id);
+let PAGE_TITLE = 'Thêm Mùa Giải Mới';
+let fetch_api = 'http://localhost:8000/api/season/add';
 
 const state = ref({
-  name_season: res.data.value[0].name_season,
-  start_date: res.data.value[0].start_date,
-  end_date: res.data.value[0].end_date,
-  quantity_team: res.data.value[0].quantity_team,
-})
+  name_season: '',
+  start_date: '',
+  end_date: '',
+  quantity_team: '',
+});
+
+if (route.query.season_id) {
+  PAGE_TITLE = 'Chỉnh Sửa Mùa Giải';
+  fetch_api = 'http://localhost:8000/api/season/update/' + route.query.season_id;
+
+  const res = await useFetch('http://localhost:8000/api/season/edit/' + route.query.season_id);
+
+  for (const key in state.value) {
+    state.value[key] = res.data.value[0][key];
+  }
+}
+
+useHead({
+  title: PAGE_TITLE,
+  meta: [
+    {
+      name: 'description',
+      content: PAGE_TITLE,
+    },
+  ],
+});
 
 async function handleSubmit() {
-  const response = await $fetch(`http://localhost:8000/api/season/update/${route.params.id}`, {
+  const response = await $fetch(fetch_api, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -54,7 +76,7 @@ async function handleSubmit() {
   });
 
   // TODO: handle using status code instead
-  if (response === "Season update successfully")
+  if (response === "Season update successfully" || response === "Season add successfully")
     router.push('/season');
 
 }

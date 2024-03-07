@@ -10,7 +10,7 @@
           Season
         </div>
         <UTooltip text="Thêm Đội Bóng" :popper="{ placement: 'bottom-end' }">
-          <UButton @click="router.push('team/add')">
+          <UButton @click="router.push('team/update')">
             <UIcon name="i-heroicons-plus-20-solid" />
           </UButton>
         </UTooltip>
@@ -40,7 +40,7 @@ const items = (row) => [
     label: 'Chỉnh Sửa',
     icon: 'i-heroicons-pencil-square-20-solid',
     click: () => {
-        router.push('team/edit/' + row.id);
+        router.push('team/update/?team_id=' + row.id);
     }
   }, {
     label: 'Xóa',

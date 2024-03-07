@@ -1,16 +1,18 @@
 <template>
   <div class="mr-3 grow h-[98vh]">
     <AppCard class="w-full h-full">
-      <h1 class="text-3xl font-bold">
-        <slot name="header"></slot>
-      </h1>
-      <UTable :rows="data.data.value" :columns="columns" @select="select" >
-        <template #actions-data="{ row }">
-          <UDropdown :items="items(row)">
-            <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
-          </UDropdown>
-        </template>
-      </UTable>
+      <div class="flex flex-col gap-8">
+        <h1 class="text-3xl font-bold">
+          <slot name="header"></slot>
+        </h1>
+        <UTable :rows="data.data.value" :columns="columns" @select="select" >
+          <template #actions-data="{ row }">
+            <UDropdown :items="items(row)">
+              <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
+            </UDropdown>
+          </template>
+        </UTable>
+      </div>
     </AppCard>
   </div>
 </template>

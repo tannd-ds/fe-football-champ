@@ -6,9 +6,7 @@
   >
     <template #header>
       <div class="flex justify-between">
-        <div>
-          Season
-        </div>
+        <div>Danh Sách Đội Bóng</div>
         <UTooltip text="Thêm Đội Bóng" :popper="{ placement: 'bottom-end' }">
           <UButton @click="router.push('team/update')">
             <UIcon name="i-heroicons-plus-20-solid" />

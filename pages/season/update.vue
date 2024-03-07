@@ -4,27 +4,43 @@
       {{ PAGE_TITLE }}
     </template>
     <template #main>
-      <div class="flex flex-col gap-3">
-        <UFormGroup size="xl" label="Name Season" name="name_seas</UFormGroup>on">
-            <UInput v-model="state.name_season" />
-        </UFormGroup>
+        <CInput
+          v-model="state.name_season"
+          label="Tên Mùa Giải"
+          name="name_season"
+          required
+        />
 
         <div class="w-full flex gap-4 items-stretch">
-            <UFormGroup class="flex-grow" size="xl" label="Start Date" name="start_date">
-            <UInput type="date" v-model="state.start_date" />
-            </UFormGroup>
+          <CInput
+            class="grow"
+            v-model="state.start_date"
+            label="Ngày Bắt Đầu"
+            name="start_date"
+            input-type="date"
+            required
+          />
 
-            <UFormGroup class="flex-grow" size="xl" label="End Date" name="end_date">
-            <UInput type="date" v-model="state.end_date" />
-            </UFormGroup>
+          <CInput
+            class="grow"
+            v-model="state.end_date"
+            label="Ngày Kết Thúc"
+            name="end_date"
+            input-type="date"
+            required
+          />
         </div>
 
-        <UFormGroup size="xl" label="Quantity Team" name="quantity_team">
-            <UInput v-model="state.quantity_team" />
-        </UFormGroup>
+        <CInput
+          v-model="state.quantity_team"
+          label="Số Lượng Đội"
+          name="quantity_team"
+          input-type="number"
+          required
+        />
 
         <div>
-          <UButton size="xl" type="submit" @click.prevent="handleSubmit"> Submit </UButton>
+          <UButton size="xl" type="submit" @click.prevent="handleSubmit">Submit</UButton>
         </div>
       </div>
     </template>
@@ -76,7 +92,7 @@ async function handleSubmit() {
   });
 
   // TODO: handle using status code instead
-  if (response === "Season update successfully" || response === "Season add successfully")
+  if (response === "Season update successfully" || response === "Season added successfully")
     router.push('/season');
 
 }

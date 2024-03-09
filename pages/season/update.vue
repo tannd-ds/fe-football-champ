@@ -4,6 +4,12 @@
       {{ PAGE_TITLE }}
     </template>
     <template #main>
+      <UForm 
+        class="flex flex-col gap-3" 
+        :state="state" 
+        :validate="validate"
+        @submit="handleSubmit"
+      >
         <CInput
           v-model="state.name_season"
           label="Tên Mùa Giải"
@@ -40,9 +46,9 @@
         />
 
         <div>
-          <UButton size="xl" type="submit" @click.prevent="handleSubmit">Submit</UButton>
+          <UButton size="xl" type="submit">Submit</UButton>
         </div>
-      </div>
+      </UForm>
     </template>
   </AppForm>
 </template>
@@ -50,6 +56,7 @@
 <script setup>
 const route = useRoute();
 const router = useRouter();
+const toasts = useToast();
 
 let PAGE_TITLE = 'Thêm Mùa Giải Mới';
 let fetch_api = 'http://localhost:8000/api/season/add';
@@ -83,17 +90,61 @@ useHead({
 });
 
 async function handleSubmit() {
-  const response = await $fetch(fetch_api, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(state.value),
-  });
+  try {
+    const response = await $fetch(fetch_api, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(state.value),
+    });
 
-  // TODO: handle using status code instead
-  if (response === "Season update successfully" || response === "Season added successfully")
-    router.push('/season');
+    // TODO: handle using status code instead
+    if (response === "Season update successfully" || response === "Season added successfully") {
+      router.push('/season');
 
+      toasts.add({
+        title: 'Success',
+        description: response,
+      });
+    }
+
+  } catch (error) {
+    console.error(error);
+  }
+
+}
+
+const validate = (state) => {
+  const errors = [];
+  if (!state.name_season) {
+    errors.push({ 
+      path: 'name_season', 
+      message: 'Tên mùa giải không được để trống'
+    });
+  }
+
+  if (!state.start_date) {
+    errors.push({ 
+      path: 'start_date', 
+      message: 'Ngày bắt đầu không được để trống'
+    });
+  }
+
+  if (!state.end_date) {
+    errors.push({ 
+      path: 'end_date', 
+      message: 'Ngày kết thúc không được để trống'
+    });
+  }
+
+  if (!state.quantity_team) {
+    errors.push({ 
+      path: 'quantity_team', 
+      message: 'Số lượng đội không được để trống'
+    });
+  }
+
+  return errors
 }
 </script>

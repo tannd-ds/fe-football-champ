@@ -99,13 +99,19 @@ async function handleSubmit() {
       body: JSON.stringify(state.value),
     });
 
-    if (!response.error.value) {
+    if (response.status.value == "success") {
       toasts.add({
-        title: 'Success',
-        description: response,
+        title: 'Thành Công',
+        description: response.data,
       });
 
       router.push('/season');
+    } else {
+      toasts.add({
+        title: 'Lỗi',
+        description: response.data,
+        type: 'error',
+      });
     }
 
   } catch (error) {

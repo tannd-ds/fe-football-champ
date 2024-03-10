@@ -112,13 +112,18 @@ async function handleSubmit() {
       body: JSON.stringify(state.value),
     });
 
-    if (!response.error.value) {
+    if (response.status.value == "success") {
       toasts.add({
-        title: 'Success',
+        title: 'Thành Công',
         description: response.data,
       });
 
       router.push('/soccer');
+    } else {
+      toasts.add({
+        title: 'Lỗi',
+        description: response.data,
+      });
     }
 
   } catch (error) {

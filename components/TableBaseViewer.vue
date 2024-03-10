@@ -8,14 +8,26 @@
         <UTable 
           :rows="data.data" 
           :columns="columns" 
-          @select="select" 
           :ui="{tbody: 'overflow-y-auto'}"
         >
+
+          <template #name-data="{ row }">
+            <UTooltip text="Xem chi tiết" :popper="{ placement: 'top' }">
+              <span 
+                class="font-bold underline cursor-pointer"
+                @click="emit('on-name-click', row)"
+              >
+                {{ row[props.realNameInJson] }}
+              </span>
+            </UTooltip>
+          </template>
+
           <template #actions-data="{ row }">
             <UDropdown :items="items(row)">
               <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
             </UDropdown>
           </template>
+
         </UTable>
       </div>
     </AppCard>
@@ -23,6 +35,7 @@
 </template>
 
 <script setup>
+
 const props = defineProps({
   data: {
     type: Object,
@@ -37,15 +50,13 @@ const props = defineProps({
   items: {
     type: Function,
     default: () => {}
+  },
+
+  realNameInJson: {
+    type: String,
+    default: 'name'
   }
 })
 
-const emit = defineEmits(['select']);
-
-function select (row) {
-  // don't do anything if the "action" columns is clicked
-  emit('select', row);
-  console.log(row.id);
-}
-
+const emit = defineEmits(['on-name-click']);
 </script>

@@ -3,7 +3,8 @@
     :data="seasons" 
     :columns="columns" 
     :items="items"
-    @select="handleSelect"
+    real-name-in-json="name_season"
+    @on-name-click="onNameClick"
   >
     <template #header>
       <div class="flex justify-between">
@@ -26,7 +27,7 @@ let seasons = ref({'data': []});
 seasons.value = await useFetch('http://localhost:8000/api/season');
 
 const columns = [
-  { key: 'name_season', label: 'Tên Mùa Giải', sortable: true}, 
+  { key: 'name', label: 'Tên Mùa Giải', sortable: true}, 
   { key: 'start_date', label: 'Ngày Bắt Đầu', sortable: true}, 
   { key: 'end_date', label: 'Ngày Kết Thúc', sortable: true}, 
   { key: 'quantity_team', label: 'SL Đội' }, 
@@ -53,7 +54,7 @@ const items = (row) => [
   }]
 ]
 
-let handleSelect = (row) => {
-  router.push('season/detail/' + row.id);
+let onNameClick = (row) => {
+  router.push('/season/detail/' + row.id);
 }
 </script>

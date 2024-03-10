@@ -79,7 +79,7 @@ useHead({
 
 async function handleSubmit() {
   try {
-    const response = await $fetch(fetch_api, {
+    const response = await useFetch(fetch_api, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -87,14 +87,13 @@ async function handleSubmit() {
       body: JSON.stringify(state.value),
     });
 
-    // TODO: handle using status code instead
-    if (response === "Team update successfully" || response === "Team added successfully") {
-      router.push('/team');
-
+    if (!response.error.value) {
       toasts.add({
         title: 'Success',
         description: response,
       })
+
+      router.push('/team');
     }
 
   } catch (error) {
@@ -113,21 +112,6 @@ const validate = (state) => {
       'message': 'Tên đội không được để trống' 
     });
   }
-
-  // if (state.quantity_soccer === '') {
-  //   errors.push({ 
-  //     'path': 'quantity_soccer', 
-  //     'message': 'Số lượng cầu thủ không được để trống' 
-  //   });
-  // } else {
-  //   // quantity_soccer must be a number and is between 15 and 22
-  //   if (isNaN(state.quantity_soccer) || state.quantity_soccer < 15 || state.quantity_soccer > 22) {
-  //     errors.push({ 
-  //       'path': 'quantity_soccer', 
-  //       'message': 'Số lượng cầu thủ trong khoảng từ 15 đến 22' 
-  //     });
-  //   }
-  // }
 
   if (state.established_date === '') {
     errors.push({ 

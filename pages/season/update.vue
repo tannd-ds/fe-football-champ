@@ -91,7 +91,7 @@ useHead({
 
 async function handleSubmit() {
   try {
-    const response = await $fetch(fetch_api, {
+    const response = await useFetch(fetch_api, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -99,14 +99,13 @@ async function handleSubmit() {
       body: JSON.stringify(state.value),
     });
 
-    // TODO: handle using status code instead
-    if (response === "Season update successfully" || response === "Season added successfully") {
-      router.push('/season');
-
+    if (!response.error.value) {
       toasts.add({
         title: 'Success',
         description: response,
       });
+
+      router.push('/season');
     }
 
   } catch (error) {

@@ -75,7 +75,7 @@ if (route.query.soccer_id) {
   const res = await useFetch('http://localhost:8000/api/soccer/edit/' + route.query.soccer_id);
 
   for (const key in state.value) {
-    state.value[key] = res.data.value[0][key];
+    state.value[key] = String(res.data.value[0][key]);
   }
 }
 
@@ -104,7 +104,7 @@ const team_options = team_list.data.value.map((team) => {
 
 async function handleSubmit() {
   try {
-    const response = await $fetch(fetch_api, {
+    const response = await useFetch(fetch_api, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -112,14 +112,14 @@ async function handleSubmit() {
       body: JSON.stringify(state.value),
     });
 
-    // TODO: handle using status code instead
-    if (response === "Soccer update successfully" || response === "Soccer added successfully")
-      router.push('/soccer');
-
+    if (!response.error.value) {
       toasts.add({
         title: 'Success',
-        description: response,
+        description: response.data,
       });
+
+      router.push('/soccer');
+    }
 
   } catch (error) {
     console.error(error);

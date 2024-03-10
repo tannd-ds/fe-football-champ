@@ -80,7 +80,7 @@ useHead({
 
 async function handleSubmit() {
   try {
-    const response = await $fetch(fetch_api, {
+    const response = await useFetch(fetch_api, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -88,14 +88,13 @@ async function handleSubmit() {
       body: JSON.stringify(state.value),
     });
 
-    // TODO: handle using status code instead
-    if (response === "Team update successfully" || response === "Team added successfully") {
-      router.push('/team');
-
+    if (!response.error.value) {
       toasts.add({
         title: 'Success',
         description: response,
       })
+
+      router.push('/team');
     }
 
   } catch (error) {

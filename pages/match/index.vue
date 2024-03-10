@@ -6,9 +6,9 @@
   >
     <template #header>
       <div class="flex justify-between">
-        <div>Danh Sách Đội Bóng</div>
-        <UTooltip text="Thêm Đội Bóng" :popper="{ placement: 'bottom-end' }">
-          <UButton @click="router.push('team/update')">
+        <div>{{ PAGE_TITLE }}</div>
+        <UTooltip text="Thêm Trận Đấu" :popper="{ placement: 'bottom-end' }">
+          <UButton @click="router.push('match/update')">
             <UIcon name="i-heroicons-plus-20-solid" />
           </UButton>
         </UTooltip>
@@ -19,17 +19,25 @@
 
 <script setup>
 
+const PAGE_TITLE = 'Danh Sách Trận Đấu';
+
+useHead({
+  title: PAGE_TITLE,
+})
+
 const router = useRouter();
 
 let seasons = ref({'data': []});
-seasons.value = await useFetch('http://localhost:8000/api/team');
+seasons.value = await useFetch('http://localhost:8000/api/match/1');
 
 const columns = [
-  { key: 'name_team', label: 'Tên Đội', sortable: true}, 
-  { key: 'quantity_soccer', label: 'SL Cầu Thủ', sortable: true}, 
-  { key: 'established_date', label: 'Ngày Thành Lập' }, 
-  { key: 'home_court', label: 'Sân Nhà' }, 
-  { key: 'actions' }
+  { key: 'id', label: 'ID', sortable: true},
+  { key: 'season_id', label: 'Mùa Giải', sortable: true},
+  { key: 'date', label: 'Ngày', sortable: true},
+  { key: 'team_id_1', label: 'Đội 1', sortable: true},
+  { key: 'team_id_2', label: 'Đội 2', sortable: true},
+  { key: 'team1_score', label: 'Điểm Đội 1', sortable: true},
+  { key: 'team2_score', label: 'Điểm Đội 2', sortable: true},
 ]
 
 

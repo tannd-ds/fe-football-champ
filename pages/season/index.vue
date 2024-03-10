@@ -3,6 +3,7 @@
     :data="seasons" 
     :columns="columns" 
     :items="items"
+    @select="handleSelect"
   >
     <template #header>
       <div class="flex justify-between">
@@ -32,7 +33,6 @@ const columns = [
   { key: 'actions' }
 ]
 
-
 const items = (row) => [
   [{
     label: 'Chỉnh Sửa',
@@ -52,4 +52,8 @@ const items = (row) => [
     }
   }]
 ]
+
+let handleSelect = (row) => {
+  router.push('season/detail/' + row.id);
+}
 </script>

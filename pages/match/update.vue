@@ -25,6 +25,7 @@
             name="established_date" 
             required
           />
+        <!-- </div> -->
 
         <CInput 
           v-model="state.home_court" 

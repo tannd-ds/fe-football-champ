@@ -1,0 +1,1 @@
+import{_ as n}from"./AppCard.f52cb022.js";import{_,o as a,h as c,w as r,a as e,H as s}from"./entry.05f95d07.js";const l={},d={class:"mb-4"},i={class:"font-black text-3xl"};function m(o,p){const t=n;return a(),c(t,null,{default:r(()=>[e("div",d,[e("div",i,[s(o.$slots,"header")]),s(o.$slots,"subheader")]),s(o.$slots,"main")]),_:3})}const u=_(l,[["render",m]]);export{u as _};

@@ -7,7 +7,7 @@
       <UForm 
         class="flex flex-col gap-3" 
         :state="state" 
-        :validate="validate"
+        :schema="schema"
         @submit="handleSubmit"
       >
         <div>Đội Bóng: {{ route.query.team_name }}</div>
@@ -37,6 +37,8 @@
 
 <script setup>
 
+import { z } from 'zod';
+
 const route = useRoute();
 const router = useRouter();
 const toasts = useToast();
@@ -51,6 +53,7 @@ const state = ref({
   team_id: route.query.team_id,
   season_id: '',
   is_confirm: false,
+  status: 1,
 });
 
 let seasons = await useFetch('http://localhost:8000/api/season');
@@ -62,8 +65,6 @@ const season_options = seasons.data.value.map((season) => {
     value: season.id,
   }
 })
-
-console.log(season_options);
 
 const handleSubmit = async () => {
 
@@ -92,18 +93,11 @@ const handleSubmit = async () => {
   }
 }
 
-const validate = (state) => {
-  const errors = [];
-
-  if (state.season_id == '') {
-    errors.push({
-      path: 'season_id',
-      message: 'Mùa giải không được để trống',
-    })
-  }
-
-  return errors;
-}
+const schema = z.object({
+  season_id: z.string().refine((val) => val !== '', {
+    message: 'Mùa giải không được để trống',
+  }),
+});
 
 
 </script>

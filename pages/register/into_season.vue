@@ -47,7 +47,7 @@ useHead({
   title: PAGE_TITLE,
 });
 
-const state = reactive({
+const state = ref({
   team_id: route.query.team_id,
   season_id: '',
   is_confirm: false,
@@ -65,16 +65,16 @@ const season_options = seasons.data.value.map((season) => {
 
 console.log(season_options);
 
-const handleSubmit = async (state) => {
+const handleSubmit = async () => {
 
-  state.data.date_signin = new Date().toISOString().slice(0, 10);
+  state.value['date_signin'] = new Date().toISOString().slice(0, 10);
 
   const res = await useFetch('http://localhost:8000/api/register/into_season', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(state),
+    body: JSON.stringify(state.value),
   });
 
   if (res.status.value == "success") {

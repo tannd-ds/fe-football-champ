@@ -134,55 +134,10 @@ async function handleSubmit() {
   }
 }
 
-const validate = (state) => {
-  const errors = [];
-  if (state.name_soccer === '') {
-    errors.push({ 
-      path: 'name_soccer', 
-      message: 'Tên Cầu Thủ không được để trống' 
-    });
-  }
-
-  if (state.birthday === '') {
-    errors.push({ 
-      path: 'birthday', 
-      message: 'Sinh Nhật không được để trống' 
-    });
-  } else {
-    // soccer cannot be younger than 18 years old or older than 40 years old
-    const birthday = new Date(state.birthday).getFullYear();
-    const today = new Date().getFullYear();
-    if (today - birthday < 18) {
-      errors.push({ 
-        'path': 'birthday', 
-        'message': 'Cầu Thủ phải từ 18 tuổi trở lên' 
-      });
-    } else if (today - birthday > 40) {
-      errors.push({ 
-        path: 'birthday', 
-        message: 'Cầu Thủ không được quá 40 tuổi' 
-      });
-    }
-  }
-
-  if (state.category === '') {
-    errors.push({ 
-      path: 'category', 
-      message: 'Loại Cầu Thủ không được để trống' 
-    });
-  }
-
-  if (state.team_id === '') {
-    errors.push({ 
-      path: 'team_id', 
-      message: 'Đội Bóng không được để trống' 
-    });
-  }
-  return errors;
-}
-
 const schema = z.object({
-  name_soccer: z.string().min(1, { message: 'Tên Cầu Thủ không được để trống' }),
+  name_soccer: 
+    z.string()
+      .min(1, { message: 'Tên Cầu Thủ không được để trống' }),
   birthday: 
     z.string()
       .min(1, { message: 'Sinh Nhật không được để trống' })

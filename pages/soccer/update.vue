@@ -7,7 +7,7 @@
       <UForm 
         class="flex flex-col gap-3" 
         :state="state" 
-        :validate="validate"
+        :schema="schema"
         @submit="handleSubmit"
       >
         <CInput
@@ -54,6 +54,9 @@
 </template>
 
 <script setup>
+
+import { z } from 'zod';
+
 const route = useRoute();
 const router = useRouter();
 const toasts = useToast();
@@ -177,4 +180,27 @@ const validate = (state) => {
   }
   return errors;
 }
+
+const schema = z.object({
+  name_soccer: z.string().min(1, { message: 'Tên Cầu Thủ không được để trống' }),
+  birthday: 
+    z.string()
+      .min(1, { message: 'Sinh Nhật không được để trống' })
+      .refine((val) => {
+        const birthday = new Date(val).getFullYear();
+        const today = new Date().getFullYear();
+        return today - birthday >= 18
+      }, { message: 'Cầu Thủ phải từ 18 tuổi trở lên' }).
+      refine((val) => {
+        const birthday = new Date(val).getFullYear();
+        const today = new Date().getFullYear();
+        return today - birthday <= 40
+      }, { message: 'Cầu Thủ không được quá 40 tuổi' }),
+  category: 
+    z.string()
+      .min(1, { message: 'Loại Cầu Thủ không được để trống' }),
+  team_id: 
+    z.string()
+      .min(1, { message: 'Đội Bóng không được để trống' }),
+});
 </script>

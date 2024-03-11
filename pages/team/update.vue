@@ -7,7 +7,7 @@
       <UForm 
         class="flex flex-col gap-3" 
         :state="state" 
-        :validate="validate"
+        :schema="schema"
         @submit="handleSubmit"
       >
         <CInput 
@@ -43,6 +43,9 @@
 </template>
 
 <script setup>
+
+import { z } from 'zod';
+
 const route = useRoute();
 const router = useRouter();
 const toasts = useToast();
@@ -109,29 +112,15 @@ async function handleSubmit() {
   }
 }
 
-const validate = (state) => {
-  const errors = [];
-  if (state.name_team === '') {
-    errors.push({ 
-      'path': 'name_team', 
-      'message': 'Tên đội không được để trống' 
-    });
-  }
-
-  if (state.established_date === '') {
-    errors.push({ 
-      'path': 'established_date', 
-      'message': 'Ngày thành lập không được để trống' 
-    });
-  }
-
-  if (state.home_court === '') {
-    errors.push({ 
-      'path': 'home_court', 
-      'message': 'Sân nhà không được để trống' 
-    });
-  }
-
-  return errors;
-}
+const schema = z.object({
+  name_team: 
+    z.string()
+      .min(1, { message: 'Tên đội không được để trống' }),
+  established_date: 
+    z.string()
+      .min(1, { message: 'Ngày thành lập không được để trống' }),
+  home_court: 
+    z.string()
+      .min(1, { message: 'Sân nhà không được để trống' }),
+});
 </script>

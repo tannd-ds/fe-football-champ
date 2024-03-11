@@ -7,7 +7,7 @@
       <UForm 
         class="flex flex-col gap-3" 
         :state="state" 
-        :validate="validate"
+        :schema="schema"
         @submit="handleSubmit"
       >
         <CInput
@@ -54,6 +54,9 @@
 </template>
 
 <script setup>
+
+import { z } from 'zod';
+
 const route = useRoute();
 const router = useRouter();
 const toasts = useToast();
@@ -120,36 +123,19 @@ async function handleSubmit() {
 
 }
 
-const validate = (state) => {
-  const errors = [];
-  if (!state.name_season) {
-    errors.push({ 
-      path: 'name_season', 
-      message: 'Tên mùa giải không được để trống'
-    });
-  }
+const schema = z.object({
+  name_season: 
+    z.string()
+      .min(1, { message: 'Tên mùa giải không được để trống' }),
+  start_date: 
+    z.string()
+      .min(1, { message: 'Ngày bắt đầu không được để trống' }),
+  end_date: 
+    z.string()
+      .min(1, { message: 'Ngày kết thúc không được để trống' }),
+  quantity_team: 
+    z.string()
+      .min(1, { message: 'Số lượng đội không được để trống' }),
+});
 
-  if (!state.start_date) {
-    errors.push({ 
-      path: 'start_date', 
-      message: 'Ngày bắt đầu không được để trống'
-    });
-  }
-
-  if (!state.end_date) {
-    errors.push({ 
-      path: 'end_date', 
-      message: 'Ngày kết thúc không được để trống'
-    });
-  }
-
-  if (!state.quantity_team) {
-    errors.push({ 
-      path: 'quantity_team', 
-      message: 'Số lượng đội không được để trống'
-    });
-  }
-
-  return errors
-}
 </script>

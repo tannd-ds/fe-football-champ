@@ -78,25 +78,25 @@ const handleSubmit = async () => {
     body: JSON.stringify(state.value),
   });
 
-  if (res.status.value == "success") {
+  const res_status = res.data.value.code;
+  const res_content = res.data.value.content;
+
+  if (res_status === 200) {
     toasts.add({
       title: 'Thành Công',
-      description: res.data,
-      type: 'success',
+      description: res_content,
     });
   } else {
     toasts.add({
-      title: 'Lỗi',
-      description: res.data,
-      type: 'error',
+      title: 'Thất Bại',
+      description: res_content,
     });
   }
 }
 
 const schema = z.object({
-  season_id: z.string().refine((val) => val !== '', {
-    message: 'Mùa giải không được để trống',
-  }),
+  season_id: 
+    z.string().min(1, { message: 'Mùa giải không được để trống' }),
 });
 
 

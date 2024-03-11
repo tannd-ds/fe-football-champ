@@ -78,7 +78,7 @@ if (route.query.season_id) {
   const res = await useFetch('http://localhost:8000/api/season/edit/' + route.query.season_id);
 
   for (const key in state.value) {
-    state.value[key] = res.data.value[0][key];
+    state.value[key] = String(res.data.value[0][key]);
   }
 }
 
@@ -102,10 +102,13 @@ async function handleSubmit() {
       body: JSON.stringify(state.value),
     });
 
-    if (response.status.value == "success") {
+    const res_status = response.data.value.code;
+    const res_content = response.data.value.content;
+
+    if (res_status === 200) {
       toasts.add({
         title: 'Thành Công',
-        description: response.data,
+        description: res_content,
       });
 
       router.push('/season');

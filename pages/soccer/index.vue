@@ -23,6 +23,12 @@
 
 const router = useRouter();
 
+const team_list = await useFetch('http://localhost:8000/api/team');
+const team_mapper = team_list.data.value.reduce((acc, team) => {
+  acc[team.id] = team.name_team;
+  return acc;
+}, {});
+
 let seasons = ref({'data': []});
 seasons.value = await useFetch('http://localhost:8000/api/soccer');
 for (const season of seasons.value.data) {
@@ -30,13 +36,19 @@ for (const season of seasons.value.data) {
     (season.category === 0) 
       ? 'Trong Nước' 
       : 'Nước Ngoài';  
+
+  if (season.team_id === null) {
+    season.team_name = 'Chưa Có Đội Bóng';
+  } else { 
+    season.team_name = team_mapper[season.team_id];
+  }
 }
 
 const columns = [
   { key: 'name', label: 'Tên', sortable: true}, 
   { key: 'birthday', label: 'Ngày Sinh', sortable: true}, 
   { key: 'category_text', label: 'Loại Cầu Thủ', sortable: true}, 
-  { key: 'team_id', label: 'Mã Đội Bóng', sortable: true}, 
+  { key: 'team_name', label: 'Đội Bóng', sortable: true}, 
   { key: 'actions' },
 ]
 
@@ -45,7 +57,7 @@ const items = (row) => [
     label: 'Chỉnh Sửa',
     icon: 'i-heroicons-pencil-square-20-solid',
     click: () => {
-      router.push('soccer/update?soccer_id=' + row.id);
+      router.push('/soccer/update?soccer_id=' + row.id);
     }
   }, {
     label: 'Xóa',

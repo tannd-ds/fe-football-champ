@@ -22,7 +22,6 @@
           :options="team_options"
           label="Đội Bóng"
           name="team_id"
-          required
         />
 
         <div class="w-full flex gap-4 items-stretch">
@@ -154,8 +153,5 @@ const schema = z.object({
   category: 
     z.string()
       .min(1, { message: 'Loại Cầu Thủ không được để trống' }),
-  team_id: 
-    z.string()
-      .min(1, { message: 'Đội Bóng không được để trống' }),
 });
 </script>

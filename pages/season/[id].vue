@@ -3,10 +3,20 @@
     <AppCard 
       class="col-span-2"
     >
-      <div>
-        <div class="text-3xl font-bold">Lịch Thi Đấu</div>
-        <div> {{ season_name }}</div>
+      <div class="flex justify-between items-center">
+        <div>
+          <div class="text-3xl font-bold">Lịch Thi Đấu</div>
+          <div> {{ season_name }}</div>
+        </div>
+
+        <UButton 
+          color="primary"
+          icon="i-heroicons-calendar-20-solid"
+          label="Lên Lịch"
+          @click="router.push(`/match/update?season_id=${season_id}`)"
+        />
       </div>
+
 
       <div class="flex flex-col gap-4">
         <div 

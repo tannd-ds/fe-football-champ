@@ -8,7 +8,7 @@
       <div class="flex justify-between">
         <div>{{ PAGE_TITLE }}</div>
         <UTooltip text="Thêm Trận Đấu" :popper="{ placement: 'bottom-end' }">
-          <UButton @click="router.push('match/update')">
+          <UButton @click="router.push(`/match/update?season_id=${route.params.id}`)">
             <UIcon name="i-heroicons-plus-20-solid" />
           </UButton>
         </UTooltip>
@@ -25,6 +25,7 @@ useHead({
   title: PAGE_TITLE,
 })
 
+const route = useRoute();
 const router = useRouter();
 
 let seasons = ref({'data': []});
@@ -46,7 +47,7 @@ const items = (row) => [
     label: 'Chỉnh Sửa',
     icon: 'i-heroicons-pencil-square-20-solid',
     click: () => {
-        router.push('team/update/?team_id=' + row.id);
+        router.push('/team/update/?team_id=' + row.id);
     }
   }, {
     label: 'Xóa',

@@ -7,147 +7,130 @@
       <UForm 
         class="flex flex-col gap-3" 
         :state="state" 
-        :validate="validate"
+        :schema="schema"
         @submit="handleSubmit"
       >
-        <CInput 
-          v-model="state.name_team" 
-          label="Tên Đội" 
-          name="name_team" 
-          required
-        />
+        <div>Giải Đấu: {{ route.query.season_id }}</div>
 
-          <CInput 
-            class="grow"
-            input-type="date"
-            v-model="state.established_date" 
-            label="Ngày Thành Lập" 
-            name="established_date" 
-            required
-          />
-        <!-- </div> -->
+        <div class="flex flex-col items-center gap-4">
+          <span class="font-bold">Chọn 2 đội đấu</span>
+
+          <div class="flex gap-2 items-center w-full">
+            <CSelect
+              class="grow"
+              v-model="state.team_id_1"
+              :options="listteam_options"
+              name="team_id_1"
+              required
+            />
+
+            <span>VS</span>
+
+            <CSelect
+              class="grow"
+              v-model="state.team_id_2"
+              :options="listteam_options"
+              name="team_id_2"
+              required
+            />
+          </div>
+        </div>
 
         <CInput 
-          v-model="state.home_court" 
-          label="Sân Nhà" 
-          name="home_court"
+          class="grow"
+          input-type="datetime-local"
+          v-model="state.date" 
+          label="Thời Gian Thi Đấu" 
+          name="date" 
           required
         />
 
         <div>
-          <UButton size="xl" type="submit">Submit</UButton>
+          <UButton type="submit">Submit</UButton>
         </div>
       </UForm>
-
     </template>
   </AppForm>
 </template>
 
 <script setup>
+
+import { z } from 'zod';
+
 const route = useRoute();
 const router = useRouter();
 const toasts = useToast();
 
-let PAGE_TITLE = 'Thêm Đội Bóng Mới';
-let fetch_api = 'http://localhost:8000/api/team/add';
-
-const state = ref({
-  name_team: '',
-  established_date: '',
-  home_court: '',
-});
-
-if (route.query.team_id) {
-  PAGE_TITLE = 'Chỉnh Sửa Đội Bóng';
-  fetch_api = 'http://localhost:8000/api/team/update/' + route.query.team_id;
-
-  const res = await useFetch('http://localhost:8000/api/team/edit/' + route.query.team_id);
-
-  for (const key in state.value) {
-    state.value[key] = res.data.value[0][key];
-  }
-}
+let PAGE_TITLE = 'Tạo Trận Đấu Mới';
+let fetch_api = 'http://localhost:8000/api/match/add';
 
 useHead({
   title: PAGE_TITLE,
-  meta: [
-    {
-      name: 'description',
-      content: PAGE_TITLE,
-    }
-  ]
 });
 
-async function handleSubmit() {
-  try {
-    const response = await useFetch(fetch_api, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(state.value),
-    });
 
-    if (response.status.value == "success") {
-      toasts.add({
-        title: 'Thành Công',
-        description: response.data,
-      })
+const state = ref({
+  season_id: route.query.season_id,
+  date: '',
+  team_id_1: '',
+  team_id_2: '',
+});
 
-      router.push('/team');
-    } else {
-      toasts.add({
-        title: 'Lỗi',
-        description: response.data,
-      })
-    }
+let listteam = await useFetch(`http://localhost:8000/api/match/listteam/${route.query.season_id}`);
 
-  } catch (error) {
+const listteam_options = listteam.data.value.map((team) => {
+  return {
+    name: team.name_team,
+    value: team.team_id,
+  }
+})
+
+const handleSubmit = async () => {
+  console.log(state.value);
+  const res = await useFetch('http://localhost:8000/api/match/add', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(state.value),
+  });
+
+  const res_status = res.data.value.code;
+  const res_content = res.data.value.content;
+
+  if (res_status === 200) {
     toasts.add({
-      title: 'Error',
-      description: error,
-    })
+      title: 'Thành Công',
+      description: res_content,
+    });
+    router.back();
+  } else {
+    toasts.add({
+      title: 'Thất Bại',
+      description: res_content,
+    });
   }
 }
 
-const validate = (state) => {
-  const errors = [];
-  if (state.name_team === '') {
-    errors.push({ 
-      'path': 'name_team', 
-      'message': 'Tên đội không được để trống' 
-    });
+const schema = z.object({
+  season_id: 
+    z.string().min(1, { message: 'Mùa giải không được để trống' }),
+  team_id_1:
+    z.string().min(1, { message: 'Chọn 1 Đội Thi Đấu' }),
+  team_id_2:
+    z.string().min(1, { message: 'Chọn 1 Đội Thi Đấu' }),
+  date:
+    z.string()
+      .min(1, { message: 'Thời gian không được để trống' })
+      .refine(
+        data => new Date(data) > new Date(),
+        { message: 'Thời gian không được nhỏ hơn hiện tại' }
+      )
+}).refine(
+  data => data.team_id_1 !== data.team_id_2, {
+    message: '2 đội không được giống nhau',
   }
+);
 
-  // if (state.quantity_soccer === '') {
-  //   errors.push({ 
-  //     'path': 'quantity_soccer', 
-  //     'message': 'Số lượng cầu thủ không được để trống' 
-  //   });
-  // } else {
-  //   // quantity_soccer must be a number and is between 15 and 22
-  //   if (isNaN(state.quantity_soccer) || state.quantity_soccer < 15 || state.quantity_soccer > 22) {
-  //     errors.push({ 
-  //       'path': 'quantity_soccer', 
-  //       'message': 'Số lượng cầu thủ trong khoảng từ 15 đến 22' 
-  //     });
-  //   }
-  // }
-
-  if (state.established_date === '') {
-    errors.push({ 
-      'path': 'established_date', 
-      'message': 'Ngày thành lập không được để trống' 
-    });
-  }
-
-  if (state.home_court === '') {
-    errors.push({ 
-      'path': 'home_court', 
-      'message': 'Sân nhà không được để trống' 
-    });
-  }
-
-  return errors;
-}
+console.log(schema);
 </script>

@@ -55,6 +55,6 @@ const items = (row) => [
 ]
 
 let onNameClick = (row) => {
-  router.push('/season/detail/' + row.id);
+  router.push('/season/' + row.id);
 }
 </script>

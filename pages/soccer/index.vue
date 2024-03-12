@@ -25,11 +25,17 @@ const router = useRouter();
 
 let seasons = ref({'data': []});
 seasons.value = await useFetch('http://localhost:8000/api/soccer');
+for (const season of seasons.value.data) {
+  season.category_text = 
+    (season.category === 0) 
+      ? 'Trong Nước' 
+      : 'Nước Ngoài';  
+}
 
 const columns = [
   { key: 'name', label: 'Tên', sortable: true}, 
   { key: 'birthday', label: 'Ngày Sinh', sortable: true}, 
-  { key: 'category', label: 'Loại Cầu Thủ', sortable: true}, 
+  { key: 'category_text', label: 'Loại Cầu Thủ', sortable: true}, 
   { key: 'team_id', label: 'Mã Đội Bóng', sortable: true}, 
   { key: 'actions' },
 ]

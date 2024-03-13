@@ -14,6 +14,7 @@
           icon="i-heroicons-calendar-20-solid"
           label="Lên Lịch"
           @click="router.push(`/match/update?season_id=${season_id}`)"
+          :disabled="!can_schedule_match"
         />
       </div>
 
@@ -111,6 +112,10 @@ const all_matches_filtered = computed(() => {
     matches[match_index] = match;
   }
   return matches;
+})
+
+const can_schedule_match = computed(() => {
+  return filter_teams.value.data.length >= 2;
 })
 
 const teams_columns = [

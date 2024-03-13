@@ -78,15 +78,18 @@ const state = ref({
 
 let listteam = await useFetch(`http://localhost:8000/api/match/listteam/${route.query.season_id}`);
 
-const listteam_options = listteam.data.value.map((team) => {
-  return {
-    name: team.name_team,
-    value: team.team_id,
-  }
+const listteam_options = computed(() => {
+  return listteam.data.value.map((team) => {
+    let is_disabled = (team.team_id == state.value.team_id_1 || team.team_id == state.value.team_id_2);
+    return {
+      name: team.name_team,
+      value: team.team_id,
+      disabled: is_disabled,
+    }
+  })
 })
 
 const handleSubmit = async () => {
-  console.log(state.value);
   const res = await useFetch('http://localhost:8000/api/match/add', {
     method: 'POST',
     headers: {

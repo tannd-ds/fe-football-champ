@@ -34,12 +34,13 @@
           </UTooltip>
 
           <UTooltip
-            text="Đăng Ký Giải Đấu" 
+            :text="can_regis_into_season ? `Đăng Ký Giải Đấu` : `Số lượng cầu thủ không đủ để đăng ký`" 
           >
             <UButton 
               icon="i-heroicons-document-plus"
-              @click="router.push(`/register/into_season?team_id=${route.params.id}&team_name=${team_info.name_team}`)">
-            </UButton>
+              @click="router.push(`/register/into_season?team_id=${route.params.id}&team_name=${team_info.name_team}`)"
+              :disabled="!can_regis_into_season"
+            ></UButton>
           </UTooltip>
         </div>
       </div>
@@ -68,6 +69,11 @@ const reload_data = () => {
 
 // Initial load
 reload_data();
+
+const can_regis_into_season = computed(() => {
+  return team_info.value.quantity_soccer >= 15;
+})
+
 
 // Load every time the data changes
 watch(response, async (newValue) => {

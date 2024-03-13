@@ -6,7 +6,7 @@
     <template #main>
       <div class="space-y-4">
         <div class="text-sm text-zinc-400">
-          Chưa có tài khoản? <NuxtLink class="underline hover:text-white" to="/register">Đăng Ký Ngay!</NuxtLink>
+          Chưa có tài khoản? <NuxtLink class="underline hover:text-white" to="/register/account">Đăng Ký Ngay!</NuxtLink>
         </div>
 
         <UForm 

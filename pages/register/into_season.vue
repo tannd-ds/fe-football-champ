@@ -86,6 +86,7 @@ const handleSubmit = async () => {
       title: 'Thành Công',
       description: res_content,
     });
+    router.back();
   } else {
     toasts.add({
       title: 'Thất Bại',

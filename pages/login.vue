@@ -16,17 +16,17 @@
           @submit="handleSubmit"
         >
           <CInput
-            v-model="state.username"
+            v-model="state.user_email"
             label="Tài Khoản"
-            name="username"
+            name="user_email"
             autocomplete="off"
             required
           />
 
           <CInput
-            v-model="state.password"
+            v-model="state.user_password"
             label="Mật Khẩu"
-            name="password"
+            name="user_password"
             autocomplete="off"
             required
           />
@@ -64,15 +64,24 @@ useHead({
 });
 
 const state = ref({
-  username: '',
-  password: '',
+  user_email: '',
+  user_password: '',
 });
 
 const handleSubmit = async () => {
-  if (state.value.username === 'admin' && state.value.password === 'admin') {
-    const cookie = useCookie('auth');
 
-    cookie.value = '1';
+  const res = await useFetch('http://localhost:8000/api/login', {
+    method: 'POST',
+    body: JSON.stringify(state.value),
+  });
+
+  if (res.data.value.code === 200) {
+    const cookie = useCookie('auth');
+    const cookie_usr_info = useCookie('usr_info');
+
+    cookie.value = res.data.value.content.rule;
+    cookie_usr_info.value = res.data.value.content;
+    
     toasts.add({ 
       title: 'Đăng nhập thành công', 
       description: 'Chào Mừng Bro!'
@@ -82,14 +91,16 @@ const handleSubmit = async () => {
   } else {
     toasts.add({ 
       title: 'Thất Bại', 
-      description: 'Tên Tài Khoản hoặc Mật Khẩu không đúng'
+      description: res.data.value.content,
     });
   }
 }
 
 const schema = z.object({
-  username: z.string().min(1, { message: 'Vui lòng nhập tài khoản'}),
-  password: z.string().min(1, { message: 'Vui lòng nhập mật khẩu'}),
+  user_email: 
+    z.string().email({ message: 'Email không hợp lệ'}),
+  user_password: 
+    z.string().min(1, { message: 'Vui lòng nhập mật khẩu'}),
 });
 
 </script>

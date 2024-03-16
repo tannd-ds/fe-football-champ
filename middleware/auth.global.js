@@ -15,7 +15,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
   // - If cookie is present, and cookie value = 0 => user is not admin
   // - If cookie is present, and cookie value = 1 => user is admin
 
-  if (!auth_cookie.value) {
+  if (auth_cookie.value == undefined) {
     return navigateTo(login_page);
   }
 })

@@ -1,6 +1,6 @@
 <template>
   <div 
-    class="py-8 w-[400px] h-screen bg-[#0A0A0A] flex flex-col justify-between items-center"
+    class="py-8 w-[360px] h-screen bg-[#0A0A0A] flex flex-col justify-between items-center"
   >
     <div class="w-full px-8 flex flex-col gap-8">
       <div class="text-zinc-100 flex gap-4 items-center">
@@ -28,13 +28,31 @@
     </div>
 
     <div>
-      <div 
-        class="w-fit p-3 flex gap-2 items-center border border-opacity-0 border-zinc-300 hover:border-opacity-100 rounded-lg text-zinc-100 cursor-pointer"
-        @click="logout"
+      <UDropdown 
+        :items="usr_btns"
+        :popper="{ 
+          placement: 'top',
+          offsetDistance: 12,
+        }"
+        mode="hover"
       >
-        <span >Đăng Xuất</span>
-        <UIcon name="i-heroicons-arrow-uturn-left" />
-      </div>
+
+        <UButton 
+          size="lg"
+          color="white" 
+          label="Tài Khoản" 
+          trailing-icon="i-heroicons-user-20-solid" 
+        />
+
+        <template #account="{ item }">
+          <div class="text-left w-full">
+            <p> Xin Chào, </p>
+            <p class="truncate font-medium text-white">{{ item.label }}</p>
+          </div>
+        </template>
+      
+      </UDropdown>
+      
     </div>
 
   </div>
@@ -45,6 +63,8 @@
 const route = useRoute();
 const router = useRouter();
 const toasts = useToast();
+
+const cookie_usr_info = useCookie('usr_info');
 
 const direct_btns = [
   {
@@ -69,12 +89,29 @@ const direct_btns = [
   }
 ]
 
+const usr_btns = [
+  [{
+    label: cookie_usr_info.value.user_name,
+    slot: 'account',
+    disabled: true,
+  }], [{
+    label: 'Chỉnh Sửa Tài Khoản',
+    icon: 'i-heroicons-cog-8-tooth',
+    disabled: true,
+  }], [{
+    label: 'Đăng Xuất',
+    icon: 'i-heroicons-arrow-left-on-rectangle',
+    click: () => logout(),
+  }],
+]
+
 const logout = () => {
   if (!confirm('Bạn có chắc chắn muốn đăng xuất?') ) return;
 
   try {
     const cookie = useCookie('auth');
-    cookie.value = '';
+    cookie.value = null;
+    cookie_usr_info.value = null;
 
     toasts.add({ 
       title: 'Đăng xuất thành công', 

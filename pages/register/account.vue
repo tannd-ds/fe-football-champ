@@ -16,17 +16,25 @@
           @submit="handleSubmit"
         >
           <CInput
-            v-model="state.username"
+            v-model="state.user_name"
             label="Tài Khoản"
-            name="username"
+            name="user_name"
             autocomplete="off"
             required
           />
 
           <CInput
-            v-model="state.password"
+            v-model="state.user_email"
+            label="Tài Khoản"
+            name="user_email"
+            autocomplete="off"
+            required
+          />
+
+          <CInput
+            v-model="state.user_password"
             label="Mật Khẩu"
-            name="password"
+            name="user_password"
             autocomplete="off"
             required
           />
@@ -74,33 +82,44 @@ useHead({
 });
 
 const state = ref({
-  username: '',
-  password: '',
+  user_name: '',
+  user_password: '',
+  user_email: '',
+  rule: 0,
   is_confirm: false,
 });
 
 const handleSubmit = async () => {
-  if (state.value.username === 'admin' && state.value.password === 'admin') {
-    const cookie = useCookie('auth');
+  const res = await useFetch('http://localhost:8000/api/register', {
+    method: 'POST',
+    body: JSON.stringify(state.value),
+  });
 
-    cookie.value = 1;
+  if (res.data.value.code === 200) {
     toasts.add({ 
-      title: 'Đăng nhập thành công', 
-      description: 'Chào Mừng Bro!'
+      title: 'Đăng ký thành công', 
+      description: 'Chúc mừng bạn đã đăng ký thành công'
     });
 
-    router.back();
+    router.push('/login');
+
   } else {
-    toasts.add({ 
-      title: 'Thất Bại', 
-      description: 'Tên Tài Khoản hoặc Mật Khẩu không đúng'
-    });
+    if (res.data.value.code === 500) {
+      if (res.data.value.content == "Tài khoản đã tồn tại") {
+        toasts.add({ 
+          title: 'Thất Bại', 
+          description: 'Tài khoản đã tồn tại'
+        });
+        // TODO: add error message directly to the form instead of using toasts
+      }
+    }
   }
 }
 
 const schema = z.object({
-  username: z.string().min(1, { message: 'Vui lòng nhập tài khoản'}),
-  password: z.string().min(1, { message: 'Vui lòng nhập mật khẩu'}),
+  user_name: z.string().min(1, { message: 'Vui lòng nhập tài khoản'}),
+  user_email: z.string().email({ message: 'Vui lòng nhập email hợp lệ'}),
+  user_password: z.string().min(1, { message: 'Vui lòng nhập mật khẩu'}),
 });
 
 </script>

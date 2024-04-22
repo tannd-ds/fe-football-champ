@@ -77,21 +77,22 @@ const state = ref({
   time_goal: '',
 });
 
-let listteam = await useFetch(`http://localhost:8000/api/match/listteam/${route.query.schedule_id}`);
 
 // Get match details
-let match_details = await useFetch(`http://localhost:8000/api/match/${route.query.schedule_id}`);
+let match_details = await useFetch(`http://localhost:8000/api/match/get/by_schedule/${route.query.schedule_id}`);
 match_details = match_details.data.value[0];
 
 const listteam_options = computed(() => {
-  return listteam.data.value.map((team) => {
-    let is_disabled = (team.team_id == state.value.team_id_1 || team.team_id == state.value.team_id_2);
-    return {
-      name: team.name_team,
-      value: team.team_id,
-      disabled: is_disabled,
+  return [
+    {
+      name: match_details.team_1_name,
+      value: match_details.team_id_1,
+    },
+    {
+      name: match_details.team_2_name,
+      value: match_details.team_id_2,
     }
-  })
+  ]
 })
 
 // List soccer options

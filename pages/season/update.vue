@@ -309,6 +309,11 @@ const schema = z.object({
   quantity_team: 
     z.string()
       .min(1, { message: 'Số lượng đội không được để trống' }),
+}).refine(data => {
+  return new Date(data.start_date) < new Date(data.end_date);
+}, {
+  message: 'Ngày kết thúc phải sau ngày bắt đầu',
+  path: ['end_date'],
 });
 
 </script>

@@ -43,9 +43,7 @@
           required
         />
 
-        <div>{{ soccers_options }}</div>
         <div>
-          {{ state }}
           <UButton type="submit">Submit</UButton>
         </div>
       </UForm>
@@ -79,18 +77,19 @@ const state = ref({
 
 
 // Get match details
-let match_details = await useFetch(`http://localhost:8000/api/match/get/by_schedule/${route.query.schedule_id}`);
-match_details = match_details.data.value[0];
+let match_details = ref({});
+match_details.value = await useFetch(`http://localhost:8000/api/match/get/by_schedule/${route.query.schedule_id}`);
+match_details.value = match_details.value.data[0];
 
 const listteam_options = computed(() => {
   return [
     {
-      name: match_details.team_1_name,
-      value: match_details.team_id_1,
+      name: match_details.value.team_1_name,
+      value: match_details.value.team_id_1,
     },
     {
-      name: match_details.team_2_name,
-      value: match_details.team_id_2,
+      name: match_details.value.team_2_name,
+      value: match_details.value.team_id_2,
     }
   ]
 })
@@ -142,8 +141,8 @@ const handleSubmit = async () => {
 
 // Validation
 // Convert max_time_match from hh:mm:ss to minutes
-let time_splits = String(match_details.max_time_match).split(':');
-match_details.max_time_match = parseInt(time_splits[0]) * 60 + parseInt(time_splits[1]);
+let time_splits = String(match_details.value.max_time_match).split(':');
+time_splits = parseInt(time_splits[0]) * 60 + parseInt(time_splits[1]);
 
 const schema = z.object({
   team_id: z.string(),
@@ -151,7 +150,8 @@ const schema = z.object({
   // Time goal has to be between 0 and max_time_match
   time_goal: z.string()
     .refine(val => {
-      return parseInt(val) >= 0 && parseInt(val) <= match_details.max_time_match;
+      console.log(val, match_details.value.max_time_match);
+      return parseInt(val) >= 0 && parseInt(val) <= time_splits;
     }, 'Thời điểm không hợp lệ')
 })
 

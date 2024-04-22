@@ -17,14 +17,14 @@
           required
         />
 
-          <CInput 
-            class="grow"
-            input-type="date"
-            v-model="state.established_date" 
-            label="Ngày Thành Lập" 
-            name="established_date" 
-            required
-          />
+        <CInput 
+          class="grow"
+          input-type="date"
+          v-model="state.established_date" 
+          label="Ngày Thành Lập" 
+          name="established_date" 
+          required
+        />
 
         <CInput 
           v-model="state.home_court" 

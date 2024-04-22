@@ -31,17 +31,20 @@
             </div>
 
             <div class="flex justify-between space-x-4">
-              <div class="font-bold font-mono text-xl">{{ team_1_names[match_index].name_team }}</div>
+              <div class="font-bold font-mono text-xl">{{ match.team_1_name }}</div>
               <div>VS</div>
-              <div class="font-bold font-mono text-xl">{{ team_2_names[match_index].name_team }}</div>
+              <div class="font-bold font-mono text-xl">{{ match.team_2_name }}</div>
             </div>
 
             <div class="tracking-[0.2em]">
-              <span v-if="isMatchNotPassed(match.time)">Sắp Diễn Ra</span>
+              <span v-if="isMatchNotPassed(match.date)">Sắp Diễn Ra</span>
               <span v-else>{{ match.team1_score }}-{{ match.team2_score }}</span>
             </div>
 
-            <div class="text-sm text-zinc-200 flex gap-2 items-center">
+            <div 
+              class="text-sm text-zinc-200 flex gap-2 items-center"
+              @click="router.push(`/match/${match.id}`)"
+            >
               <span>Chi Tiết</span>
               <UIcon name="i-heroicons-chevron-right" />
             </div>
@@ -84,11 +87,6 @@ const filter_teams = computed(() => {
 
 let all_matches = ref({'data': []});
 all_matches.value = await useFetch('http://localhost:8000/api/match/' + season_id);
-
-let team_1_names = all_matches.value.data.team_1;
-let team_2_names = all_matches.value.data.team_2;
-all_matches.value.data = all_matches.value.data.schedule;
-
 
 const all_matches_filtered = computed(() => {
   // copy all_matches data to new object

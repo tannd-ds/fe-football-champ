@@ -212,14 +212,14 @@ if (route.query.season_id) {
   PAGE_TITLE = 'Chỉnh Sửa Mùa Giải';
   fetch_api = 'http://localhost:8000/api/season/update/' + route.query.season_id;
 
-  const res = await useFetch('http://localhost:8000/api/season/edit/' + route.query.season_id);
+  const res = await useFetch('http://localhost:8000/api/season/get/' + route.query.season_id);
 
   for (const key in state.value) {
     state.value[key] = String(res.data.value[0][key]);
   }
 
   function time_to_minutes(time) {
-    const [hours, minutes] = time.split(':');
+    const [hours, minutes, seconds] = time.split(':');
     return String(parseInt(hours) * 60 + parseInt(minutes));
   }
 
@@ -246,8 +246,9 @@ async function handleSubmit() {
   try {
 
     function minutes_to_time(minutes) {
-      const hours = Math.floor(minutes / 60);
-      const mins = minutes % 60;
+      minutes = parseInt(minutes);
+      const hours = String(Math.floor(minutes / 60)).padStart(2, '0');
+      const mins = String(minutes % 60).padStart(2, '0');
       return `${hours}:${mins}:00`;
     }
 
@@ -256,7 +257,9 @@ async function handleSubmit() {
       if (advanced_state.value[key] == '')
         continue;
       if (key == 'max_time_match') {
+        console.log('parsing')
         state.value[key] = minutes_to_time(advanced_state.value[key]);
+        continue;
       }
       state.value[key] = advanced_state.value[key];
     }

@@ -23,7 +23,7 @@
 
 const router = useRouter();
 
-const team_list = await useFetch('http://localhost:8000/api/team');
+const team_list = await useFetch('http://localhost:8000/api/team/get');
 const team_mapper = team_list.data.value.reduce((acc, team) => {
   acc[team.id] = team.name_team;
   return acc;

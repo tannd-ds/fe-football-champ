@@ -20,12 +20,19 @@
           required
         />
 
-        <UCheckbox
+        <!-- Thông tin mùa giải: -->
+        <ul>
+          <li> Ngày bắt đầu: {{ chosen_season.start_date }}</li>
+          <li> Ngày kết thúc: {{ chosen_season.end_date }}</li>
+          <li> Số cầu thủ/đội: {{ chosen_season.min_quantity_soccer }} - {{ chosen_season.max_quantity_soccer }}</li>
+          <li> Tuổi cầu thủ tối thiểu: {{ chosen_season.min_age }}</li>
+        </ul>
+        <!-- <UCheckbox
           v-model="state.is_confirm"
           label="Chúng tôi đã đọc và đồng ý với điều khoản của mùa giải"
           name="is_confirm"
           required
-        />
+        /> -->
 
         <div>
           <UButton type="submit">Submit</UButton>
@@ -52,11 +59,11 @@ useHead({
 const state = ref({
   team_id: route.query.team_id,
   season_id: '',
-  is_confirm: false,
+  is_confirm: true,
   status: 1,
 });
 
-let seasons = await useFetch('http://localhost:8000/api/season');
+let seasons = await useFetch('http://localhost:8000/api/season/get_new');
 
 
 const season_options = seasons.data.value.map((season) => {
@@ -65,6 +72,14 @@ const season_options = seasons.data.value.map((season) => {
     value: season.id,
   }
 })
+
+const chosen_season = ref('OK');
+// update chosen_season when state.season_id change
+watch(state.value, (value) => {
+  const season = seasons.data.value.find((season) => String(season.id) === String(value.season_id));
+  chosen_season.value = season;
+})
+
 
 const handleSubmit = async () => {
 

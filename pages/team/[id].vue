@@ -56,7 +56,7 @@ const router = useRouter();
 let response = ref({data: []});
 let team_info = ref({});
 let team_soccers = ref({data: []});
-response.value = await useFetch(`http://localhost:8000/api/team/${route.params.id}`);
+response.value = await useFetch(`http://localhost:8000/api/team/get/${route.params.id}`);
 
 const reload_data = () => {
   team_info.value    = response.value.data.team[0];
@@ -102,7 +102,7 @@ const items = (row) => [
       if (confirm('Bạn có chắc chắn muốn đuổi cầu thủ này không?')) {
         const res = await useFetch('http://localhost:8000/api/soccer/delete/' + row.id);
 
-        response.value = await useFetch(`http://localhost:8000/api/team/${route.params.id}`);
+        response.value = await useFetch(`http://localhost:8000/api/team/get/${route.params.id}`);
       }
     }
   }]

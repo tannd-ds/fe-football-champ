@@ -5,5 +5,5 @@
 </template>
 
 <script setup>
-let season = await useFetch('http://localhost:8000/api/season');
+let season = await useFetch('http://localhost:8000/api/season/get');
 </script>

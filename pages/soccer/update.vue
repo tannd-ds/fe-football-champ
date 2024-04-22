@@ -96,7 +96,7 @@ const category_options = [
   { name: 'Nước Ngoài', value: 1, },
 ]
 
-const team_list = await useFetch('http://localhost:8000/api/team');
+const team_list = await useFetch('http://localhost:8000/api/team/get');
 const team_options = team_list.data.value.map((team) => {
   return {
     name: team.name_team,

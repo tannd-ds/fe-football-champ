@@ -24,7 +24,7 @@
 const router = useRouter();
 
 let seasons = ref({'data': []});
-seasons.value = await useFetch('http://localhost:8000/api/team');
+seasons.value = await useFetch('http://localhost:8000/api/team/get');
 
 const columns = [
   { key: 'name', label: 'Tên Đội', sortable: true, click: (row) => console.log(row)}, 
@@ -56,7 +56,7 @@ const items = (row) => [
       if (confirm('Bạn có chắc chắn muốn xóa đội bóng này không?')) {
         const res = await useFetch('http://localhost:8000/api/team/delete/' + row.id);
         // TODO: Handle if delete fail
-        seasons.value = await useFetch('http://localhost:8000/api/team');
+        seasons.value = await useFetch('http://localhost:8000/api/team/get');
       }
     }
   }]

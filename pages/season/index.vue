@@ -24,7 +24,7 @@
 const router = useRouter();
 
 let seasons = ref({'data': []});
-seasons.value = await useFetch('http://localhost:8000/api/season');
+seasons.value = await useFetch('http://localhost:8000/api/season/get');
 
 const columns = [
   { key: 'name', label: 'Tên Mùa Giải', sortable: true}, 
@@ -48,7 +48,7 @@ const items = (row) => [
       if (confirm('Bạn có chắc chắn muốn xóa mùa giải này không?')) {
         const res = await useFetch('http://localhost:8000/api/season/delete/' + row.id);
         // TODO: Handle if delete fail
-        seasons.value = await useFetch('http://localhost:8000/api/season');
+        seasons.value = await useFetch('http://localhost:8000/api/season/get');
       }
     }
   }]

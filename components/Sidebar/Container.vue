@@ -1,6 +1,6 @@
 <template>
   <div 
-    class="py-8 w-[360px] h-screen bg-[#0A0A0A] flex flex-col justify-between items-center"
+    class="py-8 w-[380px] h-screen bg-[#0A0A0A] flex flex-col justify-between items-center"
   >
     <div class="w-full px-8 flex flex-col gap-8">
       <div class="text-zinc-100 flex gap-4 items-center">
@@ -86,6 +86,11 @@ const direct_btns = [
     name: 'Trận Đấu',
     icon: 'i-heroicons-calendar-20-solid',
     path: '/',
+  },
+  {
+    name: 'Thông Báo',
+    icon: 'i-heroicons-bell-20-solid',
+    path: '/notification',
   }
 ]
 

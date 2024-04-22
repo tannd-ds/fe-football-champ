@@ -79,7 +79,7 @@ const handleSubmit = async () => {
     const cookie = useCookie('auth');
     const cookie_usr_info = useCookie('usr_info');
 
-    cookie.value = res.data.value.content.rule;
+    cookie.value = res.data.value.content.role;
     cookie_usr_info.value = res.data.value.content;
     
     toasts.add({ 

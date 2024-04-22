@@ -10,13 +10,21 @@
         :schema="schema"
         @submit="handleSubmit"
       >
-        <div>Trận: {{ route.query.schedule_id }}</div>
+        <div>Trận: {{ match_details.team_1_name }} vs. {{ match_details.team_2_name }}</div>
 
         <CSelect
           v-model="state.team_id"
           :options="listteam_options"
           label="Đội Bóng"
           name="team_id"
+          required
+        />
+
+        <CSelect
+          v-model="state.soccer_id"
+          :options="soccers_options"
+          label="Cầu Thủ"
+          name="soccer_id"
           required
         />
 
@@ -27,7 +35,17 @@
           required
         />
 
+        <CInput
+          v-model="state.time_goal"
+          label="Thời Điểm"
+          name="time_goal"
+          input-type="number"
+          required
+        />
+
+        <div>{{ soccers_options }}</div>
         <div>
+          {{ state }}
           <UButton type="submit">Submit</UButton>
         </div>
       </UForm>
@@ -61,6 +79,10 @@ const state = ref({
 
 let listteam = await useFetch(`http://localhost:8000/api/match/listteam/${route.query.schedule_id}`);
 
+// Get match details
+let match_details = await useFetch(`http://localhost:8000/api/match/${route.query.schedule_id}`);
+match_details = match_details.data.value[0];
+
 const listteam_options = computed(() => {
   return listteam.data.value.map((team) => {
     let is_disabled = (team.team_id == state.value.team_id_1 || team.team_id == state.value.team_id_2);
@@ -72,8 +94,27 @@ const listteam_options = computed(() => {
   })
 })
 
+// List soccer options
+const soccers_options = ref([]);
+
+watch(() => state.value.team_id, async (team_id) => {
+  if (team_id) {
+    let soccers = await useFetch(`http://localhost:8000/api/team/get/${team_id}`);
+    soccers = soccers.data.value.team_soccer;
+    console.log(soccers);
+    soccers_options.value = soccers.map((soccer) => {
+      return {
+        name: soccer.name_soccer,
+        value: soccer.id,
+      }
+    })
+  } else {
+    soccers_options.value = [];
+  }
+})
+
 const handleSubmit = async () => {
-  const res = await useFetch('http://localhost:8000/api/match/add', {
+  const res = await useFetch('http://localhost:8000/api/match/detailschedule/add', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -98,25 +139,19 @@ const handleSubmit = async () => {
   }
 }
 
-const schema = z.object({
-  season_id: 
-    z.string().min(1, { message: 'Mùa giải không được để trống' }),
-  team_id_1:
-    z.string().min(1, { message: 'Chọn 1 Đội Thi Đấu' }),
-  team_id_2:
-    z.string().min(1, { message: 'Chọn 1 Đội Thi Đấu' }),
-  date:
-    z.string()
-      .min(1, { message: 'Thời gian không được để trống' })
-      .refine(
-        data => new Date(data) > new Date(),
-        { message: 'Thời gian không được nhỏ hơn hiện tại' }
-      )
-}).refine(
-  data => data.team_id_1 !== data.team_id_2, {
-    message: '2 đội không được giống nhau',
-  }
-);
+// Validation
+// Convert max_time_match from hh:mm:ss to minutes
+let time_splits = String(match_details.max_time_match).split(':');
+match_details.max_time_match = parseInt(time_splits[0]) * 60 + parseInt(time_splits[1]);
 
-console.log(schema);
+const schema = z.object({
+  team_id: z.string(),
+  category_goal: z.string(),
+  // Time goal has to be between 0 and max_time_match
+  time_goal: z.string()
+    .refine(val => {
+      return parseInt(val) >= 0 && parseInt(val) <= match_details.max_time_match;
+    }, 'Thời điểm không hợp lệ')
+})
+
 </script>

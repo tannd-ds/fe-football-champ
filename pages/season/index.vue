@@ -28,6 +28,7 @@ seasons.value = await useFetch('http://localhost:8000/api/season/get');
 
 const columns = [
   { key: 'name', label: 'Tên Mùa Giải', sortable: true}, 
+  { key: 'status', label: 'Trạng Thái', sortable: true,},
   { key: 'start_date', label: 'Ngày Bắt Đầu', sortable: true}, 
   { key: 'end_date', label: 'Ngày Kết Thúc', sortable: true}, 
   { key: 'quantity_team', label: 'SL Đội' }, 

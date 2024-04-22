@@ -1,6 +1,6 @@
 <template>
   <TableBaseViewer 
-    :data="seasons" 
+    :data="soccers" 
     :columns="columns" 
     :items="items"
     real-name-in-json="name_soccer"
@@ -29,25 +29,30 @@ const team_mapper = team_list.data.value.reduce((acc, team) => {
   return acc;
 }, {});
 
-let seasons = ref({'data': []});
-seasons.value = await useFetch('http://localhost:8000/api/soccer');
-for (const season of seasons.value.data) {
-  season.category_text = 
-    (season.category === 0) 
+let soccers = ref({'data': []});
+soccers.value = await useFetch('http://localhost:8000/api/soccer');
+for (const soccer of soccers.value.data) {
+  soccer.category_text = 
+    (soccer.category === 0) 
       ? 'Trong Nước' 
       : 'Nước Ngoài';  
 
-  if (season.team_id === null) {
-    season.team_name = 'Chưa Có Đội Bóng';
+  soccer.badge = {
+    text: soccer.category_text,
+    color: (soccer.category === 0) ? 'green' : 'purple'
+  }
+
+  if (soccer.team_id === null) {
+    soccer.team_name = 'Chưa Có Đội Bóng';
   } else { 
-    season.team_name = team_mapper[season.team_id];
+    soccer.team_name = team_mapper[soccer.team_id];
   }
 }
 
 const columns = [
   { key: 'name', label: 'Tên', sortable: true}, 
   { key: 'birthday', label: 'Ngày Sinh', sortable: true}, 
-  { key: 'category_text', label: 'Loại Cầu Thủ', sortable: true}, 
+  { key: 'badge', label: 'Loại Cầu Thủ', sortable: true}, 
   { key: 'team_name', label: 'Đội Bóng', sortable: true}, 
   { key: 'actions' },
 ]
@@ -66,7 +71,7 @@ const items = (row) => [
       if (confirm('Bạn có chắc chắn muốn xóa mùa giải này không?')) {
         const res = await useFetch('http://localhost:8000/api/soccer/delete/' + row.id);
         // TODO: Handle if delete fail
-        seasons.value = await useFetch('http://localhost:8000/api/soccer');
+        soccers.value = await useFetch('http://localhost:8000/api/soccer');
       }
     }
   }]

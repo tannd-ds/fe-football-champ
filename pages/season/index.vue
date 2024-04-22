@@ -1,6 +1,6 @@
 <template>
   <TableBaseViewer 
-    :data="seasons" 
+    :data="seasons_filtered" 
     :columns="columns" 
     :items="items"
     real-name-in-json="name_season"
@@ -24,11 +24,35 @@
 const router = useRouter();
 
 let seasons = ref({'data': []});
-seasons.value = await useFetch('http://localhost:8000/api/season/get');
+let seasons_filtered = ref(seasons.value);
+let season_badge_mapper = {
+  "Chưa diễn ra": 'green',
+  "Đang diễn ra": 'purple',
+  "Đã kết thúc": 'red',
+}
+
+async function fetch_seasons() {
+  seasons.value = await useFetch('http://localhost:8000/api/season/get');
+}
+fetch_seasons();
+
+watch(() => seasons.value, (val) => {
+  seasons_filtered.value.data = val.data.map(season => {
+    return {
+      ...season,
+      badge: {
+        text: season.status,
+        color: season_badge_mapper[season.status]
+      }
+    }
+  });
+})
+  
+
 
 const columns = [
   { key: 'name', label: 'Tên Mùa Giải', sortable: true}, 
-  { key: 'status', label: 'Trạng Thái', sortable: true,},
+  { key: 'badge', label: 'Tình Trạng'},
   { key: 'start_date', label: 'Ngày Bắt Đầu', sortable: true}, 
   { key: 'end_date', label: 'Ngày Kết Thúc', sortable: true}, 
   { key: 'quantity_team', label: 'SL Đội' }, 
@@ -49,7 +73,7 @@ const items = (row) => [
       if (confirm('Bạn có chắc chắn muốn xóa mùa giải này không?')) {
         const res = await useFetch('http://localhost:8000/api/season/delete/' + row.id);
         // TODO: Handle if delete fail
-        seasons.value = await useFetch('http://localhost:8000/api/season/get');
+        fetch_seasons();
       }
     }
   }]

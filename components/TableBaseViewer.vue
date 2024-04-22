@@ -22,6 +22,19 @@
             </UTooltip>
           </template>
 
+          <template #badge-data="{ row }">
+            <span 
+              :class="{
+                // 'font-bold text-sm': true,
+                'bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300': row.badge.color === 'green',
+                'bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300': row.badge.color === 'red',
+                'text-yellow-500bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300': row.badge.color === 'purple'
+              }"
+            >
+              {{ row.badge.text }}
+            </span>
+          </template>
+
           <template #actions-data="{ row }">
             <UDropdown :items="items(row)">
               <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />

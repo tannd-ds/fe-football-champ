@@ -42,7 +42,6 @@ const items = (row) => [
     click: () => {
       router.push('/register/into_season?team_id=' + row.id + '&team_name=' + row.name_team);
     },
-    disabled: row.quantity_soccer < 15,
   }, {
     label: 'Chỉnh Sửa',
     icon: 'i-heroicons-pencil-square-20-solid',

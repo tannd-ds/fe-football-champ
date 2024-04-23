@@ -50,6 +50,7 @@ for (const soccer of soccers.value.data) {
 }
 
 const columns = [
+  { key: 'url_image', label: ''},
   { key: 'name', label: 'Tên', sortable: true}, 
   { key: 'birthday', label: 'Ngày Sinh', sortable: true}, 
   { key: 'badge', label: 'Loại Cầu Thủ', sortable: true}, 

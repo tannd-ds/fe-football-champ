@@ -11,6 +11,11 @@
           :ui="{tbody: 'overflow-y-auto'}"
         >
 
+          <template #url_image-data="{ row }">
+            <LazyUAvatar v-if="String(row.url_image).startsWith('http')" :src="row.url_image" />
+            <LazyUAvatar v-else :src="`http://localhost:8000/api/soccer/get_img/${row.url_image}`" />
+          </template>
+
           <template #name-data="{ row }">
             <UTooltip text="Xem chi tiết" :popper="{ placement: 'top' }">
               <span 

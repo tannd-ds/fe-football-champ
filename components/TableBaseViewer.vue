@@ -12,8 +12,8 @@
         >
 
           <template #url_image-data="{ row }">
-            <LazyUAvatar v-if="String(row.url_image).startsWith('http')" :src="row.url_image" />
-            <LazyUAvatar v-else :src="`http://localhost:8000/api/soccer/get_img/${row.url_image}`" />
+            <LazyUAvatar v-if="row.url_image" :src="`http://localhost:8000/api/get_img/${props.tableName}__${row.url_image}`" />
+            <LazyUAvatar v-else :alt="String(row[props.realNameInJson])"/>
           </template>
 
           <template #name-data="{ row }">
@@ -72,6 +72,11 @@ const props = defineProps({
   realNameInJson: {
     type: String,
     default: 'name'
+  },
+
+  tableName: {
+    type: String,
+    required: true
   }
 })
 

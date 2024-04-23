@@ -3,6 +3,7 @@
     :data="soccers" 
     :columns="columns" 
     :items="items"
+    table-name="soccer"
     real-name-in-json="name_soccer"
     @on-name-click="onNameClick"
   >

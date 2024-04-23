@@ -3,6 +3,7 @@
     :data="seasons" 
     :columns="columns" 
     :items="items"
+    table-name="team"
     real-name-in-json="name_team"
     @on-name-click="onNameClick"
   >

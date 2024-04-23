@@ -4,6 +4,7 @@
     :columns="columns" 
     :items="items"
     real-name-in-json="name_season"
+    table-name="season"
     @on-name-click="onNameClick"
   >
     <template #header>

@@ -71,7 +71,7 @@ const reload_data = () => {
 reload_data();
 
 const can_regis_into_season = computed(() => {
-  return team_info.value.quantity_soccer >= 15;
+  return true;
 })
 
 

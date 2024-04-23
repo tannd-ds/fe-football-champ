@@ -24,7 +24,6 @@
             v-for="(match, match_index) in all_matches_filtered"
             class="w-full p-4 bg-zinc-800 hover:bg-zinc-700 rounded-lg cursor-pointer transition-all duration-200 ease-in-out"
           >
-            <div>{{ match }}</div>
             <div class="w-full flex justify-between items-center">
               <div class="ml-4 flex flex-col items-center">
                 <span class="font-bold text-xl">{{ match.time }}</span>

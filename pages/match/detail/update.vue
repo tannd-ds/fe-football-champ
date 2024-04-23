@@ -101,7 +101,6 @@ watch(() => state.value.team_id, async (team_id) => {
   if (team_id) {
     let soccers = await useFetch(`http://localhost:8000/api/team/get/${team_id}`);
     soccers = soccers.data.value.team_soccer;
-    console.log(soccers);
     soccers_options.value = soccers.map((soccer) => {
       return {
         name: soccer.name_soccer,
@@ -145,12 +144,10 @@ let time_splits = String(match_details.value.max_time_match).split(':');
 time_splits = parseInt(time_splits[0]) * 60 + parseInt(time_splits[1]);
 
 const schema = z.object({
-  team_id: z.string(),
   category_goal: z.string(),
   // Time goal has to be between 0 and max_time_match
   time_goal: z.string()
     .refine(val => {
-      console.log(val, match_details.value.max_time_match);
       return parseInt(val) >= 0 && parseInt(val) <= time_splits;
     }, 'Thời điểm không hợp lệ')
 })

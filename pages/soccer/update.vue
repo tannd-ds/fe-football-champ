@@ -10,6 +10,14 @@
         :schema="schema"
         @submit="handleSubmit"
       >
+
+        <button type="button" @click="open">
+          Choose file
+        </button>
+
+        <!-- display img uploaded here-->
+        <img :src="soccer_src" alt="soccer_img" class="w-32 h-32" />
+
         <CInput
           v-model="state.name_soccer"
           label="Tên Cầu Thủ"
@@ -43,6 +51,8 @@
             required
           />
         </div>
+
+        <div>{{ state }}</div>
 
         <div>
           <UButton type="submit">Submit</UButton>
@@ -104,29 +114,80 @@ const team_options = team_list.data.value.map((team) => {
   }
 })
 
+// Image Upload ---------------------------------------------------------------
+import { useFileDialog } from '@vueuse/core'
+
+const soccer_src = ref(null);
+const base64  = ref(null);
+
+const { files, open, reset, onChange } = useFileDialog({
+  accept: 'image/*', // Set to accept only image files
+  directory: false, // Select directories instead of files if set true
+})
+
+onChange((files) => {
+  // print image to console
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    console.log(e.target.result);
+    base64.value = e.target.result;
+  }
+  reader.readAsDataURL(files[0]);
+
+  console.log(URL.createObjectURL(files[0]));
+  soccer_src.value = URL.createObjectURL(files[0]);
+
+})
+
+
 async function handleSubmit() {
   try {
-    const response = await useFetch(fetch_api, {
+    // Send image to server
+    const formData = new FormData();
+    formData.append('file', base64.value);
+
+    // append other data
+    for (const key in state.value) {
+      formData.append(key, state.value[key]);
+    }
+
+    const response_img = await useFetch('http://localhost:8000/api/soccer/add', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(state.value),
+      body: formData,
     });
 
-    if (response.status.value == "success") {
+    if (response_img.status.value == "success") {
       toasts.add({
         title: 'Thành Công',
-        description: response.data,
+        description: response_img.data,
       });
-
-      router.push('/soccer');
     } else {
       toasts.add({
         title: 'Lỗi',
-        description: response.data,
+        description: response_img.data,
       });
     }
+    // const response = await useFetch(fetch_api, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(state.value),
+    // });
+
+    // if (response.status.value == "success") {
+    //   toasts.add({
+    //     title: 'Thành Công',
+    //     description: response.data,
+    //   });
+
+    //   router.push('/soccer');
+    // } else {
+    //   toasts.add({
+    //     title: 'Lỗi',
+    //     description: response.data,
+    //   });
+    // }
 
   } catch (error) {
     console.error(error);

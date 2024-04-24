@@ -37,6 +37,11 @@ let emit = defineEmits(['update:modelValue']);
 
 const selected = ref('');
 
+// Initialize selected value
+selected.value = props.options.find(
+  (option) => option.value == props.modelValue
+)?.name || '';
+
 watch(() => selected.value, (val) => {
   emit('update:modelValue', String(val.value));
 })

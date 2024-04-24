@@ -24,35 +24,15 @@
 
 const router = useRouter();
 
-const team_list = await useFetch('http://localhost:8000/api/team/get');
-const team_mapper = team_list.data.value.reduce((acc, team) => {
-  acc[team.id] = team.name_team;
-  return acc;
-}, {});
+async function fetch_soccers() {
+  let response = await useFetch('http://localhost:8000/api/soccer');
+  response.data.value = await processSoccer(response.data.value);
+
+  return response;
+}
 
 let soccers = ref({'data': []});
-
-async function fetch_soccers() {
-  soccers.value = await useFetch('http://localhost:8000/api/soccer');
-  for (const soccer of soccers.value.data) {
-    soccer.category_text = (soccer.category === 0) 
-        ? 'Trong Nước' 
-        : 'Nước Ngoài';  
-
-    soccer.badge = {
-      text: soccer.category_text,
-      color: (soccer.category === 0) ? 'green' : 'purple'
-    };
-
-    if (soccer.team_id === null) {
-      soccer.team_name = 'Chưa Có Đội Bóng';
-    } else { 
-      soccer.team_name = team_mapper[soccer.team_id];
-    }
-  }
-
-}
-fetch_soccers();
+soccers.value = await fetch_soccers();
 
 const columns = [
   { key: 'url_image', label: ''},
@@ -77,7 +57,7 @@ const items = (row) => [
       if (confirm('Bạn có chắc chắn muốn xóa mùa giải này không?')) {
         const res = await useFetch('http://localhost:8000/api/soccer/delete/' + row.id);
         // TODO: Handle if delete fail
-        fetch_soccers();
+        soccers.value = await fetch_soccers();
       }
     }
   }]

@@ -31,24 +31,28 @@ const team_mapper = team_list.data.value.reduce((acc, team) => {
 }, {});
 
 let soccers = ref({'data': []});
-soccers.value = await useFetch('http://localhost:8000/api/soccer');
-for (const soccer of soccers.value.data) {
-  soccer.category_text = 
-    (soccer.category === 0) 
-      ? 'Trong Nước' 
-      : 'Nước Ngoài';  
 
-  soccer.badge = {
-    text: soccer.category_text,
-    color: (soccer.category === 0) ? 'green' : 'purple'
+async function fetch_soccers() {
+  soccers.value = await useFetch('http://localhost:8000/api/soccer');
+  for (const soccer of soccers.value.data) {
+    soccer.category_text = (soccer.category === 0) 
+        ? 'Trong Nước' 
+        : 'Nước Ngoài';  
+
+    soccer.badge = {
+      text: soccer.category_text,
+      color: (soccer.category === 0) ? 'green' : 'purple'
+    };
+
+    if (soccer.team_id === null) {
+      soccer.team_name = 'Chưa Có Đội Bóng';
+    } else { 
+      soccer.team_name = team_mapper[soccer.team_id];
+    }
   }
 
-  if (soccer.team_id === null) {
-    soccer.team_name = 'Chưa Có Đội Bóng';
-  } else { 
-    soccer.team_name = team_mapper[soccer.team_id];
-  }
 }
+fetch_soccers();
 
 const columns = [
   { key: 'url_image', label: ''},
@@ -73,13 +77,13 @@ const items = (row) => [
       if (confirm('Bạn có chắc chắn muốn xóa mùa giải này không?')) {
         const res = await useFetch('http://localhost:8000/api/soccer/delete/' + row.id);
         // TODO: Handle if delete fail
-        soccers.value = await useFetch('http://localhost:8000/api/soccer');
+        fetch_soccers();
       }
     }
   }]
 ]
 
 let onNameClick = (row) => {
-  router.push('/soccer/detail/' + row.id);
+  router.push('/soccer/' + row.id);
 }
 </script>

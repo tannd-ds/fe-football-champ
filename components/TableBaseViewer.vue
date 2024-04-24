@@ -76,7 +76,7 @@ const props = defineProps({
 
   tableName: {
     type: String,
-    required: true
+    default: '',
   }
 })
 

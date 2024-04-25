@@ -1,5 +1,4 @@
 export default async function (soccers) {
-  console.log('OMG im soccers', soccers);
   const team_list = await $fetch('http://localhost:8000/api/team/get');
 
   const team_mapper = team_list.reduce((acc, team) => {

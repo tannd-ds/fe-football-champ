@@ -1,6 +1,6 @@
 <template>
   <TableBaseViewer 
-    :data="seasons" 
+    :data="team_info" 
     :columns="columns" 
     :items="items"
     table-name="team"
@@ -24,8 +24,8 @@
 
 const router = useRouter();
 
-let seasons = ref({'data': []});
-seasons.value = await useFetch('http://localhost:8000/api/team/get');
+let team_info = ref({'data': []});
+team_info.value = await useFetch('http://localhost:8000/api/team/get');
 
 const columns = [
   { key: 'url_image', label: ''},
@@ -57,7 +57,7 @@ const items = (row) => [
       if (confirm('Bạn có chắc chắn muốn xóa đội bóng này không?')) {
         const res = await useFetch('http://localhost:8000/api/team/delete/' + row.id);
         // TODO: Handle if delete fail
-        seasons.value = await useFetch('http://localhost:8000/api/team/get');
+        team_info.value = await useFetch('http://localhost:8000/api/team/get');
       }
     }
   }]

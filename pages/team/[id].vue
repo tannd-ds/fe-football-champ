@@ -3,11 +3,15 @@
     :data="team_soccers" 
     :columns="columns" 
     :items="items"
+    table-name="soccer"
   >
     <template #header>
       <div class="flex justify-between">
         <div class="flex flex-col gap-4">
-          <div>{{ team_info.name_team }}</div>
+          <div class="flex gap-2 items-center">
+            <LazyUAvatar :src="`http://localhost:8000/api/get_img/team__${team_info.url_image}`" />
+            <div>{{ team_info.name_team }}</div>
+          </div>
           <div class="text-base font-normal">
             <div class="flex flex-col gap-1">
               <div>
@@ -58,20 +62,16 @@ let team_info = ref({});
 let team_soccers = ref({data: []});
 response.value = await useFetch(`http://localhost:8000/api/team/get/${route.params.id}`);
 
-const reload_data = () => {
+const reload_data = async () => {
   team_info.value    = response.value.data.team[0];
-  team_soccers.value.data = response.value.data.team_soccer;
-  for (const soccer of team_soccers.value.data) {
-    soccer.category_text = 
-      (soccer.category === 0) ? 'Trong Nước' : 'Nước Ngoài';
-  }
+  team_soccers.value.data = await processSoccer(response.value.data.team_soccer);
 }
 
 // Initial load
 reload_data();
 
 const can_regis_into_season = computed(() => {
-  return team_info.value.quantity_soccer >= 15;
+  return true;
 })
 
 
@@ -81,9 +81,10 @@ watch(response, async (newValue) => {
 })
 
 const columns = [
+  { key: 'url_image', label: ''},
   { key: 'name_soccer', label: 'Tên', sortable: true}, 
   { key: 'birthday', label: 'Ngày Sinh', sortable: true}, 
-  { key: 'category_text', label: 'Loại Cầu Thủ', sortable: true}, 
+  { key: 'badge', label: 'Loại Cầu Thủ', sortable: true}, 
   { key: 'total_goal', label: 'Tổng Bàn Thắng', sortable: true}, 
   { key: 'actions'}
 ]

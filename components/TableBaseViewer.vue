@@ -11,6 +11,11 @@
           :ui="{tbody: 'overflow-y-auto'}"
         >
 
+          <template #url_image-data="{ row }">
+            <LazyUAvatar v-if="row.url_image" :src="`http://localhost:8000/api/get_img/${props.tableName}__${row.url_image}`" />
+            <LazyUAvatar v-else :alt="String(row[props.realNameInJson])"/>
+          </template>
+
           <template #name-data="{ row }">
             <UTooltip text="Xem chi tiết" :popper="{ placement: 'top' }">
               <span 
@@ -67,6 +72,11 @@ const props = defineProps({
   realNameInJson: {
     type: String,
     default: 'name'
+  },
+
+  tableName: {
+    type: String,
+    default: '',
   }
 })
 

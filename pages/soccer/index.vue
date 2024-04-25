@@ -3,6 +3,7 @@
     :data="soccers" 
     :columns="columns" 
     :items="items"
+    table-name="soccer"
     real-name-in-json="name_soccer"
     @on-name-click="onNameClick"
   >
@@ -23,33 +24,18 @@
 
 const router = useRouter();
 
-const team_list = await useFetch('http://localhost:8000/api/team/get');
-const team_mapper = team_list.data.value.reduce((acc, team) => {
-  acc[team.id] = team.name_team;
-  return acc;
-}, {});
+async function fetch_soccers() {
+  let response = await useFetch('http://localhost:8000/api/soccer');
+  response.data.value = await processSoccer(response.data.value);
 
-let soccers = ref({'data': []});
-soccers.value = await useFetch('http://localhost:8000/api/soccer');
-for (const soccer of soccers.value.data) {
-  soccer.category_text = 
-    (soccer.category === 0) 
-      ? 'Trong Nước' 
-      : 'Nước Ngoài';  
-
-  soccer.badge = {
-    text: soccer.category_text,
-    color: (soccer.category === 0) ? 'green' : 'purple'
-  }
-
-  if (soccer.team_id === null) {
-    soccer.team_name = 'Chưa Có Đội Bóng';
-  } else { 
-    soccer.team_name = team_mapper[soccer.team_id];
-  }
+  return response;
 }
 
+let soccers = ref({'data': []});
+soccers.value = await fetch_soccers();
+
 const columns = [
+  { key: 'url_image', label: ''},
   { key: 'name', label: 'Tên', sortable: true}, 
   { key: 'birthday', label: 'Ngày Sinh', sortable: true}, 
   { key: 'badge', label: 'Loại Cầu Thủ', sortable: true}, 
@@ -71,13 +57,13 @@ const items = (row) => [
       if (confirm('Bạn có chắc chắn muốn xóa mùa giải này không?')) {
         const res = await useFetch('http://localhost:8000/api/soccer/delete/' + row.id);
         // TODO: Handle if delete fail
-        soccers.value = await useFetch('http://localhost:8000/api/soccer');
+        soccers.value = await fetch_soccers();
       }
     }
   }]
 ]
 
 let onNameClick = (row) => {
-  router.push('/soccer/detail/' + row.id);
+  router.push('/soccer/' + row.id);
 }
 </script>

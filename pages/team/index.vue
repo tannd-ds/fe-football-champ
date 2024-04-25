@@ -3,6 +3,7 @@
     :data="seasons" 
     :columns="columns" 
     :items="items"
+    table-name="team"
     real-name-in-json="name_team"
     @on-name-click="onNameClick"
   >
@@ -27,6 +28,7 @@ let seasons = ref({'data': []});
 seasons.value = await useFetch('http://localhost:8000/api/team/get');
 
 const columns = [
+  { key: 'url_image', label: ''},
   { key: 'name', label: 'Tên Đội', sortable: true, click: (row) => console.log(row)}, 
   { key: 'quantity_soccer', label: 'SL Cầu Thủ', sortable: true}, 
   { key: 'established_date', label: 'Ngày Thành Lập' }, 

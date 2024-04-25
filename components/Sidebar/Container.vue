@@ -1,6 +1,6 @@
 <template>
   <div 
-    class="py-8 w-[380px] h-screen bg-[#0A0A0A] flex flex-col justify-between items-center"
+    class="py-8 w-[380px] h-screen bg-zinc-900 bg-opacity-90 flex flex-col justify-between items-center"
   >
     <div class="w-full px-8 flex flex-col gap-8">
       <div class="text-zinc-100 flex gap-4 items-center">

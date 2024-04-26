@@ -1,14 +1,13 @@
 <template>
-  <div class="mr-3 grow h-[98vh]">
+  <div class="grow h-full max-h-[98vh]">
     <AppCard class="w-full h-full overflow-auto">
-      <div class="flex flex-col gap-8">
+      <div class="h-full flex flex-col gap-8">
         <h1 class="text-3xl font-bold">
           <slot name="header"></slot>
         </h1>
         <UTable 
           :rows="data.data" 
           :columns="columns" 
-          :ui="{tbody: 'overflow-y-auto'}"
         >
 
           <template #url_image-data="{ row }">

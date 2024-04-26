@@ -97,7 +97,7 @@ const direct_btns = [
 const usr_btns = [
   [{
     // label: cookie_usr_info.value.user_name,
-    label: "Admin",
+    label: cookie_usr_info.value?.user_name || 'user',
     slot: 'account',
     disabled: true,
   }], [{

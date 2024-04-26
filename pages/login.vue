@@ -25,6 +25,7 @@
 
           <CInput
             v-model="state.user_password"
+            input-type="password"
             label="Mật Khẩu"
             name="user_password"
             autocomplete="off"

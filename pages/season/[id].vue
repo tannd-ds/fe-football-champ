@@ -51,41 +51,84 @@
       </div>
     </div>
 
-    <UModal v-model="regis_pannel_is_open">
-      <div class="bg-transparent">
-        <TableBaseViewer 
-          class="shrink"
-          :data="all_regis" 
-          :columns="regis_columns" 
-          :items="items"
-          table-name="team"
-        >
-          <template #header>
-            <div>Đơn Đăng Ký chưa Xét Duyệt</div>
-          </template>
-        </TableBaseViewer>
+    <UModal 
+      v-model="regis_pannel_is_open"
+      fullscreen
+      :ui="{
+        background: 'bg-transparent dark:bg-transparent',
+      }"
+    >
+      <!-- close button -->
+      <UButton
+        class="absolute top-4 right-4"
+        icon="i-heroicons-x-mark-20-solid"
+        variant="soft"
+        size="xl"
+        color="red"
+        @click="regis_pannel_is_open = false"
+      />
 
-        <UCard
-        v-if="selected_regis"
-        :ui="{
-          base: 'h-full flex flex-col',
-          rounded: '',
-          divide: 'divide-y divide-gray-100 dark:divide-gray-800',
-          body: {
-            base: 'grow'
-          }
-        }"
-        >
-          {{ selected_regis }}
-          <div class="w-full">
-            <UButton
-              @click="utilsRegisAccept(selected_regis)"
-            >Duyệt</UButton>
-            <UButton
-              @click="utilsRegisReject(selected_regis)"
-            >Hủy</UButton>
-          </div>
-        </UCard>
+      <div class="w-full h-full flex items-center justify-center">
+        <div class="w-[75vw] h-full max-h-[70vh] flex gap-8">
+          <TableBaseViewer 
+            class="w-1/2"
+            :data="all_regis" 
+            :columns="regis_columns" 
+            :items="items"
+            table-name="team"
+          >
+            <template #header>
+              <div>Đơn Đăng Ký chưa Xét Duyệt</div>
+            </template>
+          </TableBaseViewer>
+
+          <AppCard class="w-1/2">
+            <div v-if="selected_regis.listteam_id">
+              <div class="flex flex-col gap-4">
+                <div class="flex flex-col gap-2 items-center">
+                  <LazyUAvatar :src="`http://localhost:8000/api/get_img/team__${selected_regis.url_image}`" />
+                  <div class="text-xl font-bold">{{ selected_regis.name_team }}</div>
+                </div>
+                <div class="text-base font-normal">
+                  <div class="flex flex-col gap-1">
+                    <div>
+                      <span class="font-bold">Ngày Thành Lập:</span> {{ selected_regis.established_date }}
+                    </div>
+                    <div>
+                      <span class="font-bold">Sân Nhà:</span> {{ selected_regis.home_court }}
+                    </div>
+                    <div>
+                      <span class="font-bold">Số Lượng Cầu Thủ:</span> {{ selected_regis.quantity_soccer }}
+                    </div>
+                    <div>
+                      <span class="font-bold">Ngày Đăng Ký</span> {{ selected_regis.date_signin }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="w-full flex justify-center items-center gap-4">
+                <UButton
+                  @click="utilsRegisAccept(selected_regis)"
+                >Duyệt</UButton>
+                <UButton
+                  @click="utilsRegisReject(selected_regis)"
+                >Từ Chối</UButton>
+              </div>
+            </div>
+
+            <div 
+              v-else
+              class="w-full h-full flex items-center justify-center"
+            >
+              <div class="flex flex-col gap-4 items-center text-gray-600">
+                <UIcon name="i-heroicons-queue-list-20-solid" class="text-6xl" />
+                <div class="text-3xl font-bold text-center">Thông Tin Đội Bóng Đăng Ký</div>
+                <div class="text-center">Chọn một đơn đăng ký để xem chi tiết và xét duyệt</div>
+              </div>
+            </div>
+          </AppCard>
+        </div>
       </div>
     </UModal>
   </div>

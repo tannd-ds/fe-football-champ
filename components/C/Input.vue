@@ -3,6 +3,7 @@
     <UInput 
       :type="props.inputType"
       :value="modelValue"
+      variant="outline"
       @input="$emit('update:modelValue', $event.target.value)"
     />
   </UFormGroup>

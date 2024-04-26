@@ -15,19 +15,19 @@
         <div class="flex flex-col items-center gap-4">
           <span class="font-bold">Chọn 2 đội đấu</span>
 
-          <div class="flex gap-2 items-center w-full">
+          <div class="grid grid-cols-7 gap-2 justify-items-stretch w-full">
             <CSelect
-              class="grow"
+              class="col-span-3"
               v-model="state.team_id_1"
               :options="listteam_options"
               name="team_id_1"
               required
             />
 
-            <span>VS</span>
+            <span class="text-center">VS</span>
 
             <CSelect
-              class="grow"
+              class="col-span-3"
               v-model="state.team_id_2"
               :options="listteam_options"
               name="team_id_2"

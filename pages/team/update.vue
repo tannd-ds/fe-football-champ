@@ -10,6 +10,11 @@
         :schema="schema"
         @submit="handleSubmit"
       >
+      <AppAvatarUpload
+          v-if="!route.query.soccer_id"
+          :img_src="img_src"
+          @open="open"
+        />
         <CInput 
           v-model="state.name_team" 
           label="Tên Đội" 
@@ -79,15 +84,42 @@ useHead({
     }
   ]
 });
+// Image Upload ---------------------------------------------------------------
+import { useFileDialog } from '@vueuse/core'
+
+const img_src = ref(null);
+const base64  = ref(null);
+
+const { files, open, reset, onChange } = useFileDialog({
+  accept: 'image/*', // Set to accept only image files
+  directory: false, // Select directories instead of files if set true
+})
+onChange((files) => {
+  // print image to console
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    base64.value = e.target.result;
+  }
+  reader.readAsDataURL(files[0]);
+
+  img_src.value = URL.createObjectURL(files[0]);
+})
 
 async function handleSubmit() {
   try {
+     // Send image to server
+     const formData = new FormData();
+    // append image if this page is for adding new soccer
+    if (!route.query.soccer_id)
+      formData.append('file', base64.value);
+
+    // append other data
+    for (const key in state.value) {
+      formData.append(key, state.value[key]);
+    }
     const response = await useFetch(fetch_api, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(state.value),
+      body: formData,
     });
 
     if (response.status.value == "success") {

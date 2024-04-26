@@ -1,5 +1,5 @@
 <template>
-  <div class="mr-3 grow h-[98vh]">
+  <div class="grow h-full max-h-[98vh]">
     <AppCard class="w-full h-full overflow-auto">
       <div class="h-full flex flex-col gap-8">
         <h1 class="text-3xl font-bold">

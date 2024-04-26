@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full grid grid-cols-3 gap-4">
+  <div class="w-full h-[98vh] grid grid-cols-3 gap-4">
     <AppCard 
       class="col-span-2"
     >
@@ -29,16 +29,24 @@
 
     </AppCard>
 
-    <TableBaseViewer 
-      class=""
-      :data="filter_teams" 
-      :columns="teams_columns" 
-      table-name="team"
-    >
-      <template #header>
-        <div>Bảng Xếp Hạng</div>
-      </template>
-    </TableBaseViewer>
+    <div class="w-full flex flex-col gap-4">
+      <TableBaseViewer 
+        class="shrink"
+        :data="filter_teams" 
+        :columns="teams_columns" 
+        table-name="team"
+      >
+        <template #header>
+          <div>Bảng Xếp Hạng</div>
+        </template>
+      </TableBaseViewer>
+
+      <UButton
+        label="Đơn Đăng Ký"
+        size="lg"
+        icon="i-heroicons-document-plus-20-solid"
+      />
+    </div>
   </div>
 </template>
 

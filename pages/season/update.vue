@@ -149,12 +149,30 @@
               </div>
 
               <!-- Sắp xếp -->
-              <CInput
+              <UCheckbox
+              v-model="advanced_state.category_sort"
+              label="Xếp theo hiệu số bàn thắng"
+              name="category_sort"
+             :value="'1'"
+              @click="updateCategorySort('1')"
+              >
+              </UCheckbox>
+              <UCheckbox
                 v-model="advanced_state.category_sort"
-                label="Cách Xếp Hạng"
+                label="Xếp theo số bàn thắng trên sân khách"
                 name="category_sort"
-                input-type="number"
-              />
+                :value="'2'"
+                @click="updateCategorySort('2')"
+              >
+              </UCheckbox>
+              <UCheckbox
+                v-model="advanced_state.category_sort"
+                label="Xếp theo kết quả đối kháng 2 đội"
+                name="category_sort"
+                :value="'3'"
+                @click="updateCategorySort('3')"
+              >
+              </UCheckbox>
 
             </div>
           </template>
@@ -197,9 +215,21 @@ const advanced_state = ref({
   win_score: '',
   draw_score: '',
   lose_score: '',
-  category_sort: '',
+  category_sort: [],
 })
-
+const methods = {
+  updateCategorySort(value) {
+    if (state.value.advanced_state.category_sort.includes(value)) {
+      // Nếu giá trị đã tồn tại trong mảng, loại bỏ nó
+      const index = state.value.advanced_state.category_sort.indexOf(value);
+      if (index !== -1) {
+        state.value.advanced_state.category_sort.splice(index, 1);
+      }
+    } else {
+      // Nếu giá trị chưa tồn tại trong mảng, thêm nó vào cuối mảng
+      state.value.advanced_state.category_sort.push(value);
+    }
+  }}
 const advanced_settings = [
   {
     label: 'Nâng Cao',

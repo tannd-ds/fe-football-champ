@@ -25,7 +25,7 @@
 
           <CInput
             v-model="state.user_email"
-            label="Tài Khoản"
+            label="Mail"
             name="user_email"
             autocomplete="off"
             required
@@ -35,6 +35,7 @@
             v-model="state.user_password"
             label="Mật Khẩu"
             name="user_password"
+            input-type="password"
             autocomplete="off"
             required
           />
@@ -90,29 +91,31 @@ const state = ref({
 });
 
 const handleSubmit = async () => {
-  const res = await useFetch('http://localhost:8000/api/register', {
-    method: 'POST',
-    body: JSON.stringify(state.value),
-  });
+  try {
 
-  if (res.data.value.code === 200) {
-    toasts.add({ 
-      title: 'Đăng ký thành công', 
-      description: 'Chúc mừng bạn đã đăng ký thành công'
+    const res = await useFetch('http://localhost:8000/api/register', {
+      method: 'POST',
+      body: JSON.stringify(state.value),
     });
 
-    router.push('/login');
+    const res_status = res.data.value.code;
+    const res_content = res.data.value.content;
 
-  } else {
-    if (res.data.value.code === 500) {
-      if (res.data.value.content == "Tài khoản đã tồn tại") {
-        toasts.add({ 
-          title: 'Thất Bại', 
-          description: 'Tài khoản đã tồn tại'
-        });
-        // TODO: add error message directly to the form instead of using toasts
-      }
+    if (res_status == 200) {
+      toasts.add({
+        title: 'Thành Công',
+        description: res_content,
+      });
+      router.back();
+    } else {
+      toasts.add({
+        title: 'Lỗi',
+        description: res_content,
+      });
     }
+
+  } catch (error) {
+    console.error(error);
   }
 }
 

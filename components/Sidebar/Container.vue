@@ -25,6 +25,29 @@
           </template>
         </SidebarDirectButton>
       </div>
+
+      <div class="flex flex-col gap-2">
+        <div class="font-light mb-2 text-md">Quản Lý</div>
+        <UButton 
+          size="lg"
+          variant="ghost"
+          color="black" 
+          label="Người Dùng" 
+          icon="i-heroicons-users-20-solid" 
+          @click="() => router.push('/user')"
+          square
+        />
+
+        <UButton 
+          size="lg"
+          variant="ghost"
+          color="black" 
+          label="Thông Báo" 
+          icon="i-heroicons-bell-20-solid" 
+          @click="() => router.push('')"
+          square
+        />
+      </div>
     </div>
 
     <div>
@@ -87,11 +110,6 @@ const direct_btns = [
     icon: 'i-heroicons-calendar-20-solid',
     path: '/',
   },
-  {
-    name: 'Thông Báo',
-    icon: 'i-heroicons-bell-20-solid',
-    path: '/notification',
-  }
 ]
 
 const usr_btns = [

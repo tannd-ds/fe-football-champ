@@ -44,7 +44,7 @@
           color="black" 
           label="Thông Báo" 
           icon="i-heroicons-bell-20-solid" 
-          @click="() => router.push('')"
+          @click="() => router.push('/notification')"
           square
         />
       </div>

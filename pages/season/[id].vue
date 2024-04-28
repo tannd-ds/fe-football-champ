@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <div class="w-full h-[98vh] grid grid-cols-3 gap-4">
-      <AppCard 
+      <LazyAppCard 
         class="col-span-2"
       >
         <div class="flex flex-col gap-4">
@@ -46,7 +46,7 @@
           </div>
         </div>
 
-      </AppCard>
+      </LazyAppCard>
 
       <div class="w-full flex flex-col gap-4">
         <TableBaseViewer 
@@ -60,12 +60,25 @@
           </template>
         </TableBaseViewer>
 
-        <UButton
-          label="Đơn Đăng Ký"
-          size="lg"
-          icon="i-heroicons-queue-list-20-solid"
-          @click="regis_pannel_is_open = true"
-        />
+          <UButton
+            label="Đơn Đăng Ký"
+            size="lg"
+            icon="i-heroicons-queue-list-20-solid"
+            @click="regis_pannel_is_open = true"
+            :disabled="all_regis.data.length == 0"
+          >
+            <template #trailing>
+                <span 
+                  v-if="all_regis.data.length"
+                  class="
+                    py-1 px-1 min-w-[24px] min-h-[24px] grid place-items-center 
+                    rounded-full bg-red-500 text-xs font-medium leading-none text-white content-['']
+                  "
+                >
+                  {{ all_regis.data.length }}
+                </span>
+              </template>
+          </UButton>
       </div>
     </div>
 

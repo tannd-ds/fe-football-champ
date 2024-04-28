@@ -86,7 +86,7 @@ const state = ref({
   user_name: '',
   user_password: '',
   user_email: '',
-  rule: 0,
+  role: 0,
   is_confirm: false,
 });
 

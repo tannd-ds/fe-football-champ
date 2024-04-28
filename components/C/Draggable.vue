@@ -1,23 +1,27 @@
 <template>
-  <AppCard 
-    v-for="list in props.lists"
-    :key="list.id"
-    class="min-h-[20px]"
-    @drop="on_drop($event, list)"
-    @dragover.prevent
-    @dragenter.prevent
-  >
-    <div class="font-bold text-lg">{{ list.name }}</div>
+  <div class="flex gap-4 items-stretch justify-center">
     <div 
-      v-for="item in get_list(list.id)"
-      :key="item.id"
-      class="p-2 bg-zinc-700 rounded-lg shadow-md my-2"
-      draggable="true"
-      @dragstart="start_drag($event, item)"
+      v-for="list in props.lists"
+      :key="list.id"
+      class="min-h-[20px] w-[300px] p-4 bg-zinc-900 rounded-lg 
+        border border-zinc-700
+        transition-all duration-200 ease-in-out"
+      @drop="on_drop($event, list)"
+      @dragover.prevent
+      @dragenter.prevent
     >
-      {{ item.name }}
+      <div class="font-bold text-lg">{{ list.name }}</div>
+      <div 
+        v-for="item in get_list(list.id)"
+        :key="item.id"
+        class="p-2 bg-zinc-700 rounded-lg shadow-md my-2 truncate cursor-pointer"
+        draggable="true"
+        @dragstart="start_drag($event, item)"
+      >
+        {{ item.name }}
+      </div>
     </div>
-  </AppCard>
+  </div>
 </template>
 
 <script setup>

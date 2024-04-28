@@ -54,6 +54,10 @@
 
 <script setup>
 
+definePageMeta({
+  layout: 'user',
+})
+
 const route = useRoute();
 const router = useRouter();
 

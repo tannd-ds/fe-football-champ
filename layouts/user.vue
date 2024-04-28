@@ -3,7 +3,6 @@
     <SidebarUserContainer />
 
     <div class="w-screen h-screen mr-3 flex flex-row items-center justify-center">
-      <div>Day la user</div>
       <slot></slot>
     </div>
   </div>

@@ -42,7 +42,7 @@
           v-if="isMatchNotPassed(match.date)"
           class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300"
         >Sắp Diễn Ra</span>
-        <span v-else>{{ match.team1_score }}-{{ match.team2_score }}</span>
+        <span v-else>{{ match.team_1_score }}-{{ match.team_2_score }}</span>
       </div>
 
       <button 

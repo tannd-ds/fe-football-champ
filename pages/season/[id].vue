@@ -109,10 +109,10 @@
 
               <div class="w-full flex justify-center items-center gap-4">
                 <UButton
-                  @click="utilsRegisAccept(selected_regis)"
+                  @click="accept_regis(selected_regis)"
                 >Duyệt</UButton>
                 <UButton
-                  @click="utilsRegisReject(selected_regis)"
+                  @click="reject_regis(selected_regis)"
                 >Từ Chối</UButton>
               </div>
             </div>
@@ -138,6 +138,7 @@
 
 const route = useRoute();
 const router = useRouter();
+const toasts = useToast();
 
 const season_id = route.params.id;
 const season_name = 'Mùa giải ' + season_id;
@@ -221,5 +222,32 @@ const items = (row) => [
     }
   }]
 ]
+
+const regis_response = ref({});
+
+const accept_regis = async (regis) => {
+  regis_response.value = await utilsRegisAccept(regis);
+}
+
+const reject_regis = async (regis) => {
+  regis_response.value = await utilsRegisReject(regis);
+}
+
+watch(() => regis_response.value, async (newVal) => {
+  if (newVal.value.code == 200) {
+    all_regis.value = await useFetch(`http://localhost:8000/api/season/get_registration/${season_id}`);
+    selected_regis.value = {};
+    toasts.add({
+      title: 'Thành Công',
+      description: newVal.content,
+    });
+  } else {
+    toasts.add({
+      title: 'Thất Bại',
+      description: newVal.content,
+      color: 'red'
+    });
+  }
+})
 
 </script>

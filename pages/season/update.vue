@@ -149,30 +149,19 @@
               </div>
 
               <!-- Sắp xếp -->
-              <UCheckbox
-              v-model="advanced_state.category_sort"
-              label="Xếp theo hiệu số bàn thắng"
-              name="category_sort"
-             :value="'1'"
-              @click="updateCategorySort('1')"
-              >
-              </UCheckbox>
-              <UCheckbox
-                v-model="advanced_state.category_sort"
-                label="Xếp theo số bàn thắng trên sân khách"
+              {{ category_sort_info.items }}
+              <UFormGroup 
+                :required="false" 
+                size="xl" 
+                label="Thứ Tự Ừu Tiên Khi Xếp Hạng" 
                 name="category_sort"
-                :value="'2'"
-                @click="updateCategorySort('2')"
               >
-              </UCheckbox>
-              <UCheckbox
-                v-model="advanced_state.category_sort"
-                label="Xếp theo kết quả đối kháng 2 đội"
-                name="category_sort"
-                :value="'3'"
-                @click="updateCategorySort('3')"
-              >
-              </UCheckbox>
+                <CSortable
+                  :items="category_sort_info.items"
+                  :lists="category_sort_info.lists"
+                  :item-swap-on-drop="true"
+                />
+              </UFormGroup>
 
             </div>
           </template>
@@ -217,19 +206,7 @@ const advanced_state = ref({
   lose_score: '',
   category_sort: [],
 })
-const methods = {
-  updateCategorySort(value) {
-    if (state.value.advanced_state.category_sort.includes(value)) {
-      // Nếu giá trị đã tồn tại trong mảng, loại bỏ nó
-      const index = state.value.advanced_state.category_sort.indexOf(value);
-      if (index !== -1) {
-        state.value.advanced_state.category_sort.splice(index, 1);
-      }
-    } else {
-      // Nếu giá trị chưa tồn tại trong mảng, thêm nó vào cuối mảng
-      state.value.advanced_state.category_sort.push(value);
-    }
-  }}
+
 const advanced_settings = [
   {
     label: 'Nâng Cao',
@@ -238,14 +215,29 @@ const advanced_settings = [
   }
 ]
 
+const category_sort_info = ref({
+  items: [
+    { id: 1, name: 'Theo Hiệu Số Bàn Thắng', list_id: 1 },
+    { id: 2, name: 'Theo Số Bàn Thắng Trên Sân Khách', list_id: 2 },
+    { id: 3, name: 'Theo Kết Quả Đối Kháng 2 Đội', list_id: 3 },
+  ],
+  lists: [
+    { id: 1, name: '' },
+    { id: 2, name: '' },
+    { id: 3, name: '' },
+  ],
+})
+
+
 if (route.query.season_id) {
   PAGE_TITLE = 'Chỉnh Sửa Mùa Giải';
   fetch_api = 'http://localhost:8000/api/season/update/' + route.query.season_id;
 
-  const res = await useFetch('http://localhost:8000/api/season/get/' + route.query.season_id);
+  let res = await useFetch('http://localhost:8000/api/season/get/' + route.query.season_id);
+  res = res.data.value[0];
 
   for (const key in state.value) {
-    state.value[key] = String(res.data.value[0][key]);
+    state.value[key] = String(res[key]);
   }
 
   function time_to_minutes(time) {
@@ -255,10 +247,18 @@ if (route.query.season_id) {
 
   for (const key in advanced_state.value) {
     if (key == 'max_time_match') {
-      advanced_state.value[key] = time_to_minutes(res.data.value[0][key]);
+      advanced_state.value[key] = time_to_minutes(res[key]);
+      continue;
+    } 
+    // handle category_sort
+    else if (key == 'category_sort') {
+      let new_category_sort = JSON.parse(res[key]);
+      for (let i = 0; i < 3; i++) {
+        category_sort_info.value.items[new_category_sort[i]-1].list_id = i + 1;
+      }
       continue;
     }
-    advanced_state.value[key] = String(res.data.value[0][key]);
+    advanced_state.value[key] = String(res[key]);
   }
 }
 
@@ -282,12 +282,17 @@ async function handleSubmit() {
       return `${hours}:${mins}:00`;
     }
 
-    // Add advanced settings to state if it's not empty
+    // handle category_sort, turn it into an array of ids, sorted by list_id
+    advanced_state.value.category_sort = category_sort_info.value.items
+      .sort((a, b) => a.list_id - b.list_id)
+      .map(item => item.id);
+
+
+    // parse advanced_state to state
     for (const key in advanced_state.value) {
       if (advanced_state.value[key] == '')
         continue;
       if (key == 'max_time_match') {
-        console.log('parsing')
         state.value[key] = minutes_to_time(advanced_state.value[key]);
         continue;
       }

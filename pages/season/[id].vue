@@ -20,6 +20,24 @@
             />
           </div>
 
+          <AppBanner v-if="can_arrange">
+            <template #content>
+              <strong>Mùa giải đã có {{ filter_teams.data.length }}/{{ season_info.quantity_team }} đội đăng ký tham gia.</strong> Xếp Bảng Thi Đấu ngay!
+            </template>
+
+            <template #action>
+              <a 
+                @click.prevent="router.push(`/season/arrange/${season_id}`)"
+                class="flex-none rounded-full bg-gray-900 
+                  px-3.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 
+                  focus-visible:outline focus-visible:outline-2 
+                  focus-visible:outline-offset-2 focus-visible:outline-gray-900 cursor-pointer"
+              >
+                Đi Thôi <span aria-hidden="true">&rarr;</span>
+              </a>
+            </template>
+          </AppBanner>
+
           <div class="flex flex-col gap-4">
             <CMatchItem
               v-for="(match, match_index) in all_matches_filtered"
@@ -198,6 +216,20 @@ const teams_columns = [
   { key: 'lose', label: 'Thua'},
   { key: 'total', label: 'Điểm'}
 ]
+
+// ARRANGE TABLES ------------------------------
+
+const can_arrange = computed(() => {
+
+  return true; // for testing
+  if (filter_teams.value.data.length / season_info.value.quantity_team < 0.5) 
+    return false;
+
+  for (let team of filter_teams.value.data) {
+    if (team.table !== null) return false;
+  }
+  return false;
+})
 
 // REGISTER PANEL ------------------------------
 const regis_pannel_is_open = ref(false);

@@ -149,7 +149,6 @@
               </div>
 
               <!-- Sắp xếp -->
-              {{ category_sort_info.items }}
               <UFormGroup 
                 :required="false" 
                 size="xl" 

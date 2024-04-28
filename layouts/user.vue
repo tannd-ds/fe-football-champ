@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center gap-4">
-    <SidebarContainer />
+    <SidebarUserContainer />
 
     <div class="w-screen h-screen mr-3 flex flex-row items-center justify-center">
       <div>Day la user</div>

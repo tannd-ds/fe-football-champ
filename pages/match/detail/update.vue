@@ -113,6 +113,14 @@ watch(() => state.value.team_id, async (team_id) => {
 })
 
 const handleSubmit = async () => {
+
+  // Convert time_goal from minutes to hh:mm:ss
+  let time_splits = parseInt(state.value.time_goal);
+  let hours = String(Math.floor(time_splits / 60)).padStart(2, '0');
+  let minutes = String(time_splits % 60).padStart(2, '0');
+  let seconds = '00';
+  state.value.time_goal = hours + ':' + minutes + ':' + seconds;
+
   const res = await useFetch('http://localhost:8000/api/match/detailschedule/add', {
     method: 'POST',
     headers: {

@@ -14,7 +14,7 @@
       <div 
         v-for="item in get_list(list.id)"
         :key="item.id"
-        class="p-2 bg-zinc-700 rounded-lg shadow-md my-2 truncate cursor-pointer"
+      class="p-4 bg-zinc-800 bg-opacity-70 rounded-lg shadow-md my-2 truncate cursor-pointer"
         draggable="true"
         @dragstart="start_drag($event, item)"
       >

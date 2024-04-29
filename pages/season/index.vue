@@ -74,6 +74,7 @@ const items = (row) => [
       if (confirm('Bạn có chắc chắn muốn xóa mùa giải này không?')) {
         const res = await useFetch('http://localhost:8000/api/season/delete/' + row.id);
         // TODO: Handle if delete fail
+        
         fetch_seasons();
       }
     }

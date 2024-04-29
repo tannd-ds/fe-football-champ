@@ -23,10 +23,10 @@
   
   const route = useRoute();
   const router = useRouter();
- 
-    let notification_info = ref({'data': []});
-    async function fetch_notifications() {
-      notification_info.value = await useFetch('http://localhost:8000/api/notification/get_all');
+  const toasts= useToast();
+  let notification_info = ref({'data': []});
+  async function fetch_notifications() {
+  notification_info.value = await useFetch('http://localhost:8000/api/notification/get_all');
 }
 fetch_notifications();
 const columns = [
@@ -45,16 +45,32 @@ const columns = [
           router.push(`${route.path}/update/?id=${row.id}`);
         }
       }, 
-       {
-        label: 'Xóa',
-        icon: 'i-heroicons-trash-20-solid',
-        click: async () => {
-          if (!confirm('Bạn có chắc chắn muốn xóa thông báo này không?')) 
-            return;
-          const res = await useFetch('http://localhost:8000/api/notification/delete/' + row.id)
-          notification_info.value = await fetch_notifications();
-        }
-      }
+            {
+          label: 'Xóa',
+          icon: 'i-heroicons-trash-20-solid',
+          click: async () => {
+            if (confirm('Bạn có chắc chắn muốn xóa thông báo này không?')) {
+              const res = await useFetch('http://localhost:8000/api/notification/delete/' + row.id);
+              // TODO: Handle if delete fail
+              const res_status = res.data.value.code;
+              const res_content = res.data.value.content;
+              if (res_status === 200) {
+                    toasts.add({
+                      title: 'Xóa thành Công',
+                      description: res_content,
+                    });
+                    router.replace();
+                  } else {
+                    toasts.add({
+                      title: 'Thất Bại',
+                      description: res_content,
+                    });
+                  }
+                }
+              fetch_notifications();
+            }
+          }
+        
     ]
   ]
  

@@ -7,8 +7,8 @@
       <SidebarLogo />
     </div>
 
-    <div class="flex flex-col gap-2">
-      <div class="font-light mb-2 text-md">Quản Lý</div>
+    <div class="ml-16 w-full flex flex-col gap-2">
+      <div class="font-light mb-2 text-md">Chung</div>
       <UButton 
         size="lg"
         variant="ghost"
@@ -18,6 +18,32 @@
         @click="() => router.push('/')"
         square
       />
+      <UButton 
+        size="lg"
+        variant="ghost"
+        color="black" 
+        label="Mùa Giải" 
+        icon="i-heroicons-globe-alt-20-solid" 
+        @click="() => router.push({
+          path: '/season',
+          query: { public: true }
+        })"
+        square
+      />
+      <UButton 
+        size="lg"
+        variant="ghost"
+        color="black" 
+        label="Danh sách Đội Bóng" 
+        icon="i-heroicons-user-group-20-solid" 
+        @click="() => router.push({
+          path: '/team',
+          query: { public: true }
+        })"
+        square
+      />
+
+      <div class="font-light mb-2 text-md">Quản Lý</div>
       <UButton 
         size="lg"
         variant="ghost"

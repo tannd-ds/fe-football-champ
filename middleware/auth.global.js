@@ -22,6 +22,9 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
   if (usr_info.role == 0) {
     setPageLayout('user');
+    if (to.query.public == 'true') {
+      return;
+    }
     if (!to.path.startsWith('/u/')) {
       // If user is not admin, 
       // and user is trying to access admin page, 

@@ -26,8 +26,8 @@
               label="Đăng Ký Thi Đấu"
               @click="router.push({
                 path: `/register/into_season`,
-                query: { 
-                  season_id: season_id,
+                query: {
+                  team_id: cookie_usr_info.team_id,
                   public: true,
                 }
               })"

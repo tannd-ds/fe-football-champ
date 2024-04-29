@@ -56,10 +56,10 @@
               <template #advanced>
                 <div class="flex flex-col gap-3" >
                     <CSelect
-                  v-model="state.user_id"
-                  :options="user_options"
+                  v-model="state.season_id"
+                  :options="season_options"
                   label ="Chọn mùa giải cần thông báo"
-                  name="user_id"
+                  name="season_id"
                   required
                     />
 
@@ -114,12 +114,15 @@
 
  let users = await useFetch('http://localhost:8000/api/user/get_all');  
  console.log( users.data.value );
+ 
   const user_options = users.data.value.map((user) => {
     return {
       name: user.user_name,
       value: user.id,
     }
-  })
+  }
+)
+
   let seasons = await useFetch('http://localhost:8000/api/season/get');  
  console.log( seasons.data.value );
   const season_options = seasons.data.value.map((season) => {
@@ -150,6 +153,12 @@
       title: 'Thất Bại',
       description: res_content,
     });
+    state.value={
+  user_id: '',
+  content: '',
+  season_id: '',
+ };
+    router.replace();
   }
 }
 const advanced_settings1 = [

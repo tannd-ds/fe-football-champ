@@ -45,6 +45,7 @@
         />
 
         <div class="font-light mb-2 text-md">Quản Lý</div>
+
         <UButton 
           size="lg"
           variant="ghost"
@@ -52,6 +53,16 @@
           label="Đội của tôi" 
           icon="i-heroicons-users-20-solid" 
           @click="() => router.push('/team/my')"
+          square
+        />
+
+        <UButton 
+          size="lg"
+          variant="ghost"
+          color="white" 
+          label="Đơn Đăng Ký" 
+          icon="i-heroicons-document-duplicate-20-solid" 
+          @click="() => router.push('/register/my')"
           square
         />
       </div>

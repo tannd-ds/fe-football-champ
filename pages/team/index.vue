@@ -10,11 +10,12 @@
     <template #header>
       <div class="flex justify-between">
         <div>Danh Sách Đội Bóng</div>
-        <UTooltip text="Thêm Đội Bóng" :popper="{ placement: 'bottom-end' }">
-          <UButton @click="router.push('team/update')">
-            <UIcon name="i-heroicons-plus-20-solid" />
-          </UButton>
-        </UTooltip>
+        <UButton 
+          v-if="cookie_usr_info.role === 1"
+          @click="router.push('team/update')"
+          label="Thêm Đội Bóng"
+          icon="i-heroicons-plus-20-solid" 
+        />
       </div>
     </template>
   </TableBaseViewer>
@@ -22,7 +23,9 @@
 
 <script setup>
 
+const route = useRoute();
 const router = useRouter();
+const { value: cookie_usr_info } = useCookie('usr_info');
 
 let team_info = ref({'data': []});
 team_info.value = await useFetch('http://localhost:8000/api/team/get');
@@ -33,9 +36,12 @@ const columns = [
   { key: 'quantity_soccer', label: 'SL Cầu Thủ', sortable: true}, 
   { key: 'established_date', label: 'Ngày Thành Lập' }, 
   { key: 'home_court', label: 'Sân Nhà' }, 
-  { key: 'actions' }
 ]
 
+// Only admin can edit and delete season
+if (cookie_usr_info.role === 1) {
+  columns.push({ key: 'actions' });
+}
 
 const items = (row) => [
   [{
@@ -64,6 +70,9 @@ const items = (row) => [
 ]
 
 let onNameClick = (row) => {
-  router.push(`/team/${row.id}`);
+  router.push({ 
+    path: `team/${row.id}`, 
+    query: route.query 
+  });
 }
 </script>

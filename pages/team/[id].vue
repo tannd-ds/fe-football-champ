@@ -27,25 +27,35 @@
           </div>
         </div>
 
-        <div class="flex flex-col gap-2">
-          <UTooltip
-            text="Chỉnh Sửa Thông Tin" 
-          >
-            <UButton 
-              icon="i-heroicons-pencil"
-              @click="router.push(`/team/update?team_id=${route.params.id}`)">
-            </UButton>
-          </UTooltip>
+        <div 
+          class="flex flex-col gap-2"
+          v-if="cookie_usr_info.role === 1 || cookie_usr_info.team_id === team_info.id"
+        >
+          <UButton 
+            @click="router.push({
+              path: `/team/update`,
+              query: {
+                team_id: route.params.id,
+                public: true,
+              }
+            })"
+            icon="i-heroicons-pencil"
+            label="Sửa Thông Tin"
+          />
 
-          <UTooltip
-            :text="can_regis_into_season ? `Đăng Ký Giải Đấu` : `Số lượng cầu thủ không đủ để đăng ký`" 
-          >
-            <UButton 
-              icon="i-heroicons-document-plus"
-              @click="router.push(`/register/into_season?team_id=${route.params.id}&team_name=${team_info.name_team}`)"
-              :disabled="!can_regis_into_season"
-            ></UButton>
-          </UTooltip>
+          <UButton 
+            v-if="cookie_usr_info.role === 1 || cookie_usr_info.team_id === team_info.id"
+            @click="router.push({
+              path: `/register/into_season`,
+              query: {
+                team_id: route.params.id,
+                team_name: team_info.name_team,
+                public: true,
+              }
+            })"
+            icon="i-heroicons-document-plus"
+            label="Đăng Ký Giải Đấu"
+          />
         </div>
       </div>
     </template>
@@ -56,6 +66,7 @@
 
 const route = useRoute();
 const router = useRouter();
+const { value: cookie_usr_info } = useCookie('usr_info');
 
 let response = ref({data: []});
 let team_info = ref({});

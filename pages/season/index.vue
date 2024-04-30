@@ -10,11 +10,12 @@
     <template #header>
       <div class="flex justify-between">
         <div>Danh Sách Mùa Giải</div>
-        <UTooltip text="Thêm Mùa Giải" :popper="{ placement: 'bottom-end' }">
-          <UButton @click="router.push('season/update')">
-            <UIcon name="i-heroicons-plus-20-solid" />
-          </UButton>
-        </UTooltip>
+        <UButton 
+          v-if="cookie_usr_info.role === 1"
+          @click="router.push('season/update')"
+          label="Thêm Mùa Giải"
+          icon="i-heroicons-plus-20-solid" 
+        />
       </div>
     </template>
   </TableBaseViewer>
@@ -22,7 +23,9 @@
 
 <script setup>
 
+const route = useRoute();
 const router = useRouter();
+const { value: cookie_usr_info } = useCookie('usr_info');
 
 let seasons = ref({'data': []});
 let seasons_filtered = ref(seasons.value);
@@ -57,8 +60,12 @@ const columns = [
   { key: 'start_date', label: 'Ngày Bắt Đầu', sortable: true}, 
   { key: 'end_date', label: 'Ngày Kết Thúc', sortable: true}, 
   { key: 'quantity_team', label: 'SL Đội' }, 
-  { key: 'actions' }
 ]
+
+// Only admin can edit and delete season
+if (cookie_usr_info.role === 1) {
+  columns.push({ key: 'actions' });
+}
 
 const items = (row) => [
   [{
@@ -82,6 +89,9 @@ const items = (row) => [
 ]
 
 let onNameClick = (row) => {
-  router.push('/season/' + row.id);
+  router.push({ 
+    path: `season/${row.id}`, 
+    query: route.query 
+  });
 }
 </script>

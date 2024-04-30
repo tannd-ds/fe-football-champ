@@ -12,11 +12,25 @@
             </div>
 
             <UButton 
+              v-if="cookie_usr_info.role === 1"
               color="primary"
               icon="i-heroicons-calendar-20-solid"
               label="Lên Lịch"
               @click="router.push(`/match/update?season_id=${season_id}`)"
               :disabled="!can_schedule_match"
+            />
+            <UButton 
+              v-else
+              color="primary"
+              icon="i-heroicons-calendar-20-solid"
+              label="Đăng Ký Thi Đấu"
+              @click="router.push({
+                path: `/register/into_season`,
+                query: {
+                  team_id: cookie_usr_info.team_id,
+                  public: true,
+                }
+              })"
             />
           </div>
 
@@ -60,29 +74,30 @@
           </template>
         </TableBaseViewer>
 
-          <UButton
-            label="Đơn Đăng Ký"
-            size="lg"
-            icon="i-heroicons-queue-list-20-solid"
-            @click="regis_pannel_is_open = true"
-            :disabled="all_regis.data.length == 0"
-          >
-            <template #trailing>
-                <span 
-                  v-if="all_regis.data.length"
-                  class="
-                    py-1 px-1 min-w-[24px] min-h-[24px] grid place-items-center 
-                    rounded-full bg-red-500 text-xs font-medium leading-none text-white content-['']
-                  "
-                >
-                  {{ all_regis.data.length }}
-                </span>
-              </template>
-          </UButton>
+        <UButton
+          v-if="cookie_usr_info.role === 1"
+          label="Đơn Đăng Ký"
+          size="lg"
+          icon="i-heroicons-queue-list-20-solid"
+          @click="regis_pannel_is_open = true"
+          :disabled="all_regis.data.length == 0"
+        >
+          <template #trailing>
+              <span 
+                v-if="all_regis.data.length"
+                class="
+                  py-1 px-1 min-w-[24px] min-h-[24px] grid place-items-center 
+                  rounded-full bg-red-500 text-xs font-medium leading-none text-white content-['']
+                "
+              >
+                {{ all_regis.data.length }}
+              </span>
+            </template>
+        </UButton>
       </div>
     </div>
 
-    <UModal 
+    <LazyUModal 
       v-model="regis_pannel_is_open"
       fullscreen
       :ui="{
@@ -161,7 +176,7 @@
           </AppCard>
         </div>
       </div>
-    </UModal>
+    </LazyUModal>
   </div>
 </template>
 
@@ -170,6 +185,7 @@
 const route = useRoute();
 const router = useRouter();
 const toasts = useToast();
+const { value: cookie_usr_info } = useCookie('usr_info');
 
 const season_id = route.params.id;
 const season_name = 'Mùa giải ' + season_id;
@@ -233,7 +249,8 @@ const teams_columns = [
 // ARRANGE TABLES ------------------------------
 
 const can_arrange = computed(() => {
-
+  if (cookie_usr_info.role !== 1)
+    return false;
   return true; // for testing
   if (filter_teams.value.data.length / season_info.value.quantity_team < 0.5) 
     return false;

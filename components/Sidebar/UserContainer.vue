@@ -65,16 +65,67 @@
           @click="() => router.push('/register/my')"
           square
         />
+
+        <UButton 
+          size="lg"
+          variant="ghost"
+          color="white" 
+          label="Thông Báo" 
+          icon="i-heroicons-bell-20-solid" 
+          @click="open_notification"
+          square
+        />
+
       </div>
     </div>
 
     <SidebarUserButton />
+
+    <AppUserNotification 
+      :open="notif_open"
+      @close="notif_open = false"
+    >
+      <template #content>
+        <div class="flex flex-col gap-4">
+          <div
+            v-for="notif in notifs"
+            :key="notif.id"
+            class="w-full p-4 bg-zinc-900 rounded-lg 
+                flex flex-col gap-2
+                border border-zinc-800
+                transition-all duration-200 ease-in-out"
+          >
+            <div class="font-semibold">
+              {{ notif.content }}
+            </div>
+            <div class="flex justify-end">
+              <span class="text-sm font-light text-zinc-400">
+                {{ notif.time }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </template>
+    </AppUserNotification>
   </div>
 </template>
 
 <script setup>
 
-const route = useRoute();
 const router = useRouter();
+const { value: cookie_usr_info } = useCookie('usr_info');
+
+const notif_open = ref(false);
+function open_notification() {
+  notif_open.value = true;
+}
+
+const fetch_notif = async () => {
+  let { data: response } = await useFetch(`http://localhost:8000/api/notification/get/${cookie_usr_info.id}`);
+  return response.value;
+}
+
+const notifs = ref([]);
+notifs.value = await fetch_notif();
 
 </script>

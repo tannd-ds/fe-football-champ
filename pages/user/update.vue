@@ -78,7 +78,7 @@ if (route.query.user_id) {
   const res = await useFetch('http://localhost:8000/api/user/edit/' + route.query.user_id);
 
   for (const key in state.value) {
-    state.value[key] = String(res.data.value[0][key]);
+    state.value[key] = String(res.data.value[key]);
   }
 }
 

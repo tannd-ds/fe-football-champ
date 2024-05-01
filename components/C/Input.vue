@@ -1,7 +1,19 @@
 <template>
-  <UFormGroup :required="props.isRequired" size="xl" :label="props.label" :name="props.name">
+  <UFormGroup 
+    :required="props.isRequired" 
+    size="xl" :label="props.label" 
+    :name="props.name"
+  >
     <UInput 
+      v-if="props.inputType !== 'textarea'"
       :type="props.inputType"
+      :value="modelValue"
+      variant="outline"
+      @input="$emit('update:modelValue', $event.target.value)"
+    />
+
+    <UTextarea 
+      v-else
       :value="modelValue"
       variant="outline"
       @input="$emit('update:modelValue', $event.target.value)"

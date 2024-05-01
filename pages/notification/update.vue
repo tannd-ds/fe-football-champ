@@ -4,56 +4,51 @@
       {{ PAGE_TITLE }}
     </template>
     <template #main>
-      <UForm class="flex flex-col gap-3" :state="state" :schema="schema" @submit="handleSubmit">
+      <div class="mb-4 bg-yellow-300 rounded-lg">
+        <div class="container mx-auto px-4 py-2 flex justify-between items-center">
+          <p class="text-sm text-gray-700"><span class="font-bold">Cẩn Thận!</span> Thông báo sau khi được gửi đi sẽ không thể sửa hay thu hồi!</p>
+        </div>
+      </div>
+      <UForm 
+        class="flex flex-col gap-3" 
+        :state="state" 
+        :validate="validate"
+        @submit="handleSubmit"
+      >
 
-        <UAccordion :items="advanced_settings1">
-          <template #default="{ item, index, open }">
-            <UButton color="gray" variant="outline" class="rounded-md" size="xl"
-              :ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }">
-              <span class="text-md text-zinc-300">{{ item.label }}</span>
+        <CSelect 
+          v-model="notif_type" 
+          :options="notif_type_options" 
+          label="Loại Thông Báo" 
+          name="notif_type"
+          required 
+        />
 
-              <template #trailing>
-                <UIcon name="i-heroicons-chevron-right-20-solid"
-                  class="w-5 h-5 ms-auto transform transition-transform duration-200" :class="[open && 'rotate-90']" />
-              </template>
-            </UButton>
-          </template>
+        <LazyCSelect 
+          v-if="notif_type == 'to_user'"
+          v-model="state.user_id" 
+          :options="user_options" 
+          label="Chọn người nhận" 
+          name="user_id"
+          :multiple="notif_type == 'to_user'"
+          required 
+        />
 
-          <template #advanced>
-            <div class="flex flex-col gap-3">
-              <CSelect v-model="state.user_id" :options="user_options" label="Chọn người nhận" name="user_id"
-                required />
-            </div>
-          </template>
-        </UAccordion>
-        <UAccordion :items="advanced_settings2">
-          <template #default="{ item, index, open }">
-            <UButton color="gray" variant="outline" class="rounded-md" size="xl"
-              :ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }">
-              <span class="text-md text-zinc-300">{{ item.label }}</span>
+        <LazyCSelect 
+          v-if="notif_type == 'to_season'"
+          v-model="state.season_id" 
+          :options="season_options" 
+          label="Chọn mùa giải cần thông báo"
+          name="season_id" required 
+        />
 
-              <template #trailing>
-                <UIcon name="i-heroicons-chevron-right-20-solid"
-                  class="w-5 h-5 ms-auto transform transition-transform duration-200" :class="[open && 'rotate-90']" />
-              </template>
-            </UButton>
-          </template>
-
-          <template #advanced>
-            <div class="flex flex-col gap-3">
-              <CSelect v-model="state.season_id" :options="season_options" label="Chọn mùa giải cần thông báo"
-                name="season_id" required />
-
-
-
-            </div>
-          </template>
-        </UAccordion>
-
-        <span>Nội dung thông báo</span>
-        <UTextarea v-model="state.content" name="content" required />
-
-
+        <CInput 
+          input-type="textarea"
+          v-model="state.content" 
+          label="Nội dung thông báo"
+          name="content" 
+          required 
+        />
         <div>
           <UButton name="submit" size="xl" type="submit">Submit</UButton>
         </div>
@@ -73,49 +68,66 @@ const toasts = useToast();
 let PAGE_TITLE = 'Thêm thông báo';
 let fetch_api = 'http://localhost:8000/api/notification/add';
 
-const item = [{
-  label: 'Gửi cho người dùng',
-  icon: 'i-heroicons-information-circle',
-  defaultOpen: true,
-}, {
-  label: 'Gửi cho mùa giải',
-  icon: 'i-heroicons-information-circle',
-  defaultOpen: true,
-}
-]
-let state = ref({
+const state = ref({
   user_id: '',
   content: '',
   season_id: '',
 })
 
-let users = await useFetch('http://localhost:8000/api/user/get_all');
-console.log(users.data.value);
+const notif_type = ref('');
 
+let users = await useFetch('http://localhost:8000/api/user/get_all');
 const user_options = users.data.value.map((user) => {
   return {
     name: user.user_name,
     value: user.id,
   }
-}
-)
+})
 
 let seasons = await useFetch('http://localhost:8000/api/season/get');
-console.log(seasons.data.value);
 const season_options = seasons.data.value.map((season) => {
   return {
     name: season.name_season,
     value: season.id,
   }
 })
+
+const notif_type_options = [
+  {
+    name: 'Thông báo cho TẤT CẢ người dùng',
+    value: 'to_all',
+  },
+  {
+    name: 'Thông báo cho người dùng',
+    value: 'to_user',
+  },
+  {
+    name: 'Thông báo Mùa giải',
+    value: 'to_season',
+  }
+]
+
 const handleSubmit = async () => {
+  let request_body = {
+    content: state.value.content,
+  };
+
+  if (notif_type.value == 'to_user') {
+    request_body.user_id = state.value.user_id;
+  } else if (notif_type.value == 'to_season') {
+    request_body.season_id = state.value.season_id;
+  } else if (notif_type.value == 'to_all') {
+    request_body.user_id = 'all';
+  }
+
   const res = await useFetch(fetch_api, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(state.value),
+    body: JSON.stringify(request_body),
   });
+
   const res_status = res.data.value.code;
   const res_content = res.data.value.content;
 
@@ -123,49 +135,53 @@ const handleSubmit = async () => {
     toasts.add({
       title: 'Thành Công',
       description: res_content,
+      color: 'green',
     });
     router.back();
   } else {
     toasts.add({
       title: 'Thất Bại',
       description: res_content,
+      color: 'red',
     });
-    state.value = {
-      user_id: '',
-      content: '',
-      season_id: '',
-    };
-    router.replace();
   }
 }
-const advanced_settings1 = [
-  {
-    label: 'Gửi thông báo cho người dùng',
-    slot: 'advanced',
-  }
-]
-const advanced_settings2 = [
-  {
-    label: 'Gửi thông báo mùa giải',
-    icon: 'i-heroicons-information-circle',
-    slot: 'advanced',
-  }
-]
 
-const schema = z.object({
-  content: z.string().min(1, {
-    path: ['content'],
-    message: 'Nội dung thông báo không được để trống'
-  }),
-  user_id: z.string(),
-  season_id: z.string(),
-}).refine(data => data.user_id !== '' || data.season_id !== '',
-{  message: 'Chọn ít nhất 1 người nhận thông báo',
-  path: [ 'user_id','seasoN_id'], // Ensure this path correctly represents your intention for the validation message.
+const validate = (state)=> {
+  const errors = [];
+
+  if (!notif_type.value) {
+    errors.push({
+      message: 'Chưa chọn loại thông báo',
+      path: 'notif_type'
+    })
+  }
+
+
+  if (notif_type.value == 'to_user' && !state.user_id) {
+    errors.push({
+      message: 'Chưa chọn người nhận',
+      path: 'user_id'
+    })
+  }
+
+  if (notif_type.value == 'to_season' && !state.season_id) {
+    errors.push({
+      message: 'Chưa chọn mùa giải',
+      path: 'season_id'
+    })
+  }
+
+  if (!state.content) {
+    errors.push({
+      message: 'Nội dung thông báo không được để trống',
+      path: 'content'
+    })
+  }
+
+  return errors
 }
-);
 
-console.log(schema);
 
 
 </script>

@@ -3,7 +3,6 @@
       :data="notification_info" 
       :columns="columns" 
       :items="items"
-     
     >
       <template #header>
         <div class="flex justify-between">
@@ -45,33 +44,34 @@ const columns = [
           router.push(`${route.path}/update/?id=${row.id}`);
         }
       }, 
-            {
-          label: 'Xóa',
-          icon: 'i-heroicons-trash-20-solid',
-          click: async () => {
-            if (confirm('Bạn có chắc chắn muốn xóa thông báo này không?')) {
-              const res = await useFetch('http://localhost:8000/api/notification/delete/' + row.id);
-              // TODO: Handle if delete fail
-              const res_status = res.data.value.code;
-              const res_content = res.data.value.content;
-              if (res_status === 200) {
-                    toasts.add({
-                      title: 'Xóa thành Công',
-                      description: res_content,
-                    });
-                    router.replace();
-                  } else {
-                    toasts.add({
-                      title: 'Thất Bại',
-                      description: res_content,
-                    });
-                  }
+      {
+        label: 'Xóa',
+        icon: 'i-heroicons-trash-20-solid',
+        click: async () => {
+          if (confirm('Bạn có chắc chắn muốn xóa thông báo này không?')) {
+            const res = await useFetch('http://localhost:8000/api/notification/delete/' + row.id);
+
+            // TODO: Handle if delete fail
+            const res_status = res.data.value.code;
+            const res_content = res.data.value.content;
+            if (res_status === 200) {
+                  toasts.add({
+                    title: 'Xóa thành Công',
+                    description: res_content,
+                  });
+                  router.replace();
+                } else {
+                  toasts.add({
+                    title: 'Thất Bại',
+                    description: res_content,
+                  });
                 }
-              fetch_notifications();
-            }
-          }
-        
-    ]
-  ]
- 
-  </script>
+              }
+            fetch_notifications();
+        }
+    }
+  
+]
+]
+
+</script>

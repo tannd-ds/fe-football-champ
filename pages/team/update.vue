@@ -113,6 +113,10 @@ async function handleSubmit() {
     if (!route.query.soccer_id)
       formData.append('file', base64.value);
 
+    // add info about who make this request (user_id)
+    const { value: cookie_usr_info } = useCookie('usr_info');
+    formData.append('user_id', cookie_usr_info.id);
+
     // append other data
     for (const key in state.value) {
       formData.append(key, state.value[key]);

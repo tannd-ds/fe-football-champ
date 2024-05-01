@@ -107,8 +107,8 @@ onChange((files) => {
 
 async function handleSubmit() {
   try {
-     // Send image to server
-     const formData = new FormData();
+    // Send image to server
+    const formData = new FormData();
     // append image if this page is for adding new soccer
     if (!route.query.soccer_id)
       formData.append('file', base64.value);
@@ -126,13 +126,17 @@ async function handleSubmit() {
       body: formData,
     });
 
-    if (response.status.value == "success") {
+    if (response.data.value.code == 200) {
       toasts.add({
         title: 'Thành Công',
         description: response.data,
       })
 
-      router.push('/team');
+      // Update team_id to cookie
+      cookie_usr_info.team_id = response.data.value.team_id;
+      useCookie('usr_info', cookie_usr_info);
+
+      router.back();
     } else {
       toasts.add({
         title: 'Lỗi',

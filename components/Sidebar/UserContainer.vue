@@ -90,12 +90,14 @@
           <div
             v-for="notif in notifs"
             :key="notif.id"
-            class="w-full p-4 bg-zinc-900 rounded-lg 
-                flex flex-col gap-2
-                border border-zinc-800
+            class="w-full p-4 bg-zinc-900 hover:bg-zinc-800
+                rounded-lg flex flex-col gap-2
+                border border-zinc-800 cursor-pointer
                 transition-all duration-200 ease-in-out"
+            @click="read_notif(notif.id)"
           >
-            <div class="font-semibold">
+            <div 
+              :class="[notif.seen ? 'font-normal text-zinc-400' : 'font-semibold text-white']">
               {{ notif.content }}
             </div>
             <div class="flex justify-end">
@@ -127,5 +129,10 @@ const fetch_notif = async () => {
 
 const notifs = ref([]);
 notifs.value = await fetch_notif();
+
+const read_notif = async (id) => {
+  notifs.value.find(notif => notif.id === id).seen = true;
+  let { data: response } = await useFetch(`http://localhost:8000/api/notification/seen/${id}`);
+}
 
 </script>

@@ -2,7 +2,7 @@
   <div 
     class="p-4 min-w-[64px] rounded-md flex flex-col justify-center items-center gap-2 cursor-pointer"
     :class="{
-      'bg-zinc-700 text-zinc-100 hover:bg-zinc-600': isActive,
+      'bg-zinc-800 text-zinc-100 hover:bg-zinc-600': isActive,
       'bg-zinc-900 text-zinc-100 hover:bg-zinc-800': !isActive,
     }"
     @click="onClick"

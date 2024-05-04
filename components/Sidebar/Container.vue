@@ -8,7 +8,7 @@
       <div class="grid grid-cols-2 gap-4">
         <SidebarDirectButton 
           v-for="btn in direct_btns" :key="btn.name"
-          :is-active="'/' + String(route.name) == btn.path"
+          :is-active="is_active(btn.path)"
           :on-click="() => { router.push(btn.path) }"
         >
           <template #icon>
@@ -56,6 +56,11 @@ const router = useRouter();
 
 const direct_btns = [
   {
+    name: 'Trang Chủ',
+    icon: 'i-heroicons-home-20-solid',
+    path: '/',
+  },
+  {
     name: 'Mùa Giải',
     icon: 'i-heroicons-globe-alt-20-solid',
     path: '/season',
@@ -70,11 +75,10 @@ const direct_btns = [
     icon: 'i-heroicons-user-20-solid',
     path: '/soccer',
   },
-  {
-    name: 'Trận Đấu',
-    icon: 'i-heroicons-calendar-20-solid',
-    path: '/',
-  },
 ]
+
+const is_active = (path) => {
+  return String(route.path) == path;
+}
 
 </script>

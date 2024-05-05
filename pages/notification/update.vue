@@ -43,6 +43,15 @@
         />
 
         <CInput 
+          v-if="notif_type == 'to_season'"
+          input-type="textarea"
+          v-model="state.title" 
+          label="Tiêu Đề"
+          name="title"  
+          required
+        />
+
+        <CInput 
           input-type="textarea"
           v-model="state.content" 
           label="Nội dung thông báo"
@@ -70,6 +79,7 @@ let fetch_api = 'http://localhost:8000/api/notification/add';
 
 const state = ref({
   user_id: '',
+  title: '',
   content: '',
   season_id: '',
 })
@@ -116,6 +126,7 @@ const handleSubmit = async () => {
     request_body.user_id = state.value.user_id;
   } else if (notif_type.value == 'to_season') {
     request_body.season_id = state.value.season_id;
+    request_body.title = state.value.title;
   } else if (notif_type.value == 'to_all') {
     request_body.user_id = 'all';
   }
@@ -165,11 +176,20 @@ const validate = (state)=> {
     })
   }
 
-  if (notif_type.value == 'to_season' && !state.season_id) {
-    errors.push({
-      message: 'Chưa chọn mùa giải',
-      path: 'season_id'
-    })
+  if (notif_type.value == 'to_season') {
+    if (!state.season_id) {
+      errors.push({
+        message: 'Chưa chọn mùa giải',
+        path: 'season_id'
+      })
+    }
+
+    if (!state.title) {
+      errors.push({
+        message: 'Tiêu đề thông báo không được để trống',
+        path: 'title'
+      })
+    }
   }
 
   if (!state.content) {

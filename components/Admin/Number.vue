@@ -1,20 +1,36 @@
 <template>
-  <AppCard>
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
-      <dl class="grid grid-cols-1 gap-x-8 gap-y-20 text-center lg:grid-cols-3">
-        <div 
-          v-for="stat in stats" 
-          :key="stat.id" 
-          class="mx-auto flex max-w-xs flex-col gap-y-4"
-        >
-          <dt class="text-base leading-7 text-zinc-200">{{ stat.name }}</dt>
-          <dd class="order-first text-8xl font-bold tracking-tight text-primary">{{ stat.value }}</dd>
-        </div>
-      </dl>
+  <div class="grid grid-cols-4 gap-x-8 gap-y-20 text-center">
+    <div 
+      v-for="stat in stats" 
+      :key="stat.id" 
+      class="relative rounded-lg p-6 shadow-lg dark:text-white overflow-hidden"
+      :class="stat.color"
+    >
+      <dt class="text-lg leading-7 text-zinc-200 font-bold">{{ stat.name }}</dt>
+      <dd class="order-first text-8xl font-bold tracking-tight text-white">{{ stat.value }}</dd>
+      <div class="flex justify-center mt-4">
+      <div class="absolute -left-20 top-0">
+        <UIcon :name="stat.icon" class="w-48 h-48 opacity-20" />
+      </div>
+      </div>
     </div>
-  </AppCard>
+  </div>
 </template>
 
 <script setup>
-const { data : stats } = useFetch('http://localhost:8000/api/admin/number_statistics');
+
+const { data : stats } = await useFetch('http://localhost:8000/api/admin/number_statistics');
+
+// add color to each stats
+const colors = ['bg-green-600', 'bg-orange-500', 'bg-red-600', 'bg-indigo-500']
+const icons  = [
+  'i-heroicons-globe-alt-solid',
+  'i-heroicons-user-group-20-solid',
+  'i-heroicons-user-circle-solid',
+  'i-heroicons-newspaper-solid',
+]
+for (let i = 0; i < stats.value.length; i++) {
+  stats.value[i].color = colors[i];
+  stats.value[i].icon = icons[i];
+}
 </script>

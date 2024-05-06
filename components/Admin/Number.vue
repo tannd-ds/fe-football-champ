@@ -6,12 +6,10 @@
       class="relative rounded-lg p-6 shadow-lg dark:text-white overflow-hidden"
       :class="stat.color"
     >
-      <dt class="text-lg leading-7 text-zinc-200 font-bold">{{ stat.name }}</dt>
-      <dd class="order-first text-8xl font-bold tracking-tight text-white">{{ stat.value }}</dd>
-      <div class="flex justify-center mt-4">
+      <dt class="text-lg leading-7 text-zinc-200 font-bold select-none">{{ stat.name }}</dt>
+      <dd class="order-first text-8xl font-bold tracking-tight text-white select-none">{{ stat.value }}</dd>
       <div class="absolute -left-20 top-0">
         <UIcon :name="stat.icon" class="w-48 h-48 opacity-20" />
-      </div>
       </div>
     </div>
   </div>
@@ -22,7 +20,7 @@
 const { data : stats } = await useFetch('http://localhost:8000/api/admin/number_statistics');
 
 // add color to each stats
-const colors = ['bg-green-600', 'bg-orange-500', 'bg-red-600', 'bg-indigo-500']
+const colors = ['bg-green-500', 'bg-orange-500', 'bg-red-600', 'bg-indigo-500']
 const icons  = [
   'i-heroicons-globe-alt-solid',
   'i-heroicons-user-group-20-solid',

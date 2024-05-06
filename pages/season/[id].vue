@@ -63,6 +63,9 @@
       </LazyAppCard>
 
       <div class="w-full flex flex-col gap-4">
+
+        <CSeasonNews :season_id="route.params.id"/>
+
         <TableBaseViewer 
           class="shrink"
           :data="filter_teams" 
@@ -78,7 +81,7 @@
           v-if="cookie_usr_info.role === 1"
           label="Đơn Đăng Ký"
           size="lg"
-          icon="i-heroicons-queue-list-20-solid"
+          icon="i-heroicons-inbox-stack-20-solid"
           @click="regis_pannel_is_open = true"
           :disabled="all_regis.data.length == 0"
         >

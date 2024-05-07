@@ -4,10 +4,11 @@
     <div class="mb-4 flex justify-between">
       <div class="text-2xl font-bold">Bản Tin</div>
       <UButton 
+        v-if="cookie_usr_info.role == 1"
         color="primary"
         icon="i-heroicons-newspaper"
         label="Đăng Tin"
-        @click=""
+        @click="create_news"
       />
     </div>
 
@@ -47,10 +48,13 @@
 
 const props = defineProps({
   season_id: {
-    type: Number,
+    type: String,
     required: true
   }
 })
+
+const router = useRouter();
+const { value: cookie_usr_info } = useCookie('usr_info');
 
 const news = await $fetch(`http://localhost:8000/api/notification/get_by_season/${props.season_id}`);
 
@@ -64,6 +68,15 @@ const open_news_detail = async (id) => {
   news_detail_is_loading.value = true;
   news_detail.value = await $fetch(`http://localhost:8000/api/notification/get_by_id/${id}`);
   news_detail_is_loading.value = false;
+}
+
+const create_news = () => {
+  router.push({
+    path: `/notification/update`,
+    query: {
+      season_id: props.season_id,
+    }
+  })
 }
 
 </script>

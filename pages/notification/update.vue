@@ -117,6 +117,13 @@ const notif_type_options = [
   }
 ]
 
+// Handle user query
+if (route.query.season_id) {
+  notif_type.value = 'to_season'; 
+  state.value.season_id = route.query.season_id;
+}
+
+
 const handleSubmit = async () => {
   let request_body = {
     content: state.value.content,

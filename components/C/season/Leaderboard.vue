@@ -1,6 +1,5 @@
 <template>
   <TableBaseViewer 
-    class="shrink"
     :data="props.teams" 
     :columns="teams_columns" 
     table-name="team"

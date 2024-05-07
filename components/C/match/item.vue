@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full p-4 bg-zinc-900 rounded-lg 
+    class="w-full p-4 bg-zinc-900 rounded-lg bg-opacity-80
         border border-zinc-800
         transition-all duration-200 ease-in-out"
   >

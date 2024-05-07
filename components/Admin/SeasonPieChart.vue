@@ -1,3 +1,18 @@
+<template>
+  <AppCard>
+
+    <div class="mb-8 text-3xl font-bold">Tổng Quan các Mùa Giải</div>
+
+    <div class="w-2/3 h-full relative">
+      <Doughnut
+        class="p-4 h-full absolute -top-8 left-1/4"
+        :data="data"
+        :options="options"
+      />
+    </div>
+  </AppCard>
+</template>
+
 <script setup>
 import { Doughnut } from 'vue-chartjs'
 
@@ -39,22 +54,7 @@ const options = {
         boxHeight: 40,
       },
     }
-  }
+  },
+  cutout: '67%',
 };
 </script>
-<template>
-  <div class="w-full h-full">
-    <AppCard>
-
-      <div class="mb-8 text-3xl font-bold">Tổng Quan các Mùa Giải</div>
-
-      <div>
-        <Doughnut
-          class="p-4"
-          :data="data"
-          :options="options"
-        />
-      </div>
-    </AppCard>
-  </div>
-</template>

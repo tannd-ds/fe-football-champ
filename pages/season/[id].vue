@@ -1,10 +1,10 @@
 <template>
   <div class="w-full">
-    <div class="w-full h-[98vh] grid grid-cols-3 gap-4">
+    <div class="w-full h-[96vh] grid grid-cols-3 gap-4">
       <LazyAppCard 
-        class="col-span-2"
+        class="col-span-2 h-[96vh]"
       >
-        <div class="flex flex-col gap-4">
+        <div class="h-full overflow-auto flex flex-col gap-4">
           <div class="flex justify-between items-center">
             <div class="space-y-2">
               <div class="text-3xl font-bold"> {{ season_info.name_season }}</div>
@@ -42,7 +42,7 @@
             <template #action>
               <a 
                 @click.prevent="router.push(`/season/arrange/${season_id}`)"
-                class="flex-none rounded-full bg-gray-900 
+                class="flex-none rounded-full bg-gray-900
                   px-3.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 
                   focus-visible:outline focus-visible:outline-2 
                   focus-visible:outline-offset-2 focus-visible:outline-gray-900 cursor-pointer"
@@ -52,7 +52,7 @@
             </template>
           </AppBanner>
 
-          <div class="flex flex-col gap-4">
+          <div class="pr-3 w-full max-h-full overflow-auto flex flex-col gap-4">
             <CMatchItem
               v-for="(match, match_index) in all_matches_filtered"
               :match="match"

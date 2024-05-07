@@ -66,16 +66,9 @@
 
         <CSeasonNews :season_id="route.params.id"/>
 
-        <TableBaseViewer 
-          class="shrink"
-          :data="filter_teams" 
-          :columns="teams_columns" 
-          table-name="team"
-        >
-          <template #header>
-            <div>Bảng Xếp Hạng</div>
-          </template>
-        </TableBaseViewer>
+        <CSeasonLeaderboard
+          :teams="filter_teams"
+        />  
 
         <UButton
           v-if="cookie_usr_info.role === 1"
@@ -239,15 +232,6 @@ const all_matches_filtered = computed(() => {
 const can_schedule_match = computed(() => {
   return filter_teams.value.data.length >= 2;
 })
-
-const teams_columns = [
-  { key: 'url_image', label: ''},
-  { key: 'name_team', label: 'Đội'},
-  { key: 'win', label: 'Thắng'},
-  { key: 'draw', label: 'Hòa'},
-  { key: 'lose', label: 'Thua'},
-  { key: 'total', label: 'Điểm'}
-]
 
 // ARRANGE TABLES ------------------------------
 

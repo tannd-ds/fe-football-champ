@@ -129,7 +129,7 @@ const state = ref({
 // Get match details
 let match_details = ref({});
 match_details.value = await useFetch(`http://localhost:8000/api/match/get/by_schedule/${route.query.schedule_id}`);
-match_details.value = match_details.value.data[0];
+match_details.value = match_details.value.data;
 
 const listteam_options = computed(() => {
   return [

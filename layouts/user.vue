@@ -10,7 +10,14 @@
     <div class="bg-cover w-screen h-screen"></div>
     <div class="bg-overlay w-full h-full absolute top-0 left-0"></div>
   </div>
+<div>
+  <ChatBubble />
+</div>
 </template>
+
+
+
+
 
 <style>
 

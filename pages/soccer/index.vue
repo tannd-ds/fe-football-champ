@@ -10,11 +10,12 @@
     <template #header>
       <div class="flex justify-between">
         <div>Danh Sách Cầu Thủ</div>
-        <UTooltip text="Thêm Cầu Thủ" :popper="{ placement: 'bottom-end' }">
-          <UButton @click="router.push('soccer/update')">
-            <UIcon name="i-heroicons-plus-20-solid" />
-          </UButton>
-        </UTooltip>
+        <UButton 
+          v-if="cookie_usr_info.role === 1"
+          @click="router.push('soccer/update')"
+          label="Thêm Cầu Thủ"
+          icon="i-heroicons-plus-20-solid" 
+        />
       </div>
     </template>
   </TableBaseViewer>
@@ -23,6 +24,7 @@
 <script setup>
 
 const router = useRouter();
+const { value: cookie_usr_info } = useCookie('usr_info');
 
 async function fetch_soccers() {
   let response = await useFetch('http://localhost:8000/api/soccer');

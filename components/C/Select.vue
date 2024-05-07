@@ -4,6 +4,7 @@
       v-model="selected"
       :options="props.options" 
       option-attribute="name"
+      :disabled="props.disabled"
     />
   </UFormGroup>
 </template>
@@ -31,6 +32,10 @@ const props = defineProps({
     type: String,
     default: ''
   },
+  disabled: {
+    type: Boolean,
+    default: false
+  }
 });
 
 let emit = defineEmits(['update:modelValue']);

@@ -10,8 +10,8 @@
         :schema="schema"
         @submit="handleSubmit"
       >
-      <AppAvatarUpload
-          v-if="!route.query.soccer_id"
+        <AppAvatarUpload
+          v-if="!route.query.team_id"
           :img_src="img_src"
           @open="open"
         />

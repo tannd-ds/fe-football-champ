@@ -24,13 +24,7 @@
               color="primary"
               icon="i-heroicons-calendar-20-solid"
               label="Đăng Ký Thi Đấu"
-              @click="router.push({
-                path: `/register/into_season`,
-                query: {
-                  team_id: cookie_usr_info.team_id,
-                  public: true,
-                }
-              })"
+              @click="regis_to_season()"
             />
           </div>
 
@@ -298,5 +292,32 @@ watch(() => regis_response.value, async (newVal) => {
     });
   }
 })
+
+const regis_to_season = () => {
+  if (new Date(season_info.value.start_date) < new Date()) {
+    toasts.add({
+      title: 'Thất Bại',
+      description: 'Mùa Giải này đã hết hạn đăng ký.',
+      color: 'red'
+    });
+    return;
+  }
+
+  if (cookie_usr_info.team_id) {
+    router.push({
+      path: `/register/into_season`,
+      query: {
+        team_id: cookie_usr_info.team_id,
+        public: true,
+      }
+    })
+  } else {
+    toasts.add({
+      title: 'Thất Bại',
+      description: 'Bạn chưa có đội bóng để đăng ký.',
+      color: 'red'
+    })
+  }
+}
 
 </script>

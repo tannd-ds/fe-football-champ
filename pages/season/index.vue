@@ -124,6 +124,10 @@ const seasons_filtered = computed(() => {
     let name_check = null;
     let status_check = null;
 
+    // remove extra space
+    selected_season_name.value = selected_season_name.value.trim();
+    selected_season_name.value = selected_season_name.value.replace(/\s+/g, ' ');
+
     if (selected_season_name.value == '') {
       name_check = true;
     } else {

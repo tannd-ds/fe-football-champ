@@ -1,6 +1,6 @@
 <template>
   <TableBaseViewer 
-    :data="soccers" 
+    :data="soccer_filtered" 
     :columns="columns" 
     :items="items"
     table-name="soccer"
@@ -21,6 +21,16 @@
 
     <template #filters>
       <div class="w-full flex gap-4">
+        <UFormGroup
+          label="Tên Cầu Thủ"
+        >
+          <UInput 
+            v-model="selected_soccer_name" 
+            placeholder="Nhập tên cầu thủ"
+            autocomplete="off"
+          />
+        </UFormGroup>
+
         <UFormGroup
           label="Loại Cầu Thủ"
         >
@@ -83,10 +93,10 @@ useHead({
 });
 
 async function fetch_soccers(api='http://localhost:8000/api/soccer') {
-  let response = await useFetch(api);
-  response.data.value = await processSoccer(response.data.value);
+  let { data: response } = await useFetch(api);
+  response.value = await processSoccer(response.value);
 
-  return response;
+  return response.value;
 }
 
 let soccers = ref({'data': []});
@@ -146,22 +156,56 @@ const team_options = team_list.data.value.map((team) => {
 
 const selected_category = ref([]);
 const selected_team = ref([]);
+const selected_soccer_name = ref('');
 
-watch(() => selected_category.value, async (val) => {
-  soccers.value = await fetch_soccers(`http://localhost:8000/api/soccer?category=${selected_category.value.join(',')}&team_id=${selected_team.value.join(',')}`);
-})
+const soccer_filtered = computed(() => {
+  let temp_soccers = [];
+  for (let i = 0; i < soccers.value.length; i++) {
+    let soccer = soccers.value[i];
+    let name_check = false;
+    let status_check = false;
+    let team_check = false;
 
-watch(() => selected_team.value, async (val) => {
-  soccers.value = await fetch_soccers(`http://localhost:8000/api/soccer?category=${selected_category.value.join(',')}&team_id=${selected_team.value.join(',')}`);
+    // remove extra space
+    selected_soccer_name.value = selected_soccer_name.value.trim();
+    selected_soccer_name.value = selected_soccer_name.value.replace(/\s+/g, ' ');
+
+    if (selected_soccer_name.value == '') {
+      name_check = true;
+    } else {
+      name_check = soccer.name_soccer
+        .toLowerCase()
+        .includes(selected_soccer_name.value.toLowerCase())
+    }
+
+    if (selected_category.value.length == 0) {
+      status_check = true;
+    } else {
+      status_check = selected_category.value.includes(String(soccer.category));
+    }
+
+    if (selected_team.value.length == 0) {
+      team_check = true;
+    } else {
+      team_check = selected_team.value.includes(soccer.team_id);
+    }
+
+    if (name_check && status_check && team_check) {
+      temp_soccers.push(soccer);
+    }
+  }
+
+  return temp_soccers;
 })
 
 const reset_filters = () => {
   selected_category.value = [];
   selected_team.value = [];
+  selected_soccer_name.value = '';
 }
 
 const any_filter_selected = computed(() => {
-  return selected_category.value.length > 0 || selected_team.value.length > 0;
+  return selected_category.value.length > 0 || selected_team.value.length > 0 || selected_soccer_name.value != '';
 })
 
 </script>

@@ -12,6 +12,7 @@ export default async function (soccers) {
         : 'Nước Ngoài';  
 
     soccer.badge = {
+      value: soccer.category,
       text: soccer.category_text,
       color: (soccer.category === 0) ? 'green' : 'purple'
     };

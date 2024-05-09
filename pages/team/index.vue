@@ -27,6 +27,11 @@ const route = useRoute();
 const router = useRouter();
 const { value: cookie_usr_info } = useCookie('usr_info');
 
+const PAGE_TITLE = 'Danh Sách Đội Bóng';
+useHead({
+  title: PAGE_TITLE,
+});
+
 let team_info = ref({'data': []});
 team_info.value = await useFetch('http://localhost:8000/api/team/get');
 

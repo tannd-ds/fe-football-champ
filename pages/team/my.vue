@@ -26,6 +26,12 @@
 
 <script setup>
 const router = useRouter();
+
+const PAGE_TITLE = 'Đội Bóng Của Bạn';
+useHead({
+  title: PAGE_TITLE,
+});
+
 onBeforeMount(() => {
   const { value: cookie_usr_info } = useCookie('usr_info');
   if (cookie_usr_info.team_id != null)

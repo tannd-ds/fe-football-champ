@@ -6,7 +6,7 @@
   >
     <template #header>
       <div class="flex justify-between">
-        <div>Danh Sách Đơn Đăng Ký</div>
+        <div>{{ PAGE_TITLE }}</div>
       </div>
     </template>
   </TableBaseViewer>
@@ -17,6 +17,11 @@
 const route = useRoute();
 const router = useRouter();
 const { value: cookie_usr_info } = useCookie('usr_info');
+
+const PAGE_TITLE = 'Danh Sách Đơn Đăng Ký';
+useHead({
+  title: PAGE_TITLE,
+});
 
 async function fetch_listteam() {
   let response = await useFetch(`http://localhost:8000/api/register/get_by_user/${cookie_usr_info.id}`);

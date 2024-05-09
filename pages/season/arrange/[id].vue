@@ -2,7 +2,7 @@
   <AppCard class="w-full h-[90vh] overflow-auto spacey-8">
     <div class="w-full h-full space-y-8">
       <div class="flex flex-col gap-4 items-center">
-        <div class="text-5xl font-bold">Xếp Bảng Đấu</div>
+        <div class="text-5xl font-bold">{{ PAGE_TITLE }}</div>
         <div class="text-xl">{{ season_info.name_season }} </div>
       </div>
 
@@ -28,6 +28,11 @@
 const route = useRoute();
 const router = useRouter();
 const toasts = useToast();
+
+const PAGE_TITLE = 'Xếp Bảng Đấu';
+useHead({
+  title: PAGE_TITLE,
+});
 
 const { data : season_info } = await useFetch(`http://localhost:8000/api/season/get/${route.params.id}`);
 season_info.value = season_info.value[0];

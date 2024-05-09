@@ -9,7 +9,7 @@
   >
     <template #header>
       <div class="flex justify-between">
-        <div>Danh Sách Cầu Thủ</div>
+        <div>{{ PAGE_TITLE }}</div>
         <UButton 
           v-if="cookie_usr_info.role === 1"
           @click="router.push('soccer/update')"
@@ -25,6 +25,11 @@
 
 const router = useRouter();
 const { value: cookie_usr_info } = useCookie('usr_info');
+
+const PAGE_TITLE = 'Danh sách cầu thủ';
+useHead({
+  title: PAGE_TITLE,
+});
 
 async function fetch_soccers() {
   let response = await useFetch('http://localhost:8000/api/soccer');

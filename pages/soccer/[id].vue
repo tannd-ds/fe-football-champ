@@ -67,7 +67,10 @@
 const route = useRoute();
 const router = useRouter();
 
-const PAGE_TITLE = 'Chi Tiết Cầu Thủ';
+const PAGE_TITLE = 'Thông tin Cầu Thủ';
+useHead({
+  title: PAGE_TITLE,
+});
 
 let soccer_info = ref({});
 let response = await useFetch(`http://localhost:8000/api/soccer/get/${route.params.id}`);

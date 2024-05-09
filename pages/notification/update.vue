@@ -6,7 +6,7 @@
     <template #main>
       <div class="mb-4 bg-yellow-300 rounded-lg">
         <div class="container mx-auto px-4 py-2 flex justify-between items-center">
-          <p class="text-sm text-gray-700"><span class="font-bold">Cẩn Thận!</span> Thông báo sau khi được gửi đi sẽ không thể sửa hay thu hồi!</p>
+          <p class="text-sm text-gray-700"><span class="font-bold">Cẩn Thận!</span> Thông báo sau khi được gửi đi sẽ không thể sửa!</p>
         </div>
       </div>
       <UForm 
@@ -76,6 +76,10 @@ const toasts = useToast();
 
 let PAGE_TITLE = 'Thêm thông báo';
 let fetch_api = 'http://localhost:8000/api/notification/add';
+
+useHead({
+  title: PAGE_TITLE,
+});
 
 const state = ref({
   user_id: '',
@@ -208,7 +212,4 @@ const validate = (state)=> {
 
   return errors
 }
-
-
-
 </script>

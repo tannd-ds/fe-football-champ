@@ -6,12 +6,13 @@
   >
     <template #header>
       <div class="flex justify-between">
-        <div>Danh Sách Người Dùng</div>
-        <UTooltip text="Thêm Người Dùng" :popper="{ placement: 'bottom-end' }">
-          <UButton @click="router.push(`${route.path}/update`)">
-            <UIcon name="i-heroicons-plus-20-solid" />
-          </UButton>
-        </UTooltip>
+        <div>{{ PAGE_TITLE }}</div>
+        <UButton 
+          v-if="cookie_usr_info.role === 1"
+          @click="router.push(`${route.path}/update`)"
+          label="Thêm Người Dùng"
+          icon="i-heroicons-plus-20-solid" 
+        />
       </div>
     </template>
   </TableBaseViewer>
@@ -21,6 +22,12 @@
 
 const route = useRoute();
 const router = useRouter();
+const { value: cookie_usr_info } = useCookie('usr_info');
+
+const PAGE_TITLE = 'Danh Sách Người Dùng';
+useHead({
+  title: PAGE_TITLE,
+});
 
 async function fetch_users() {
   let response = await useFetch('http://localhost:8000/api/user/get_all');

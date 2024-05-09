@@ -2,4 +2,9 @@
   <AdminDashboard />
 </template>
 
-<script setup></script>
+<script setup>
+const PAGE_TITLE = 'Trang Chủ';
+useHead({
+  title: PAGE_TITLE,
+});
+</script>

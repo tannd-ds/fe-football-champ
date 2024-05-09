@@ -68,6 +68,11 @@ const route = useRoute();
 const router = useRouter();
 const { value: cookie_usr_info } = useCookie('usr_info');
 
+const PAGE_TITLE = 'Thông Tin Đội Bóng';
+useHead({
+  title: PAGE_TITLE,
+});
+
 let response = ref({data: []});
 let team_info = ref({});
 let team_soccers = ref({data: []});

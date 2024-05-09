@@ -178,13 +178,13 @@ const toasts = useToast();
 const { value: cookie_usr_info } = useCookie('usr_info');
 
 const season_id = route.params.id;
-const season_name = 'Mùa giải ' + season_id;
 
-useHead({ title: `Mùa giải ${season_id}`, })
 
 let season_info = ref({'data': []});
 season_info.value = await useFetch(`http://localhost:8000/api/season/get/${season_id}`);
 season_info.value = season_info.value.data[0];
+
+useHead({ title: season_info.value.name_season });
 
 let all_teams = ref({'data': []});
 all_teams.value = await useFetch('http://localhost:8000/api/match/listteam/' + season_id);

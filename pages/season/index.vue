@@ -10,7 +10,7 @@
     <template #header>
       <div>
         <div class="flex justify-between">
-          <div>Danh Sách Mùa Giải</div>
+          <div>{{ PAGE_TITLE }}</div>
           <UButton 
             v-if="cookie_usr_info.role === 1"
             @click="router.push('season/update')"
@@ -64,6 +64,11 @@
 const route = useRoute();
 const router = useRouter();
 const { value: cookie_usr_info } = useCookie('usr_info');
+
+const PAGE_TITLE = 'Danh Sách Mùa Giải';
+useHead({
+  title: PAGE_TITLE,
+});
 
 let seasons = ref({'data': []});
 let seasons_filtered = ref(seasons.value);

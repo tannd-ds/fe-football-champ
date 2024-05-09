@@ -4,21 +4,28 @@
       <LazyAppCard 
         class="col-span-2 h-[96vh]"
       >
-        <div class="h-full overflow-auto flex flex-col gap-4">
+        <div class="h-full flex flex-col gap-4">
           <div class="flex justify-between items-center">
             <div class="space-y-2">
-              <div class="text-3xl font-bold"> {{ season_info.name_season }}</div>
-              <div>Lịch Thi Đấu</div>
+              <div class="flex gap-4 items-end">
+                <span class="text-3xl font-bold"> 
+                  {{ season_info.name_season }}
+                </span>
+                <CSeasonDetail :detail="season_info"/>
+              </div>
+              <div>Lịch Thi Đấu
+              </div>
             </div>
 
-            <UButton 
-              v-if="cookie_usr_info.role === 1"
-              color="primary"
-              icon="i-heroicons-calendar-20-solid"
-              label="Lên Lịch"
-              @click="router.push(`/match/update?season_id=${season_id}`)"
-              :disabled="!can_schedule_match"
-            />
+            <div v-if="cookie_usr_info.role === 1">
+              <UButton 
+                color="primary"
+                icon="i-heroicons-calendar-20-solid"
+                label="Lên Lịch"
+                @click="router.push(`/match/update?season_id=${season_id}`)"
+                :disabled="!can_schedule_match"
+              />
+            </div>
             <UButton 
               v-else
               color="primary"
@@ -56,13 +63,11 @@
 
       </LazyAppCard>
 
-      <div class="w-full flex flex-col gap-4">
+      <div class="w-full h-[96vh] overflow-auto flex flex-col gap-4">
 
         <CSeasonNews :season_id="route.params.id"/>
 
-        <CSeasonLeaderboard
-          :teams="filter_teams"
-        />  
+        <CSeasonLeaderboard :teams="filter_teams" />  
 
         <UButton
           v-if="cookie_usr_info.role === 1"

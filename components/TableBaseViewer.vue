@@ -5,46 +5,52 @@
         <h1 class="text-3xl font-bold">
           <slot name="header"></slot>
         </h1>
-        <UTable 
-          :rows="data.data" 
-          :columns="columns" 
-        >
+        <div>
+          <div class="mb-2">
 
-          <template #url_image-data="{ row }">
-            <LazyUAvatar v-if="row.url_image" :src="`http://localhost:8000/api/get_img/${props.tableName}__${row.url_image}`" />
-            <LazyUAvatar v-else :alt="String(row[props.realNameInJson])"/>
-          </template>
+            <slot name="filters"></slot>
+          </div>
+          <UTable 
+            :rows="data.data" 
+            :columns="columns" 
+          >
 
-          <template #name-data="{ row }">
-            <UTooltip text="Xem chi tiết" :popper="{ placement: 'top' }">
+            <template #url_image-data="{ row }">
+              <LazyUAvatar v-if="row.url_image" :src="`http://localhost:8000/api/get_img/${props.tableName}__${row.url_image}`" />
+              <LazyUAvatar v-else :alt="String(row[props.realNameInJson])"/>
+            </template>
+
+            <template #name-data="{ row }">
+              <UTooltip text="Xem chi tiết" :popper="{ placement: 'top' }">
+                <span 
+                  class="font-bold underline cursor-pointer"
+                  @click="emit('on-name-click', row)"
+                >
+                  {{ row[props.realNameInJson] }}
+                </span>
+              </UTooltip>
+            </template>
+
+            <template #badge-data="{ row }">
               <span 
-                class="font-bold underline cursor-pointer"
-                @click="emit('on-name-click', row)"
+                :class="{
+                  'bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300': row.badge.color === 'green',
+                  'bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300': row.badge.color === 'red',
+                  'text-yellow-500bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300': row.badge.color === 'purple'
+                }"
               >
-                {{ row[props.realNameInJson] }}
+                {{ row.badge.text }}
               </span>
-            </UTooltip>
-          </template>
+            </template>
 
-          <template #badge-data="{ row }">
-            <span 
-              :class="{
-                'bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300': row.badge.color === 'green',
-                'bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300': row.badge.color === 'red',
-                'text-yellow-500bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300': row.badge.color === 'purple'
-              }"
-            >
-              {{ row.badge.text }}
-            </span>
-          </template>
+            <template #actions-data="{ row }">
+              <UDropdown :items="items(row)">
+                <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
+              </UDropdown>
+            </template>
 
-          <template #actions-data="{ row }">
-            <UDropdown :items="items(row)">
-              <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
-            </UDropdown>
-          </template>
-
-        </UTable>
+          </UTable>
+        </div>
       </div>
     </AppCard>
   </div>

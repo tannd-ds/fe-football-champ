@@ -8,14 +8,32 @@
     @on-name-click="onNameClick"
   >
     <template #header>
-      <div class="flex justify-between">
-        <div>Danh Sách Mùa Giải</div>
-        <UButton 
-          v-if="cookie_usr_info.role === 1"
-          @click="router.push('season/update')"
-          label="Thêm Mùa Giải"
-          icon="i-heroicons-plus-20-solid" 
-        />
+      <div>
+        <div class="flex justify-between">
+          <div>Danh Sách Mùa Giải</div>
+          <UButton 
+            v-if="cookie_usr_info.role === 1"
+            @click="router.push('season/update')"
+            label="Thêm Mùa Giải"
+            icon="i-heroicons-plus-20-solid" 
+          />
+        </div>
+      </div>
+    </template>
+
+    <template #filters>
+      <div>
+        <UFormGroup
+          label="Tình Trạng"
+        >
+          <USelectMenu 
+            v-model="selectedStatus" 
+            :options="todoStatus" 
+            option-attribute="label"
+            value-attribute="value"
+            multiple 
+          />
+        </UFormGroup>
       </div>
     </template>
   </TableBaseViewer>
@@ -30,8 +48,8 @@ const { value: cookie_usr_info } = useCookie('usr_info');
 let seasons = ref({'data': []});
 let seasons_filtered = ref(seasons.value);
 
-async function fetch_seasons() {
-  seasons.value = await useFetch('http://localhost:8000/api/season/get');
+async function fetch_seasons(api='http://localhost:8000/api/season/get') {
+  seasons.value = await useFetch(api);
 }
 fetch_seasons();
 
@@ -47,6 +65,29 @@ const columns = [
   { key: 'end_date', label: 'Ngày Kết Thúc', sortable: true}, 
   { key: 'quantity_team', label: 'SL Đội' }, 
 ]
+
+// Filter
+const todoStatus = [{
+  label: 'Chưa Bắt Đầu',
+  value: '0',
+}, {
+  label: 'Đang Diễn Ra',
+  value: '1',
+}, {
+  label: 'Đã Kết Thúc',
+  value: '2',
+}]
+
+const selectedStatus = ref([]);
+watch(() => selectedStatus.value, (val) => {
+  if (val.length === 0) {
+    fetch_seasons();
+  } else {
+    const fetch_url = 'http://localhost:8000/api/season/get?status=' + val.join(',');
+    fetch_seasons('http://localhost:8000/api/season/get?status=' + val.join(','));
+  }
+})
+
 
 // Only admin can edit and delete season
 if (cookie_usr_info.role === 1) {

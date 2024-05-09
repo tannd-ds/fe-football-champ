@@ -94,7 +94,7 @@ const user_options = users.data.value.map((user) => {
   }
 })
 
-let seasons = await useFetch('http://localhost:8000/api/season/get');
+let seasons = await useFetch('http://localhost:8000/api/season/get_simple');
 const season_options = seasons.data.value.map((season) => {
   return {
     name: season.name_season,

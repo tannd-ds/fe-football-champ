@@ -11,7 +11,7 @@
             <slot name="filters"></slot>
           </div>
           <UTable 
-            :rows="data.data" 
+            :rows="processed_data" 
             :columns="columns" 
             :ui="custom_ui"
           >
@@ -90,11 +90,18 @@ const props = defineProps({
 
 const emit = defineEmits(['on-name-click']);
 
-console.log('props', props);
 const custom_ui = {
   td: {
     base: props.wrapLines ? 'whitespace-pre-line' : null,
     size: props.useSmallText ? 'text-xs' : null,
   }
 }
+
+const processed_data = computed(() => {
+  let current_data = props.data;
+  while (current_data.data) {
+    current_data = current_data.data;
+  }
+  return current_data;
+})
 </script>

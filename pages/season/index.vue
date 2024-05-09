@@ -22,7 +22,17 @@
     </template>
 
     <template #filters>
-      <div class="w-full flex">
+      <div class="w-full flex gap-4">
+        <UFormGroup
+          label="Tên Mùa Giải"
+        >
+          <UInput 
+            v-model="selected_season_name" 
+            placeholder="Nhập tên mùa giải"
+            autocomplete="off"
+          />
+        </UFormGroup>
+       
         <UFormGroup
           label="Tình Trạng"
         >
@@ -42,10 +52,10 @@
 
             <UTooltip text="Xóa bộ lọc">
               <UButton
-                @click="selectedStatus = []"
-                :disabled="!selectedStatus.length"
-                :icon="selectedStatus.length ? 'i-material-symbols-filter-alt-off' : 'i-material-symbols-filter-alt'"
-                :color="selectedStatus.length ? 'red' : 'gray'"
+                @click="reset_filters"
+                :disabled="!any_filter_selected"
+                :icon="any_filter_selected ? 'i-material-symbols-filter-alt-off' : 'i-material-symbols-filter-alt'"
+                :color="any_filter_selected ? 'red' : 'gray'"
                 variant="ghost"
                 size="sm"
               />
@@ -70,17 +80,12 @@ useHead({
 });
 
 let seasons = ref({'data': []});
-let seasons_filtered = ref(seasons.value);
 
 async function fetch_seasons(api='http://localhost:8000/api/season/get') {
-  seasons.value = await useFetch(api);
+  let { data: response } = await useFetch(api);
+  return response.value;
 }
-fetch_seasons();
-
-watch(() => seasons.value, async (val) => {
-  seasons_filtered.value = await utilsProcessSeason(val.data);
-})
-  
+seasons.value = await fetch_seasons();
 
 const columns = [
   { key: 'name', label: 'Tên Mùa Giải', sortable: true}, 
@@ -106,10 +111,49 @@ const status_options = [{
 }]
 
 const selectedStatus = ref([]);
-watch(() => selectedStatus.value, (val) => {
-  fetch_seasons('http://localhost:8000/api/season/get?status=' + val.join(','));
-})
+const selected_season_name = ref('');
 
+const seasons_filtered = computed(() => {
+  if (!seasons.value || seasons.value.length === 0) {
+    return [];
+  }
+
+  let temp_seasons = [];
+  for (let i = 0; i < seasons.value.length; i++) {
+    let season = seasons.value[i];
+    let name_check = null;
+    let status_check = null;
+
+    if (selected_season_name.value == '') {
+      name_check = true;
+    } else {
+      name_check = season.name_season
+        .toLowerCase()
+        .includes(selected_season_name.value.toLowerCase())
+    }
+
+    if (selectedStatus.value.length == 0) {
+      status_check = true;
+    } else {
+      status_check = selectedStatus.value.includes(season.status);
+    }
+
+    if (name_check && status_check) {
+      temp_seasons.push(season);
+    }
+  }
+
+  return utilsProcessSeason(temp_seasons);
+});
+
+const reset_filters = () => {
+  selected_season_name.value = '';
+  selectedStatus.value = [];
+}
+
+const any_filter_selected = computed(() => {
+  return selected_season_name.value != '' || selectedStatus.value.length > 0;
+})
 
 // Only admin can edit and delete season
 if (cookie_usr_info.role === 1) {

@@ -1,11 +1,4 @@
-export default async function (seasons) {
-
-  // let season_badge_mapper = {
-  //   "Chưa diễn ra": 'green',
-  //   "Đang diễn ra": 'purple',
-  //   "Đã kết thúc": 'red',
-  // }
-
+export default function (seasons) {
   let season_badge_mapper = {
     '0': {
       text: 'Chưa bắt đầu',

@@ -3,6 +3,8 @@
       :data="notification_info" 
       :columns="columns" 
       :items="items"
+      :use-small-text="true"
+      :wrap-lines="true"
     >
       <template #header>
         <div class="flex justify-between">

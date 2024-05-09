@@ -13,6 +13,7 @@
           <UTable 
             :rows="data.data" 
             :columns="columns" 
+            :ui="custom_ui"
           >
 
             <template #url_image-data="{ row }">
@@ -74,8 +75,26 @@ const props = defineProps({
   tableName: {
     type: String,
     default: '',
-  }
+  },
+
+  useSmallText: {
+    type: Boolean,
+    default: false,
+  },
+
+  wrapLines: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const emit = defineEmits(['on-name-click']);
+
+console.log('props', props);
+const custom_ui = {
+  td: {
+    base: props.wrapLines ? 'whitespace-pre-line' : null,
+    size: props.useSmallText ? 'text-xs' : null,
+  }
+}
 </script>

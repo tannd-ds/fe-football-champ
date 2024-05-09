@@ -3,6 +3,7 @@
     :data="props.teams" 
     :columns="teams_columns" 
     table-name="team"
+    :use-small-text="true"
   >
     <template #header>
       <div>Bảng Xếp Hạng</div>

@@ -25,11 +25,10 @@
       <div class="w-full flex">
         <UFormGroup
           label="Tình Trạng"
-          class="w-[200px]"
         >
           <div class="flex gap-2">
             <USelectMenu 
-              class="grow"
+              class="w-[200px]"
               v-model="selectedStatus" 
               :options="status_options" 
               option-attribute="label"

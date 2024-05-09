@@ -11,7 +11,7 @@
     <div class="bg-overlay w-full h-full absolute top-0 left-0"></div>
   </div>
 <div>
-  <ChatBubble />
+  <Bubble/>
 </div>
 </template>
 

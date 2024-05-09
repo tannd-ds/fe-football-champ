@@ -1,6 +1,6 @@
 <template>
   <TableBaseViewer 
-    :data="team_info" 
+    :data="team_info_calculated" 
     :columns="columns" 
     :items="items"
     table-name="team"
@@ -9,13 +9,40 @@
   >
     <template #header>
       <div class="flex justify-between">
-        <div>Danh Sách Đội Bóng</div>
+        <div>{{ PAGE_TITLE }}</div>
         <UButton 
           v-if="cookie_usr_info.role === 1"
           @click="router.push('team/update')"
           label="Thêm Đội Bóng"
           icon="i-heroicons-plus-20-solid" 
         />
+      </div>
+    </template>
+
+    <template #filters>
+      <div class="w-full flex gap-4">
+        <UFormGroup
+          label="Tên Đội Bóng"
+        >
+          <div class="flex gap-2">
+            <UInput 
+              v-model="search_team_name" 
+              placeholder="Nhập tên đội bóng"
+            />
+       
+            <UTooltip text="Xóa bộ lọc">
+              <UButton
+                @click="reset_filters"
+                :disabled="!any_filter_selected"
+                :icon="any_filter_selected ? 'i-material-symbols-filter-alt-off' : 'i-material-symbols-filter-alt'"
+                :color="any_filter_selected ? 'red' : 'gray'"
+                variant="ghost"
+                size="sm"
+              />
+            </UTooltip>
+          </div>
+        </UFormGroup>
+
       </div>
     </template>
   </TableBaseViewer>
@@ -32,8 +59,13 @@ useHead({
   title: PAGE_TITLE,
 });
 
+async function fetch_teams(api='http://localhost:8000/api/team/get') {
+  let response = await useFetch(api);
+  return response;
+}
+
 let team_info = ref({'data': []});
-team_info.value = await useFetch('http://localhost:8000/api/team/get');
+team_info.value = await fetch_teams();
 
 const columns = [
   { key: 'url_image', label: ''},
@@ -68,7 +100,7 @@ const items = (row) => [
       if (confirm('Bạn có chắc chắn muốn xóa đội bóng này không?')) {
         const res = await useFetch('http://localhost:8000/api/team/delete/' + row.id);
         // TODO: Handle if delete fail
-        team_info.value = await useFetch('http://localhost:8000/api/team/get');
+        team_info.value = await fetch_teams();
       }
     }
   }]
@@ -80,4 +112,32 @@ let onNameClick = (row) => {
     query: route.query 
   });
 }
+
+// Filters
+const search_team_name = ref('');
+
+const team_info_calculated = computed(() => {
+  if (search_team_name.value == '') {
+    return team_info.value;
+  }
+
+  // remove extra space
+  search_team_name.value = search_team_name.value.trim();
+  search_team_name.value = search_team_name.value.replace(/\s+/g, ' ');
+
+  return {
+    data: team_info.value.data.filter((team) => {
+      return team.name_team.toLowerCase().includes(search_team_name.value.toLowerCase());
+    })
+  }
+})
+
+const reset_filters = () => {
+  search_team_name.value = '';
+}
+
+const any_filter_selected = computed(() => {
+  return search_team_name.value;
+})
+
 </script>

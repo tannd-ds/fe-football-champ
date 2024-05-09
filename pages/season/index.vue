@@ -22,18 +22,38 @@
     </template>
 
     <template #filters>
-      <div>
+      <div class="w-full flex">
         <UFormGroup
           label="Tình Trạng"
+          class="w-[200px]"
         >
-          <USelectMenu 
-            v-model="selectedStatus" 
-            :options="todoStatus" 
-            option-attribute="label"
-            value-attribute="value"
-            multiple 
-          />
+          <div class="flex gap-2">
+            <USelectMenu 
+              class="grow"
+              v-model="selectedStatus" 
+              :options="status_options" 
+              option-attribute="label"
+              value-attribute="value"
+              multiple 
+            >
+              <template #option="{ option: status }">
+                <CBadge :data="{ color: status.color, text: status.label }" />
+              </template>
+            </USelectMenu>
+
+            <UTooltip text="Xóa bộ lọc">
+              <UButton
+                @click="selectedStatus = []"
+                :disabled="!selectedStatus.length"
+                :icon="selectedStatus.length ? 'i-material-symbols-filter-alt-off' : 'i-material-symbols-filter-alt'"
+                :color="selectedStatus.length ? 'red' : 'gray'"
+                variant="ghost"
+                size="sm"
+              />
+            </UTooltip>
+          </div>
         </UFormGroup>
+
       </div>
     </template>
   </TableBaseViewer>
@@ -63,29 +83,27 @@ const columns = [
   { key: 'badge', label: 'Tình Trạng'},
   { key: 'start_date', label: 'Ngày Bắt Đầu', sortable: true}, 
   { key: 'end_date', label: 'Ngày Kết Thúc', sortable: true}, 
-  { key: 'quantity_team', label: 'SL Đội' }, 
+  { key: 'quantity_team', label: 'SL Đội', sortable: true }, 
 ]
 
 // Filter
-const todoStatus = [{
+const status_options = [{
   label: 'Chưa Bắt Đầu',
   value: '0',
+  color: 'gray',
 }, {
   label: 'Đang Diễn Ra',
   value: '1',
+  color: 'green',
 }, {
   label: 'Đã Kết Thúc',
   value: '2',
+  color: 'red',
 }]
 
 const selectedStatus = ref([]);
 watch(() => selectedStatus.value, (val) => {
-  if (val.length === 0) {
-    fetch_seasons();
-  } else {
-    const fetch_url = 'http://localhost:8000/api/season/get?status=' + val.join(',');
-    fetch_seasons('http://localhost:8000/api/season/get?status=' + val.join(','));
-  }
+  fetch_seasons('http://localhost:8000/api/season/get?status=' + val.join(','));
 })
 
 

@@ -38,10 +38,10 @@
       </button>
 
       <div class="col-span-3 flex justify-center">
-        <span 
+        <CBadge 
           v-if="isMatchNotPassed(match.date)"
-          class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300"
-        >Sắp Diễn Ra</span>
+          :data="{ color: 'green', text: 'Sắp Diễn Ra' }" 
+        />
         <span v-else>{{ match.team_1_score }}-{{ match.team_2_score }}</span>
       </div>
 

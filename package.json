@@ -21,6 +21,7 @@
     "vue-router": "^4.2.5"
   },
   "dependencies": {
+    "@iconify-json/material-symbols": "^1.1.79",
     "@nuxt/ui": "^2.9.0",
     "@pinia/nuxt": "^0.5.1",
     "chart.js": "^4.4.2",

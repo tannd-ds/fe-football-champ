@@ -51,8 +51,6 @@
           />
         </div>
 
-        <div>{{ state }}</div>
-
         <div>
           <UButton type="submit">Submit</UButton>
         </div>

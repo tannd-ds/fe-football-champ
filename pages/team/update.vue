@@ -133,8 +133,10 @@ async function handleSubmit() {
       })
 
       // Update team_id to cookie
-      cookie_usr_info.team_id = response.data.value.team_id;
-      useCookie('usr_info', cookie_usr_info);
+      if (!cookie_usr_info.team_id) {
+        cookie_usr_info.team_id = response.data.value.team_id;
+        useCookie('usr_info', cookie_usr_info);
+      }
 
       router.back();
     } else {

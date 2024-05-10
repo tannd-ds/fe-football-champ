@@ -129,7 +129,8 @@ async function handleSubmit() {
     if (response.data.value.code == 200) {
       toasts.add({
         title: 'Thành Công',
-        description: response.data,
+        description: response.data.value.content,
+        color: 'green',
       })
 
       // Update team_id to cookie
@@ -142,7 +143,8 @@ async function handleSubmit() {
     } else {
       toasts.add({
         title: 'Lỗi',
-        description: response.data,
+        description: response.data.value.content,
+        color: 'red',
       })
     }
 
@@ -150,6 +152,7 @@ async function handleSubmit() {
     toasts.add({
       title: 'Lỗi',
       description: error,
+      color: 'red',
     })
   }
 }

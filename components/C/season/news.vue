@@ -1,29 +1,29 @@
 <template>
-  <AppCard>
+  <AppCard class="max-h-[30vh]">
+    <div class="w-full h-full flex flex-col">
+      <div class="mb-4 flex justify-between">
+        <div class="text-2xl font-bold">Bản Tin</div>
+        <UButton 
+          v-if="cookie_usr_info.role == 1"
+          color="primary"
+          icon="i-heroicons-newspaper"
+          label="Đăng Tin"
+          @click="create_news"
+        />
+      </div>
 
-    <div class="mb-4 flex justify-between">
-      <div class="text-2xl font-bold">Bản Tin</div>
-      <UButton 
-        v-if="cookie_usr_info.role == 1"
-        color="primary"
-        icon="i-heroicons-newspaper"
-        label="Đăng Tin"
-        @click="create_news"
-      />
-    </div>
-
-    <div class="flex flex-col gap-2 max-h-[256px] overflow-auto divide-y divide-gray-700">
-      <div v-for="n in news" :key="n.id" class="flex flex-col pt-2 gap-1">
-        <div 
-          class="text-base font-semibold hover:text-primary truncate cursor-pointer transition-colors duration-300 ease-in-out"
-          @click="open_news_detail(n.id)"
-        >
-          {{ n.title }}
+      <div class="grow flex flex-col gap-2 overflow-auto divide-y divide-gray-700">
+        <div v-for="n in news" :key="n.id" class="flex flex-col pt-2 gap-1">
+          <div 
+            class="text-base font-semibold hover:text-primary truncate cursor-pointer transition-colors duration-300 ease-in-out"
+            @click="open_news_detail(n.id)"
+          >
+            {{ n.title }}
+          </div>
+          <div class="text-right text-sm text-gray-500">{{ n.time }}</div>
         </div>
-        <div class="text-right text-sm text-gray-500">{{ n.time }}</div>
       </div>
     </div>
-
   </AppCard>
 
   <UModal v-model="news_detail_is_open">
@@ -64,6 +64,7 @@ const news_detail = ref({});
 
 const open_news_detail = async (id) => {
   news_detail_is_open.value = true;
+
 
   news_detail_is_loading.value = true;
   news_detail.value = await $fetch(`http://localhost:8000/api/notification/get_by_id/${id}`);

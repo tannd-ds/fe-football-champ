@@ -17,11 +17,14 @@
               </div>
             </div>
 
-            <div v-if="cookie_usr_info.role === 1">
+            <div 
+              v-if="cookie_usr_info.role === 1"
+              class="flex flex-col gap-2"
+            >
               <UButton 
                 color="primary"
                 icon="i-heroicons-calendar-20-solid"
-                label="Lên Lịch"
+                label="Thêm Trận"
                 @click="router.push(`/match/update?season_id=${season_id}`)"
                 :disabled="!can_schedule_match"
               />
@@ -55,7 +58,7 @@
 
           <div class="pr-3 w-full max-h-full overflow-auto flex flex-col gap-4">
             <CMatchItem
-              v-for="(match, match_index) in all_matches_filtered"
+              v-for="(match, match_index) in all_matches"
               :match="match"
             />
           </div>
@@ -203,32 +206,7 @@ const filter_teams = computed(() => {
   )};
 })
 
-let all_matches = ref({'data': []});
-all_matches.value = await useFetch('http://localhost:8000/api/match/get/by_season/' + season_id);
-
-const all_matches_filtered = computed(() => {
-  // copy all_matches data to new object
-  let matches = {...all_matches.value.data};
-
-  for (let match_index in matches) {
-    let match = matches[match_index];
-    let match_date = new Date(match.date);
-
-    // Extract time from match date
-    let hour = match_date.getHours();
-    let minute = match_date.getMinutes() ? match_date.getMinutes() : '00';
-    match.time = String(hour).padStart(2, '0') + ':' + String(minute).padStart(2, '0')
-
-    // Extract date from match date
-    let day = match_date.getDate();
-    let month = match_date.getMonth() + 1;
-    let year = match_date.getFullYear();
-    match.date_only = day + '/' + month + '/' + year;
-
-    matches[match_index] = match;
-  }
-  return matches;
-})
+const { data: all_matches } = await useFetch(`http://localhost:8000/api/match/get/by_season/${route.params.id}`);
 
 const can_schedule_match = computed(() => {
   return filter_teams.value.data.length >= 2;

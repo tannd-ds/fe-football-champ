@@ -43,10 +43,12 @@
                 </TransitionChild>
 
                 <AppCard class="h-[98vh] flex-col shadow-xl">
-                  <div class="mb-8 px-4 sm:px-6">
-                    <DialogTitle class="text-3xl font-bold leading-6">Thông Báo</DialogTitle>
+                  <div class="h-full flex flex-col overflow-auto">
+                    <div class="mb-8 px-4 sm:px-6">
+                      <DialogTitle class="text-3xl font-bold leading-6">Thông Báo</DialogTitle>
+                    </div>
+                    <slot name="content"></slot>
                   </div>
-                  <slot name="content"></slot>
                 </AppCard>
               </DialogPanel>
             </TransitionChild>

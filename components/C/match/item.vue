@@ -4,10 +4,81 @@
         border border-zinc-800
         transition-all duration-200 ease-in-out"
   >
-    <div class="w-full justify-between items-center grid grid-cols-11">
-      <div class="ml-4 col-span-2 flex flex-col items-start">
-        <span class="font-bold text-lg">{{ match.time }}</span>
-        <span class="text-zinc-400 text-sm">{{ match.date_only }}</span>
+    <div class="w-full justify-between items-center grid grid-cols-11 select-none">
+      <div class="ml-4 col-span-2 flex flex-col items-start class">
+        <UModal 
+          v-model="update_time"
+          class="w-full"
+        >
+          <AppCard>
+            <div class="flex flex-col gap-4">
+              <div class="grid grid-cols-5 items-center">
+                <div 
+                  class="unset col-span-2 flex flex-col gap-1 justify-center items-center cursor-default"
+                >
+                  <LazyUAvatar 
+                    :src="`http://localhost:8000/api/get_img/team__${match.team_1_url_image}`"
+                    alt="team_1_logo" 
+                    class="w-10 h-10"
+                  />
+                  <div class="w-full font-bold text-sm text-center truncate">{{ match.team_1_name }}</div>
+                </div>
+
+                <div class="font-bold col-span-1 text-center">VS</div>
+
+                <div 
+                  class="unset col-span-2 flex flex-col gap-1 justify-center items-center cursor-default"
+                >
+                  <LazyUAvatar 
+                    :src="`http://localhost:8000/api/get_img/team__${match.team_2_url_image}`"
+                    alt="team_1_logo" 
+                    class="w-10 h-10"
+                  />
+                  <div class="w-full font-bold text-sm text-center truncate">{{ match.team_2_name }}</div>
+                </div>
+              </div>
+
+              <UFormGroup
+                label="Thời Gian"
+              >
+                <UInput
+                  class="grow"
+                  v-model="state.datetime"
+                  label="Ngày"
+                  name="date"
+                  type="datetime-local"
+                />
+              </UFormGroup>
+
+              <div class="flex justify-center">
+                <UButton
+                  class="mt-4"
+                  label="Cập Nhật"
+                  @click="fetch_update_time"
+                />
+              </div>
+            </div>
+          </AppCard>
+        </UModal>
+
+        <div 
+          class="flex flex-col items-center disabled:cursor-default"
+          :class="{ 'cursor-pointer': cookie_usr_info.role == 1 }"
+          @click="open_update_modal"
+        >
+          <div
+            v-if="state.date != '' && state.time != ''"
+            class="flex flex-col items-center"
+          >
+            <span class="font-bold text-xl text-center">{{ state.time }}</span>
+            <span class="text-zinc-400 text-sm">{{ state.date }}</span>
+          </div>
+
+          <CBadge
+            v-else
+            :data="{ color: 'red', text: 'Chưa Xếp' }"
+          />
+        </div>
       </div>
 
       <button 
@@ -62,12 +133,69 @@ const props = defineProps({
 })
 
 const router = useRouter();
+const toasts = useToast();
+const { value: cookie_usr_info } = useCookie('usr_info');
+
+const update_time = ref(false);
+const state = ref({
+  date: props.match.date ? props.match.date_only : '',
+  time: props.match.date ? props.match.time_only : '',
+  datetime: props.match.date,
+});
+
+const open_update_modal = () => {
+  if (cookie_usr_info.role == 1) {
+    update_time.value = true;
+  }
+}
 
 function isMatchNotPassed(time) {
   let match_time = new Date(time);
   let current_time = new Date();
 
   return match_time > current_time;
+}
+
+async function fetch_update_time() {
+  const body = [{
+    schedule_id: props.match.schedule_id,
+    datetime: state.value.datetime,
+  }];
+
+  const { data: response } = await useFetch('http://localhost:8000/api/match/update_time', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (response.value.code == 200) {
+    toasts.add({
+      title: 'Thành Công',
+      description: 'Cập nhật thời gian trận đấu thành công',
+      status: 'success',
+    });
+
+    const date_n_time = state.value.datetime.split('T');
+    if (date_n_time.length == 2) {
+      state.value.date = date_n_time[0];
+      state.value.time = date_n_time[1].slice(0, 5);
+      state.value.time = state.value.time.slice(0, 5);
+    } else {
+      state.value.date = '';
+      state.value.time = '';
+    }
+
+    update_time.value = false;
+  } else {
+    toasts.add({
+      title: 'Thất Bại',
+      description: 'Cập nhật thời gian trận đấu thất bại',
+      status: 'error',
+    });
+  }
+
 }
 
 </script>

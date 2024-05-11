@@ -147,20 +147,22 @@ async function handleSubmit() {
       formData.append(key, state.value[key]);
     }
 
-    const response_img = await useFetch(fetch_api, {
+    const response = await useFetch(fetch_api, {
       method: 'POST',
       body: formData,
     });
 
-    if (response_img.status.value == "success") {
+    if (response.status.value == "success") {
       toasts.add({
         title: 'Thành Công',
-        description: response_img.data,
+        description: response.data.content,
       });
+      router.back();
+
     } else {
       toasts.add({
         title: 'Lỗi',
-        description: response_img.data,
+        description: response.data.content,
       });
     }
   } catch (error) {

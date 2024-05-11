@@ -4,6 +4,7 @@
     :columns="teams_columns" 
     table-name="team"
     :use-small-text="true"
+    class="shrink"
   >
     <template #header>
       <div>Bảng Xếp Hạng</div>
@@ -25,6 +26,7 @@ const teams_columns = [
   { key: 'win', label: 'Thắng'},
   { key: 'draw', label: 'Hòa'},
   { key: 'lose', label: 'Thua'},
+  { key: 'goal_difference', label: '+/-'},
   { key: 'total', label: 'Điểm'}
 ]
 

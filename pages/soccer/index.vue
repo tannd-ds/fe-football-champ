@@ -108,6 +108,7 @@ const columns = [
   { key: 'birthday', label: 'Ngày Sinh', sortable: true}, 
   { key: 'badge', label: 'Loại Cầu Thủ', sortable: true}, 
   { key: 'team_name', label: 'Đội Bóng', sortable: true}, 
+  { key: 'total_goal', label: 'Tổng Bàn Thắng', sortable: true}, 
   { key: 'actions' },
 ]
 

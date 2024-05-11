@@ -67,7 +67,9 @@
 
         <CSeasonNews :season_id="route.params.id"/>
 
-        <CSeasonLeaderboard :teams="filter_teams" />  
+        <div class="max-h-[58vh]">
+          <CSeasonLeaderboard :teams="filter_teams" />  
+        </div>
 
         <UButton
           v-if="cookie_usr_info.role === 1"

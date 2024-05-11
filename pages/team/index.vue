@@ -10,12 +10,15 @@
     <template #header>
       <div class="flex justify-between">
         <div>{{ PAGE_TITLE }}</div>
-        <UButton 
-          v-if="cookie_usr_info.role === 1"
-          @click="router.push('team/update')"
-          label="Thêm Đội Bóng"
-          icon="i-heroicons-plus-20-solid" 
-        />
+        <div class="flex flex-col gap-2">
+          <UButton 
+            v-if="cookie_usr_info.role === 1"
+            @click="router.push('team/update')"
+            label="Thêm Đội Bóng"
+            icon="i-heroicons-plus-20-solid" 
+          />
+          <CDownloadButton :data_filtered="team_info_calculated" />
+        </div>
       </div>
     </template>
 

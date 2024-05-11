@@ -21,13 +21,7 @@
               v-if="cookie_usr_info.role === 1"
               class="flex flex-col gap-2"
             >
-              <UButton 
-                color="primary"
-                icon="i-heroicons-calendar-20-solid"
-                label="Thêm Trận"
-                @click="router.push(`/match/update?season_id=${season_id}`)"
-                :disabled="!can_schedule_match"
-              />
+              <CSeasonAdminDropdown />
             </div>
             <UButton 
               v-else
@@ -57,8 +51,14 @@
           </AppBanner>
 
           <div class="pr-3 w-full max-h-full overflow-auto flex flex-col gap-4">
+            <div class="p-2 bg-gray-200 rounded text-zinc-800 text-center text-lg font-bold">Vòng 1</div>
             <CMatchItem
-              v-for="(match, match_index) in all_matches"
+              v-for="(match, match_index) in all_matches_round_1"
+              :match="match"
+            />
+            <div class="p-2 bg-gray-200 rounded text-zinc-800 text-center text-lg font-bold">Vòng 2</div>
+            <CMatchItem
+              v-for="(match, match_index) in all_matches_round_2"
               :match="match"
             />
           </div>
@@ -207,6 +207,15 @@ const filter_teams = computed(() => {
 })
 
 const { data: all_matches } = await useFetch(`http://localhost:8000/api/match/get/by_season/${route.params.id}`);
+
+// separate matches by round
+const all_matches_round_1 = computed(() => {
+  return all_matches.value.filter((match) => match.round == 1);
+})
+
+const all_matches_round_2 = computed(() => {
+  return all_matches.value.filter((match) => match.round == 2);
+})
 
 const can_schedule_match = computed(() => {
   return filter_teams.value.data.length >= 2;

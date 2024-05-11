@@ -34,6 +34,10 @@
             </svg>
             <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3"><span class="text-primary font-bold">{{ info.key }}:</span> {{ info.value }}</span>
           </li>
+
+          <li class="space-y-2">
+            <div v-for="c in category_sort_info" class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-5">{{ c }}</div>
+          </li>
         </ul>
       </AppCard>
     </UModal>
@@ -47,6 +51,19 @@ const props = defineProps({
     type: Object,
     required: true
   }
+})
+
+const category_sort_mapper = [
+  'Theo Hiệu Số Bàn Thắng',
+  'Theo Số Bàn Thắng Trên Sân Khách',
+  'Theo Kết Quả Đối Kháng 2 Đội',
+]
+
+const category_sort = props.detail.category_sort.slice(1, -1).split(',').map((item) => {
+  return parseInt(item);
+});
+const category_sort_info = category_sort.map((item) => {
+  return `${item}. ${category_sort_mapper[item - 1]}`;
 })
 
 const general_info = {
@@ -78,20 +95,12 @@ const regulation_info = {
     'value': props.detail.max_time_match,
   },
   'win_score': {
-    'key': 'Điểm thắng',
-    'value': props.detail.win_score,
-  },
-  'lose_score': {
-    'key': 'Điểm thua',
-    'value': props.detail.lose_score,
-  },
-  'draw_score': {
-    'key': 'Điểm hòa',
-    'value': props.detail.draw_score,
+    'key': 'Điểm thắng - thua - hòa',
+    'value': `${props.detail.win_score} - ${props.detail.lose_score} - ${props.detail.draw_score}`,
   },
   'category_sort': {
-    'key': 'Sắp xếp danh hiệu',
-    'value': props.detail.category_sort,
+    'key': 'Quy tắc Xếp hạng',
+    'value': '',
   },
 }
 

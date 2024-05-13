@@ -1,5 +1,5 @@
 <template>
-  <AppCard class="max-h-[30vh]">
+  <AppCard class="h-full">
     <div class="w-full h-full flex flex-col">
       <div class="mb-4 flex justify-between">
         <div class="text-2xl font-bold">Bản Tin</div>
@@ -21,6 +21,13 @@
             {{ n.title }}
           </div>
           <div class="text-right text-sm text-gray-500">{{ n.time }}</div>
+        </div>
+
+        <div 
+          v-if="news.length == 0"
+          class="h-full flex justify-center items-center text-gray-500"
+        >
+          Không có thông báo
         </div>
       </div>
     </div>

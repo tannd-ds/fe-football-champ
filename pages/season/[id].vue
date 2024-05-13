@@ -38,9 +38,11 @@
 
       <div class="w-full h-[96vh] overflow-auto flex flex-col gap-4">
 
-        <CSeasonNews :season_id="route.params.id"/>
+        <div class="h-[30vh]">
+          <CSeasonNews :season_id="route.params.id"/>
+        </div>
 
-        <div class="max-h-[58vh]">
+        <div class="h-[58vh]">
           <CSeasonLeaderboard :teams="filter_teams" />  
         </div>
 

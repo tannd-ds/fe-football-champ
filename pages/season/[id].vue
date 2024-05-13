@@ -51,12 +51,12 @@
           </AppBanner>
 
           <div class="pr-3 w-full max-h-full overflow-auto flex flex-col gap-4">
-            <div class="p-2 bg-gray-200 rounded text-zinc-800 text-center text-lg font-bold">Vòng 1</div>
+            <div class="p-1 bg-gray-200 rounded text-zinc-800 text-center font-bold">Vòng 1</div>
             <CMatchItem
               v-for="(match, match_index) in all_matches_round_1"
               :match="match"
             />
-            <div class="p-2 bg-gray-200 rounded text-zinc-800 text-center text-lg font-bold">Vòng 2</div>
+            <div class="p-1 bg-gray-200 rounded text-zinc-800 text-center font-bold">Vòng 2</div>
             <CMatchItem
               v-for="(match, match_index) in all_matches_round_2"
               :match="match"

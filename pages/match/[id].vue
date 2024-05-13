@@ -8,7 +8,7 @@
           </div>
           <UButton 
             v-if="cookie_usr_info.role === 1"
-            @click="router.push(`/match/detail/update?schedule_id=${route.params.id}`)"
+            @click="handle_add_detail"
             label="Thêm Chi Tiết"
             icon="i-heroicons-plus-20-solid" 
           />
@@ -128,4 +128,16 @@ const { value: cookie_usr_info } = useCookie('usr_info');
 let match_details = await $fetch(`http://localhost:8000/api/match/get/detail/${route.params.id}`);
 
 const match_info = await $fetch(`http://localhost:8000/api/match/get/by_schedule/${route.params.id}`);
+
+const handle_add_detail = () => {
+  if (match_info.date == null)
+    if (!confirm('Trận đấu này chưa có Thời gian thi đấu, vẫn tiếp tục?'))
+      return
+
+  if (new Date(match_info.date) > new Date())
+    if (!confirm('Trận đấu này chưa diễn ra, vẫn tiếp tục?'))
+      return
+
+  router.push(`/match/detail/update?schedule_id=${route.params.id}`)
+}
 </script>

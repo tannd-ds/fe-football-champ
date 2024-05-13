@@ -74,10 +74,7 @@
             <span class="text-zinc-400 text-sm">{{ state.date }}</span>
           </div>
 
-          <CBadge
-            v-else
-            :data="{ color: 'red', text: 'Chưa Xếp' }"
-          />
+          <CBadge v-else :data="{ color: 'red', text: 'Chưa Xếp' }" />
         </div>
       </div>
 
@@ -91,7 +88,7 @@
           alt="team_1_logo" 
           class="w-10 h-10"
         />
-        <div class="font-bold text-sm text-center">{{ match.team_1_name }}</div>
+        <div class="w-full text-xs text-center truncate">{{ match.team_1_name }}</div>
       </button>
 
       <div class="font-bold col-span-1 text-center">VS</div>
@@ -105,7 +102,7 @@
           alt="team_1_logo" 
           class="w-10 h-10"
         />
-        <div class="font-bold text-sm text-center">{{ match.team_2_name }}</div>
+        <div class="w-full text-xs text-center truncate">{{ match.team_2_name }}</div>
       </button>
 
       <div class="col-span-3 flex justify-center">
@@ -113,7 +110,7 @@
           v-if="isMatchNotPassed(match.date)"
           :data="{ color: 'green', text: 'Sắp Diễn Ra' }" 
         />
-        <span v-else>{{ match.team_1_score }}-{{ match.team_2_score }}</span>
+        <span v-else class="font-bold font-lg">{{ match.team_1_score }} - {{ match.team_2_score }}</span>
       </div>
 
       <button 

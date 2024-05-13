@@ -1,14 +1,14 @@
 <template>
   <UDropdown 
+    v-if="cookie_usr_info.role === 1"
     class="w-full"
     :items="items" 
     :popper="{ placement: 'bottom-end' }"
     mode="hover"
   >
     <UButton 
-      v-if="cookie_usr_info.role === 1"
       class="w-full cursor-context-menu"
-      label="Tải Xuống"
+      label="Xuất Dữ Liệu"
       icon="i-material-symbols-download-rounded" 
     />
   </UDropdown>

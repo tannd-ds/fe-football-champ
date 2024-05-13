@@ -1,7 +1,7 @@
 <template>
   <div class="grow h-full max-h-[98vh]">
     <AppCard class="w-full h-full overflow-auto">
-      <div class="h-full flex flex-col gap-8">
+      <div class="h-full flex flex-col gap-4">
         <h1 class="text-3xl font-bold">
           <slot name="header"></slot>
         </h1>

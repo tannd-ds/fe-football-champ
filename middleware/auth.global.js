@@ -2,9 +2,10 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
   const login_page = '/login';
   const regis_page = '/register/account';
+  const forget_password_page = '/forget_password';
   const auth_cookie = useCookie('auth');
   const { value: usr_info } = useCookie('usr_info');
-  if (to.path == login_page || to.path == regis_page) {
+  if (to.path == login_page || to.path == regis_page || to.path == forget_password_page) {
     if (auth_cookie.value) {
       return navigateTo('/');
     } else {
@@ -22,21 +23,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
   if (usr_info.role == 0) {
     setPageLayout('user');
-    // if (to.query.public == 'true') {
-    //   return;
-    // }
-    // if (!to.path.startsWith('/u/')) {
-    //   // If user is not admin, 
-    //   // and user is trying to access admin page, 
-    //   // redirect to user page
-    //   return navigateTo(`/u${to.path}`);
-    // }
   } else {
     setPageLayout('default');
-    // if (to.path.startsWith('/u/')) {
-    //   // Same as above, but for admin
-    //   return navigateTo(to.path.replace('/u', ''));
-    // }
   }
 
 })

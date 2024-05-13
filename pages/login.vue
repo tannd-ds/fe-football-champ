@@ -30,7 +30,14 @@
             name="user_password"
             autocomplete="off"
             required
-          />
+          >
+            <template #hint>
+              <div class="text-sm text-zinc-400">
+                <NuxtLink class="underline hover:text-white" to="/forget_password">Quên Mật Khẩu</NuxtLink>
+              </div>
+            </template>
+          </CInput>
+
 
           <div>
             <UButton type="submit">Đăng Nhập</UButton>

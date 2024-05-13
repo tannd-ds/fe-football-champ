@@ -4,6 +4,10 @@
     size="xl" :label="props.label" 
     :name="props.name"
   >
+    <template #hint>
+      <slot name="hint" />
+    </template>
+
     <UInput 
       v-if="props.inputType !== 'textarea'"
       :type="props.inputType"

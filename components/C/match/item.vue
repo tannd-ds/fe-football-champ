@@ -88,7 +88,12 @@
           alt="team_1_logo" 
           class="w-10 h-10"
         />
-        <div class="w-full text-xs text-center truncate">{{ match.team_1_name }}</div>
+        <div 
+          class="w-full text-xs text-center truncate"
+          :class="{'text-primary font-bold' : team_1_is_this_team()}"
+        >
+          {{ match.team_1_name }}
+        </div>
       </button>
 
       <div class="font-bold col-span-1 text-center">VS</div>
@@ -102,7 +107,12 @@
           alt="team_1_logo" 
           class="w-10 h-10"
         />
-        <div class="w-full text-xs text-center truncate">{{ match.team_2_name }}</div>
+        <div 
+          class="w-full text-xs text-center truncate"
+          :class="{'text-primary font-bold' : team_2_is_this_team()}"
+        >
+          {{ match.team_2_name }}
+        </div>
       </button>
 
       <div class="col-span-3 flex justify-center">
@@ -151,6 +161,14 @@ function isMatchNotPassed(time) {
   let current_time = new Date();
 
   return match_time > current_time;
+}
+
+function team_1_is_this_team() {
+  return cookie_usr_info.team_id == props.match.team_id_1;
+}
+
+function team_2_is_this_team() {
+  return cookie_usr_info.team_id == props.match.team_id_2;
 }
 
 async function fetch_update_time() {

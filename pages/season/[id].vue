@@ -255,6 +255,18 @@ const regis_to_season = () => {
   }
 
   if (cookie_usr_info.team_id) {
+    // check if team already in season
+    for (let team of filter_teams.value.data) {
+      if (team.team_id == cookie_usr_info.team_id) {
+        toasts.add({
+          title: 'Thất Bại',
+          description: 'Đội của bạn đã tham gia mùa giải này.',
+          color: 'yellow'
+        });
+        return;
+      }
+    }
+
     router.push({
       path: `/register/into_season`,
       query: {

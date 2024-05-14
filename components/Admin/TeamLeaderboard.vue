@@ -59,13 +59,20 @@
 
 const all_seasons = await $fetch('http://localhost:8000/api/season/get_simple');
 
-const chosen_season_id = ref(all_seasons[0].id);
+const chosen_season_id = ref(-1);
+if (all_seasons.length != 0) {
+  chosen_season_id.value = all_seasons[0].id;
+} 
 
 const teams_info = ref([]);
 const teams_on_loading = ref(false);
 
 const fetch_teams = async () => {
   teams_on_loading.value = true;
+  if (chosen_season_id.value == -1) {
+    teams_on_loading.value = false;
+    return;
+  }
   teams_info.value = await $fetch(`http://localhost:8000/api/match/listteam/${chosen_season_id.value}`);
   // only show top 3
   teams_info.value = teams_info.value.slice(0, 3);

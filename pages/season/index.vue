@@ -76,6 +76,7 @@
 
 const route = useRoute();
 const router = useRouter();
+const toasts = useToast();
 const { value: cookie_usr_info } = useCookie('usr_info');
 
 const PAGE_TITLE = 'Danh Sách Mùa Giải';
@@ -180,10 +181,24 @@ const items = (row) => [
     icon: 'i-heroicons-trash-20-solid',
     click: async () => {
       if (confirm('Bạn có chắc chắn muốn xóa mùa giải này không?')) {
-        const res = await useFetch('http://localhost:8000/api/season/delete/' + row.id);
+        const { data: res } = await useFetch('http://localhost:8000/api/season/delete/' + row.id);
         // TODO: Handle if delete fail
         
-        fetch_seasons();
+        if (res.value.code == 200) {
+          toasts.add({
+            title: 'Thành công',
+            description: 'Xóa mùa giải thành công',
+            color: 'green',
+          })
+          seasons.value = await fetch_seasons();
+        } else if (res.value.code == 500) {
+          toasts.add({
+            title: 'Thất bại',
+            description: res.value.content,
+            color: 'red',
+          })
+        }
+        
       }
     }
   }]

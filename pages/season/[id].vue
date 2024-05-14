@@ -172,13 +172,12 @@ season_info.value = season_info.value.data[0];
 
 useHead({ title: season_info.value.name_season });
 
-let all_teams = ref({'data': []});
-all_teams.value = await useFetch('http://localhost:8000/api/match/listteam/' + season_id);
+const { data: all_teams } = await useFetch('http://localhost:8000/api/match/listteam/' + season_id);
 
 const filter_teams = computed(() => {
   return {
-    data: all_teams.value.data.filter(
-    (team) => team.season_id == season_id
+    data: all_teams.value.filter(
+    (team) => team.season_id == season_id && team.name_team != null
   )};
 })
 

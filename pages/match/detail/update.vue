@@ -257,7 +257,7 @@ const schema = z.object({
   soccer_id: z.string().min(1, 'Chưa chọn cầu thủ'),
   category_goal: z.string(),
   // Time goal has to be between 0 and max_time_match
-  time_goal: z.number()
+  time_goal: z.any()
     .refine(val => {
       return parseInt(val) >= 0 && parseInt(val) <= time_splits;
     }, 'Thời điểm không hợp lệ')

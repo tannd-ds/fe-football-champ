@@ -163,7 +163,11 @@ const schema = z.object({
       .min(1, { message: 'Tên đội không được để trống' }),
   established_date: 
     z.string()
-      .min(1, { message: 'Ngày thành lập không được để trống' }),
+      .min(1, { message: 'Ngày thành lập không được để trống' })
+      .refine(
+        (date) => new Date(date) < new Date(), 
+        { message: 'Ngày thành lập không được lớn hơn ngày hiện tại' }
+      ),
   home_court: 
     z.string()
       .min(1, { message: 'Sân nhà không được để trống' }),

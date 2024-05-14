@@ -55,6 +55,7 @@
 
 const route = useRoute();
 const router = useRouter();
+const toasts = useToast();
 const { value: cookie_usr_info } = useCookie('usr_info');
 
 const PAGE_TITLE = 'Danh Sách Đội Bóng';
@@ -101,9 +102,21 @@ const items = (row) => [
     icon: 'i-heroicons-trash-20-solid',
     click: async () => {
       if (confirm('Bạn có chắc chắn muốn xóa đội bóng này không?')) {
-        const res = await useFetch('http://localhost:8000/api/team/delete/' + row.id);
+        const { data: res } = await useFetch('http://localhost:8000/api/team/delete/' + row.id);
         // TODO: Handle if delete fail
         team_info.value = await fetch_teams();
+
+        if (res.value.code == 200) {
+          toasts.add({
+            title: 'Thành công',
+            description: 'Xóa đội bóng thành công',
+          })
+        } else {
+          toasts.add({
+            title: 'Thất bại',
+            description: res.value.content,
+          })
+        }
       }
     }
   }]

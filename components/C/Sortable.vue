@@ -13,7 +13,7 @@
         :key="item.id"
         color="white"
         variant="ghost"
-        icon="i-heroicons-bars-2"
+        icon="i-material-symbols-drag-handle-rounded"
         draggable="true"
         @dragstart="start_drag($event, item)"
       >

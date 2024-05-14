@@ -95,7 +95,7 @@ const handleSubmit = async () => {
       description: 'Chào Mừng Bro!'
     });
 
-    router.back();
+    router.push({ path: '/' });
   } else {
     toasts.add({ 
       title: 'Thất Bại', 

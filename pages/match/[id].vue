@@ -4,7 +4,10 @@
       <div class="flex flex-col gap-16">
         <div class="flex justify-between">
           <div>
-            <span class="text-primary font-bold">{{ match_info.name_season }}</span> • {{ match_info.date }}
+            <span 
+              class="text-primary font-bold hover:underline cursor-pointer underline-offset-2"
+              @click="router.push(`/season/${match_info.season_id}`)"
+            >{{ match_info.name_season }}</span> • {{ match_info.date }}
           </div>
           <UButton 
             v-if="cookie_usr_info.role === 1"
@@ -33,8 +36,8 @@
                   size="lg"
                 />
               </div>
-              <span class="truncate">{{ match_info.team_2_name }}</span>
-              <span class="col-start-5 truncate">{{ match_info.team_1_name }}</span>
+              <span class="truncate">{{ match_info.team_1_name }}</span>
+              <span class="col-start-5 truncate">{{ match_info.team_2_name }}</span>
             </div>
           </div>
 

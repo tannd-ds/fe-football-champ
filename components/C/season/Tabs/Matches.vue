@@ -1,5 +1,10 @@
 <template>
   <div class="pr-3 w-full max-h-full overflow-auto flex flex-col gap-4">
+    <CMatchItem
+      v-for="(match, match_index) in other_matches"
+      :match="match"
+    />
+
     <div class="p-1 bg-gray-200 rounded text-zinc-800 text-center font-bold">Vòng 1</div>
     <CMatchItem
       v-for="(match, match_index) in all_matches_round_1"
@@ -27,5 +32,9 @@ const all_matches_round_1 = computed(() => {
 
 const all_matches_round_2 = computed(() => {
   return all_matches.value.filter((match) => match.round == 2);
+})
+
+const other_matches = computed(() => {
+  return all_matches.value.filter((match) => match.round > 2 || match.round == null);
 })
 </script>

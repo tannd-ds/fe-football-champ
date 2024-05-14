@@ -45,6 +45,14 @@
           required
         />
 
+        <CInput 
+          class="grow"
+          input-type="number"
+          v-model="state.round" 
+          label="Vòng Đấu" 
+          name="round" 
+        />
+
         <div>
           <UButton type="submit">Submit</UButton>
         </div>
@@ -72,6 +80,7 @@ useHead({
 const state = ref({
   season_id: route.query.season_id,
   date: '',
+  round: '',
   team_id_1: '',
   team_id_2: '',
 });

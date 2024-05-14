@@ -39,7 +39,9 @@
       class="p-12"
     >
       <div class="mb-4 text-2xl font-bold">{{ news_detail.title }}</div>
-      {{ news_detail.content }}
+      <div class="whitespace-pre-line">
+        {{ news_detail.content }}
+      </div>
     </div>
 
     <div 

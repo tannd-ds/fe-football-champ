@@ -1,15 +1,18 @@
 <template>
   <AppCard>
 
+  <div class="flex flex-col">
+
     <div class="mb-8 text-3xl font-bold">Tổng Quan các Mùa Giải</div>
 
-    <div class="w-2/3 h-full relative">
+    <div class="w-2/3 flex grow relative">
       <Doughnut
         class="p-4 h-full absolute -top-8 left-1/4"
         :data="data"
         :options="options"
       />
     </div>
+  </div>
   </AppCard>
 </template>
 

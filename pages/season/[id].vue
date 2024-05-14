@@ -31,14 +31,18 @@
             />
           </div>
 
-          <CSeasonTabsContainer />
+          <div class="grow flex overflow-auto">
+            <CSeasonTabsContainer />
+          </div>
         </div>
 
       </LazyAppCard>
 
       <div class="w-full h-[96vh] overflow-auto flex flex-col gap-4">
 
-        <div class="h-[30vh]">
+        <div 
+          :class="[cookie_usr_info.role == 1 ? 'h-[30vh]' : 'h-[37vh]']"
+        >
           <CSeasonNews :season_id="route.params.id"/>
         </div>
 

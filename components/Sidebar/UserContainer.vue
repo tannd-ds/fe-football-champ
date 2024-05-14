@@ -9,7 +9,8 @@
       </div>
 
       <div class="ml-8 mr-4 flex flex-col gap-2">
-        <div class="font-light mb-2 text-md">Chung</div>
+        <div class="font-light mb-2 text-md">Quản Lý</div>
+
         <UButton 
           size="lg"
           variant="ghost"
@@ -19,32 +20,6 @@
           @click="() => router.push('/')"
           square
         />
-        <UButton 
-          size="lg"
-          variant="ghost"
-          color="white" 
-          label="Mùa Giải" 
-          icon="i-heroicons-globe-alt-20-solid" 
-          @click="() => router.push({
-            path: '/season',
-            query: { public: true }
-          })"
-          square
-        />
-        <UButton 
-          size="lg"
-          variant="ghost"
-          color="white" 
-          label="Danh sách Đội Bóng" 
-          icon="i-heroicons-user-group-20-solid" 
-          @click="() => router.push({
-            path: '/team',
-            query: { public: true }
-          })"
-          square
-        />
-
-        <div class="font-light mb-2 text-md">Quản Lý</div>
 
         <UButton 
           size="lg"
@@ -73,6 +48,44 @@
           label="Thông Báo" 
           icon="i-heroicons-bell-20-solid" 
           @click="open_notification"
+          square
+        />
+
+        <div class="font-light mb-2 text-md">Tra Cứu</div>
+
+        <UButton 
+          size="lg"
+          variant="ghost"
+          color="white" 
+          label="Mùa Giải" 
+          icon="i-heroicons-globe-alt-20-solid" 
+          @click="() => router.push({
+            path: '/season',
+          })"
+          square
+        />
+
+        <UButton 
+          size="lg"
+          variant="ghost"
+          color="white" 
+          label="Đội Bóng" 
+          icon="i-heroicons-user-group-20-solid" 
+          @click="() => router.push({
+            path: '/team',
+          })"
+          square
+        />
+
+        <UButton 
+          size="lg"
+          variant="ghost"
+          color="white" 
+          label="Cầu Thủ" 
+          icon="i-heroicons-user-20-solid" 
+          @click="() => router.push({
+            path: '/soccer',
+          })"
           square
         />
 

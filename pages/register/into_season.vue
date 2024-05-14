@@ -84,21 +84,22 @@ const state = ref({
   status: cookie_usr_info.role == '0' ? 0 : 1,
 });
 
-let seasons = await useFetch('http://localhost:8000/api/season/get_new');
+let { data: seasons } = await useFetch('http://localhost:8000/api/season/get_new');
 
-
-const season_options = seasons.data.value.map((season) => {
-  return {
-    name: season.name_season,
-    value: season.id,
-  }
-})
+const season_options = computed(() => {
+  return seasons.value.map((season) => {
+    return {
+      name: season.name_season,
+      value: season.id,
+    }
+  });
+});
 
 const chosen_season = ref('');
 let policies = [];
 // update chosen_season when state.season_id change
 watch(state.value, (value) => {
-  const season = seasons.data.value.find((season) => String(season.id) === String(value.season_id));
+  const season = seasons.value.find((season) => String(season.id) === String(value.season_id));
   chosen_season.value = season;
 
   policies = [

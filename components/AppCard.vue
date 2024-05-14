@@ -1,5 +1,5 @@
 <template>
-  <div class="p-8 relative flex justify-center rounded-xl bg-zinc-900 bg-opacity-90 overflow-auto">
+  <div class="p-8 relative flex justify-center rounded-xl bg-zinc-900 bg-opacity-90">
     <div class="w-full h-full">
       <slot></slot>
     </div>

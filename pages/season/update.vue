@@ -48,6 +48,7 @@
         <UAccordion :items="advanced_settings">
           <template #default="{ item, index, open }">
             <UButton color="gray" variant="ghost" class="rounded-md" :ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }">
+              <UIcon :name="item.icon" class="w-4 h-4" />
               <span class="text-md text-zinc-300">{{ item.label }}</span>
 
               <template #trailing>
@@ -152,7 +153,7 @@
               <UFormGroup 
                 :required="false" 
                 size="xl" 
-                label="Thứ Tự Ừu Tiên Khi Xếp Hạng" 
+                label="Thứ Tự Ưu Tiên Khi Xếp Hạng" 
                 name="category_sort"
               >
                 <CSortable
@@ -193,23 +194,23 @@ const state = ref({
 });
 
 const advanced_state = ref({
-  min_age: '',
-  max_age: '',
-  min_quantity_soccer: '',
-  max_quantity_soccer: '',
-  max_quantity_foreign_soccer: '',
-  quantity_category_goal: '',
-  max_time_match: '',
-  win_score: '',
-  draw_score: '',
-  lose_score: '',
+  min_age: '16',
+  max_age: '40',
+  min_quantity_soccer: '15',
+  max_quantity_soccer: '22',
+  max_quantity_foreign_soccer: '3',
+  quantity_category_goal: '3',
+  max_time_match: '90',
+  win_score: '3',
+  draw_score: '0',
+  lose_score: '1',
   category_sort: [],
 })
 
 const advanced_settings = [
   {
-    label: 'Nâng Cao',
-    icon: 'i-heroicons-information-circle',
+    label: 'Quy Định',
+    icon: 'i-material-symbols-auto-stories-rounded',
     slot: 'advanced',
   }
 ]

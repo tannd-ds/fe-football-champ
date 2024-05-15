@@ -21,6 +21,7 @@
           />
 
           <CInput
+            :disabled="route.query.user_id"
             v-model="state.user_email"
             label="Mail"
             name="user_email"

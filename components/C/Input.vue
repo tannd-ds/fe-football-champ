@@ -14,6 +14,7 @@
       :value="modelValue"
       variant="outline"
       @input="$emit('update:modelValue', $event.target.value)"
+      :disabled="props.disabled"
     />
 
     <UTextarea 
@@ -21,6 +22,7 @@
       :value="modelValue"
       variant="outline"
       @input="$emit('update:modelValue', $event.target.value)"
+      :disabled="props.disabled"
     />
   </UFormGroup>
 </template>
@@ -48,6 +50,10 @@ const props = defineProps({
     type: String,
     default: ''
   },
+  disabled: {
+    type: Boolean,
+    default: false
+  }
 })
 
 </script>

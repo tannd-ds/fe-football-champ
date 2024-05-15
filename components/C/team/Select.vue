@@ -22,6 +22,10 @@ const props = defineProps({
   initValue: {
     type: String,
     default: ''
+  },
+  nullOption: {
+    type: Boolean,
+    default: false
   }
 });
 
@@ -44,5 +48,11 @@ const team_options = team_list.value.map((team) => {
   }
 })
 
+if (props.nullOption) {
+  team_options.unshift({
+    name: 'Không',
+    value: null,
+  });
+}
 
 </script>

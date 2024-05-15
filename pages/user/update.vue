@@ -41,6 +41,7 @@
           <CTeamSelect 
             v-model="state.team_id" 
             :init-value="state.team_id"
+            :null-option="true"
           />
 
           <div>

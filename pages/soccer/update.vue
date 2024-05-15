@@ -29,6 +29,7 @@
           :options="team_options"
           label="Đội Bóng"
           name="team_id"
+          :disabled="cookie_usr_info.role == '0'"
         />
 
         <div class="w-full flex gap-4 items-stretch">
@@ -66,6 +67,7 @@ import { z } from 'zod';
 const route = useRoute();
 const router = useRouter();
 const toasts = useToast();
+const { value: cookie_usr_info } = useCookie('usr_info');
 
 let PAGE_TITLE = 'Thêm Cầu Thủ Mới';
 let fetch_api = 'http://localhost:8000/api/soccer/add';
@@ -74,7 +76,7 @@ const state = ref({
   name_soccer: '',
   birthday: '',
   category: '',
-  team_id: '',
+  team_id: route.query.team_id || '',
 });
 
 if (route.query.soccer_id) {

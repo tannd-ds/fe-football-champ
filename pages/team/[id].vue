@@ -56,6 +56,18 @@
             icon="i-heroicons-document-plus"
             label="Đăng Ký Giải Đấu"
           />
+
+          <UButton 
+            v-if="cookie_usr_info.role === 1 || cookie_usr_info.team_id === team_info.id"
+            @click="router.push({
+              path: `/soccer/update`,
+              query: {
+                team_id: route.params.id,
+              }
+            })"
+            icon="i-heroicons-user-plus"
+            label="Thêm Cầu Thủ"
+          />
         </div>
       </div>
     </template>

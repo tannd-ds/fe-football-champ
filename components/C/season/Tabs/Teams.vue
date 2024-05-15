@@ -3,6 +3,7 @@
     <CTeamCard
       v-for="team in filter_teams"
       :info="team"
+      :season_id="route.params.id"
     />
   </div>
 </template>
@@ -21,6 +22,6 @@ const filter_teams = computed(() => {
 })
 
 // if (cookie_usr_info.role == 1)
-//   all_teams.value.push({ id: -1, });
+//   all_teams.value.push({ team_id: -1, });
 
 </script>

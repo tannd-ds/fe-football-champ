@@ -12,7 +12,7 @@
         :schema="schema"
         @submit="handleSubmit"
       >
-        <div>Đội Bóng: {{ route.query.team_name }}</div>
+        <div>Đội Bóng: {{ team_info.name_team }}</div>
 
         <CSelect
           v-model="state.season_id"
@@ -22,7 +22,7 @@
           required
         />
 
-        <!-- Thông tin mùa giải: -->
+        <!-- Thông tin mùa giải -->
         <div 
           v-if="chosen_season"
           class="space-y-2"
@@ -38,7 +38,11 @@
             >
               <UIcon 
                 name="i-heroicons-check-circle-20-solid"
-                :class="[policy.status ? 'text-green-500' : 'text-gray-500']"
+                :class="{
+                  'text-green-500': policy.status === 1,
+                  'text-red-500': policy.status === -1,
+                  'text-gray-500': policy.status === 0,
+                }"
               />
               <span>{{ policy.content }}</span>
             </li>
@@ -79,12 +83,30 @@ useHead({
 
 const state = ref({
   team_id: route.query.team_id,
-  season_id: '',
+  season_id: route.query.season_id || '',
   is_confirm: false,
   status: cookie_usr_info.role == '0' ? 0 : 1,
 });
 
 let { data: seasons } = await useFetch('http://localhost:8000/api/season/get_new');
+
+const team_info = ref({});
+
+const fetchTeamInfo = async (team_id) => {
+  if (team_id) {
+    let { data: response } = await useFetch(`http://localhost:8000/api/team/get/${team_id}`);
+    team_info.value = response.value.team[0];
+    console.log(team_info.value, 'team_info', response.value);
+  } else {
+    team_info.value = {
+      name_team: 'Không xác định',
+    };
+  }
+}
+
+onMounted(() => {
+  fetchTeamInfo(state.value.team_id);
+});
 
 const season_options = computed(() => {
   return seasons.value.map((season) => {
@@ -113,11 +135,11 @@ watch(state.value, (value) => {
       content: `Số đội tham gia: ${ chosen_season.value.quantity_team }`,
       status: 1,
     }, {
-      content: `Số cầu thủ/đội: ${ chosen_season.value.min_quantity_soccer } - ${ chosen_season.value.max_quantity_soccer }`,
-      status: 0,
+      content: `Số cầu thủ/đội: ${ chosen_season.value.min_quantity_soccer } - ${ chosen_season.value.max_quantity_soccer } (Đội bạn có: ${ team_info.value.quantity_soccer })`,
+      status: (chosen_season.value.min_quantity_soccer <= team_info.value.quantity_soccer) ? 1 : -1,
     }, {
       content: `Tuổi cầu thủ tối thiểu: ${ chosen_season.value.min_age }`,
-      status: 0,
+      status: 1,
     },
   ]
 })

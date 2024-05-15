@@ -274,7 +274,7 @@ const regis_to_season = () => {
       path: `/register/into_season`,
       query: {
         team_id: cookie_usr_info.team_id,
-        public: true,
+        season_id: season_id,
       }
     })
   } else {

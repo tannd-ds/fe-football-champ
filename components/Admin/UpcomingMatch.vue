@@ -19,10 +19,20 @@
       </div>
 
       <div class="flex flex-col gap-2 max-h-[90%] overflow-auto divide-y divide-zinc-700">
-        <CMatchCard
-          v-for="(match, match_index) in filtered_matches"
-          :match_info="match"
-        />
+        <div v-if="filtered_matches.length == 0" class="text-center text-gray-500 flex flex-col gap-2 justify-center items-center">
+          <UIcon name="i-material-symbols-calendar-clock-outline-rounded" class="w-12 h-12" />
+          <span>
+            Không có trận đấu nào
+          </span>
+        </div>
+
+        <div v-else>
+          <CMatchCard
+            v-for="(match, match_index) in filtered_matches"
+            :match_info="match"
+          />
+        </div>
+
       </div>
     </div>
   </AppCard>

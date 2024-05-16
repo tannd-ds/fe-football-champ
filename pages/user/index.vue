@@ -22,6 +22,7 @@
 
 const route = useRoute();
 const router = useRouter();
+const toasts = useToast();
 const { value: cookie_usr_info } = useCookie('usr_info');
 
 const PAGE_TITLE = 'Danh Sách Người Dùng';
@@ -68,8 +69,25 @@ const items = (row) => [
       click: async () => {
         if (!confirm('Bạn có chắc chắn muốn xóa người dùng này không?')) 
           return;
-        const res = await useFetch('http://localhost:8000/api/user/delete/' + row.id)
-        user_info.value = await fetch_users();
+
+        const { data: res } = await useFetch('http://localhost:8000/api/user/delete/' + row.id)
+
+        if (res.value.code == 200) {
+          toasts.add({
+            title: 'Thành công',
+            description: 'Xóa Người dùng thành công',
+            color: 'green',
+          })
+
+          user_info.value = await fetch_users();
+        } else {
+          toasts.add({
+            title: 'Thất bại',
+            description: res.value.content,
+            color: 'red',
+          })
+        }
+
       }
     }
   ]

@@ -42,7 +42,6 @@
           v-model="state.date" 
           label="Thời Gian Thi Đấu" 
           name="date" 
-          required
         />
 
         <CInput 

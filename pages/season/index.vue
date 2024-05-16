@@ -182,7 +182,6 @@ const items = (row) => [
     click: async () => {
       if (confirm('Bạn có chắc chắn muốn xóa mùa giải này không?')) {
         const { data: res } = await useFetch('http://localhost:8000/api/season/delete/' + row.id);
-        // TODO: Handle if delete fail
         
         if (res.value.code == 200) {
           toasts.add({

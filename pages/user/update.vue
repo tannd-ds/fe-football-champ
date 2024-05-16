@@ -109,12 +109,14 @@ const handleSubmit = async () => {
       toasts.add({
         title: 'Thành Công',
         description: res_content,
+        color: 'green',
       });
       router.back();
     } else {
       toasts.add({
         title: 'Lỗi',
         description: res_content,
+        color: 'red',
       });
     }
 

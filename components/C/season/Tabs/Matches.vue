@@ -1,40 +1,65 @@
 <template>
-  <div class="pr-3 w-full max-h-full overflow-auto flex flex-col gap-4">
-    <CMatchItem
-      v-for="(match, match_index) in other_matches"
-      :match="match"
-    />
+  <ClientOnly>
+    <div 
+      v-if="all_matches.length > 0"
+      class="pr-3 w-full max-h-full overflow-auto flex flex-col gap-4"
+    >
+      <div 
+        v-for="(round, round_index) in matches_by_round"
+        class="pr-3 w-full max-h-full overflow-auto flex flex-col gap-4"
+      >
+        <div class="p-1 bg-gray-200 rounded text-zinc-800 text-center font-bold">Vòng {{ round_names[round_index] }}</div>
+          <CMatchItem
+            v-for="(match, match_index) in round"
+            :match="match"
+            @delete="update_matches"
+            @update-match-date="update_matches"
+          />
+      </div>
+    </div>
 
-    <div class="p-1 bg-gray-200 rounded text-zinc-800 text-center font-bold">Vòng 1</div>
-    <CMatchItem
-      v-for="(match, match_index) in all_matches_round_1"
-      :match="match"
-    />
-
-    <div class="p-1 bg-gray-200 rounded text-zinc-800 text-center font-bold">Vòng 2</div>
-    <CMatchItem
-      v-for="(match, match_index) in all_matches_round_2"
-      :match="match"
-    />
-  </div>
+    <div v-else
+      class="mt-[30vh] h-full flex justify-center items-center text-gray-500"
+    >
+      Không có trận đấu nào
+    </div>
+  </ClientOnly>
 </template>
 
 <script setup>
 
 const route = useRoute();
 
-const { data: all_matches } = await useFetch(`http://localhost:8000/api/match/get/by_season/${route.params.id}`);
+const all_matches = ref([]);
+const round_names = ref([]);
+const matches_by_round = ref({});
 
-// separate matches by round
-const all_matches_round_1 = computed(() => {
-  return all_matches.value.filter((match) => match.round == 1);
-})
+const fetch_matches = async () => {
+  const { data: new_all_matches } = await useFetch(`http://localhost:8000/api/match/get/by_season/${route.params.id}`);
 
-const all_matches_round_2 = computed(() => {
-  return all_matches.value.filter((match) => match.round == 2);
-})
+  let new_round_names = [...new Set(new_all_matches.value.map((match) => match.round))];
+  let new_matches_by_round = {};
+  for (let i=0; i< new_round_names.length; i++) {
+    new_matches_by_round[new_round_names[i]] = new_all_matches.value.filter((match) => match.round == new_round_names[i]);
+  }
 
-const other_matches = computed(() => {
-  return all_matches.value.filter((match) => match.round > 2 || match.round == null);
-})
+  console.log('new matches comming!')
+
+  return {
+    all_matches: new_all_matches.value,
+    round_names: new_round_names,
+    matches_by_round: new_matches_by_round,
+  }
+}
+
+const update_matches = async () => {
+  let fetch_data = await fetch_matches();
+
+  all_matches.value = fetch_data.all_matches;
+  round_names.value = fetch_data.round_names;
+  matches_by_round.value = fetch_data.matches_by_round;
+}
+
+update_matches();
+
 </script>

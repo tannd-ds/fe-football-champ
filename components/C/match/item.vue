@@ -70,8 +70,8 @@
             v-if="state.date != '' && state.time != ''"
             class="flex flex-col items-center"
           >
-            <span class="font-bold text-xl text-center">{{ state.time }}</span>
-            <span class="text-zinc-400 text-sm">{{ state.date }}</span>
+            <span class="font-bold text-xl text-center">{{ props.match.time_only }}</span>
+            <span class="text-zinc-400 text-sm">{{ props.match.date_only }}</span>
           </div>
 
           <CBadge v-else :data="{ color: 'red', text: 'Chưa Xếp' }" />
@@ -123,13 +123,23 @@
         <span v-else class="font-bold font-lg">{{ match.team_1_score }} - {{ match.team_2_score }}</span>
       </div>
 
-      <button 
-        class="unset col-span-1 text-sm text-zinc-200 flex gap-2 items-center justify-end"
-        @click="router.push(`/match/${match.schedule_id}`)"
-      >
-        <span>Chi Tiết</span>
-        <UIcon name="i-heroicons-chevron-right" />
-      </button>
+      <div class="flex col-span-1 justify-end items-center">
+        <CMatchAdminDropdown
+          v-if="cookie_usr_info.role == 1"
+          :match="match"
+          @update-date="open_update_modal"
+          @delete="() => emit('delete')"
+        />
+
+        <button 
+          v-else
+          class="unset text-sm text-zinc-200 flex gap-2 items-center"
+          @click="router.push(`/match/${match.schedule_id}`)"
+        >
+          <span>Chi Tiết</span>
+          <UIcon name="i-heroicons-chevron-right" />
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -138,6 +148,8 @@
 const props = defineProps({
   match: Object,
 })
+
+const emit = defineEmits(['delete', 'update-match-date']);
 
 const router = useRouter();
 const toasts = useToast();
@@ -152,6 +164,10 @@ const state = ref({
 
 const open_update_modal = () => {
   if (cookie_usr_info.role == 1) {
+    state.value.date =  props.match.date ? props.match.date_only : '';
+    state.value.time =  props.match.date ? props.match.time_only : '';
+    state.value.datetime =  props.match.date;
+
     update_time.value = true;
   }
 }
@@ -192,16 +208,10 @@ async function fetch_update_time() {
       status: 'success',
     });
 
-    const date_n_time = state.value.datetime.split('T');
-    if (date_n_time.length == 2) {
-      state.value.date = date_n_time[0];
-      state.value.time = date_n_time[1].slice(0, 5);
-      state.value.time = state.value.time.slice(0, 5);
-    } else {
-      state.value.date = '';
-      state.value.time = '';
-    }
+    // emit to parent component to update matches
+    emit('update-match-date');
 
+    // close modal
     update_time.value = false;
   } else {
     toasts.add({

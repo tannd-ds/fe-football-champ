@@ -7,6 +7,7 @@
       <UForm 
         class="flex flex-col gap-3" 
         :state="state" 
+        :validate="validate"
         :schema="schema"
         @submit="handleSubmit"
       >
@@ -125,29 +126,39 @@
               />
 
               <!-- Điểm số -->
-              <div class="w-full flex gap-4 items-stretch">
-                <CInput
-                  class="grow"
-                  v-model="advanced_state.win_score"
-                  label="Điểm Số Thắng"
-                  name="win_score"
-                  input-type="number"
-                />
-                <CInput
-                  class="grow"
-                  v-model="advanced_state.draw_score"
-                  label="Điểm Số Hòa"
-                  name="draw_score"
-                  input-type="number"
-                />
-                <CInput
-                  class="grow"
-                  v-model="advanced_state.lose_score"
-                  label="Điểm Số Thua"
-                  name="lose_score"
-                  input-type="number"
-                />
+              <div>
+                <div class="w-full flex gap-4 items-stretch">
+                  <CInput
+                    class="grow"
+                    v-model="advanced_state.win_score"
+                    label="Điểm Số Thắng"
+                    name="win_score"
+                    input-type="number"
+                  />
+                  <CInput
+                    class="grow"
+                    v-model="advanced_state.draw_score"
+                    label="Điểm Số Hòa"
+                    name="draw_score"
+                    input-type="number"
+                  />
+                  <CInput
+                    class="grow"
+                    v-model="advanced_state.lose_score"
+                    label="Điểm Số Thua"
+                    name="lose_score"
+                    input-type="number"
+                  />
+                </div>
+
+                <span 
+                  v-if="score_validate_text != ''"
+                  class="text-red-400"
+                >
+                  {{ score_validate_text }}
+                </span>
               </div>
+
 
               <!-- Sắp xếp -->
               <UFormGroup 
@@ -202,8 +213,8 @@ const advanced_state = ref({
   quantity_category_goal: '3',
   max_time_match: '90',
   win_score: '3',
-  draw_score: '0',
-  lose_score: '1',
+  draw_score: '1',
+  lose_score: '0',
   category_sort: [],
 })
 
@@ -350,5 +361,38 @@ const schema = z.object({
   message: 'Ngày kết thúc phải sau ngày bắt đầu',
   path: ['end_date'],
 });
+
+const score_validate_text = ref('');
+
+const validate = (state)=> {
+  const errors = [];
+
+  let win_score = parseInt(advanced_state.value.win_score);
+  let draw_score = parseInt(advanced_state.value.draw_score);
+  let lose_score = parseInt(advanced_state.value.lose_score);
+
+  if (win_score <= draw_score || draw_score <= lose_score) {
+    score_validate_text.value = 'Điểm Thắng > Điểm Hòa > Điểm Thua!';
+
+    errors.push({
+      message: ' ',
+      path: 'win_score'
+    })
+
+    errors.push({
+      message: ' ',
+      path: 'draw_score'
+    })
+
+    errors.push({
+      message: ' ',
+      path: 'lose_score'
+    })
+  } else {
+    score_validate_text.value = '';
+  }
+
+  return errors;
+}
 
 </script>

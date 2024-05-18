@@ -21,7 +21,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
     return navigateTo(login_page);
   }
 
-  if (usr_info.role == 0) {
+  if (usr_info.role == 0 || usr_info.role == 2) {
     setPageLayout('user');
   } else {
     setPageLayout('default');

@@ -42,7 +42,12 @@ const usr_btns = [
   }], [{
     label: 'Chỉnh Sửa Tài Khoản',
     icon: 'i-heroicons-cog-8-tooth',
-    disabled: true,
+    click: () => router.push({
+      path: '/user/update/',
+      query: {
+        user_id: cookie_usr_info.value.id
+      }
+    })
   }], [{
     label: 'Đăng Xuất',
     icon: 'i-heroicons-arrow-left-on-rectangle',

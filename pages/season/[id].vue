@@ -11,7 +11,7 @@
                 <span class="text-3xl font-bold"> 
                   {{ season_info.name_season }}
                 </span>
-                <CSeasonDetail :detail="season_info"/>
+                <LazyCSeasonDetail :detail="season_info"/>
               </div>
               <div class="text-gray-500">Vietnam • {{ season_info.start_date }}</div>
             </div>

@@ -59,51 +59,59 @@ const category_sort_mapper = [
   'Theo Kết Quả Đối Kháng 2 Đội',
 ]
 
-const category_sort = props.detail.category_sort.slice(1, -1).split(',').map((item) => {
-  return parseInt(item);
+const category_sort = computed(() => {
+  return props.detail.category_sort.slice(1, -1).split(',').map((item) => {
+    return parseInt(item);
+  });
 });
-const category_sort_info = category_sort.map((item) => {
-  return `${item}. ${category_sort_mapper[item - 1]}`;
-})
 
-const general_info = {
-  'start_date': {
-    'key': 'Ngày bắt đầu',
-    'value': props.detail.start_date,
-  },
-  'end_date': {
-    'key': 'Ngày kết thúc',
-    'value': props.detail.end_date,
-  },
-}
+const category_sort_info = computed(() => {
+  return category_sort.value.map((item) => {
+    return `${item}. ${category_sort_mapper[item - 1]}`;
+  });
+});
 
-const regulation_info = {
-  'quantity_team': {
-    'key': 'Số Đội',
-    'value': props.detail.quantity_team,
-  },
-  'min_age': {
-    'key': 'Độ tuổi',
-    'value': `Từ ${props.detail.min_age} đến ${props.detail.max_age}`,
-  },
-  'min_quantity_soccer': {
-    'key': 'Số cầu thủ',
-    'value': `Từ ${props.detail.min_quantity_soccer} đến ${props.detail.max_quantity_soccer}`,
-  },
-  'max_time_match': {
-    'key': 'Thời gian tối đa một trận',
-    'value': props.detail.max_time_match,
-  },
-  'win_score': {
-    'key': 'Điểm thắng - thua - hòa',
-    'value': `${props.detail.win_score} - ${props.detail.lose_score} - ${props.detail.draw_score}`,
-  },
-  'category_sort': {
-    'key': 'Quy tắc Xếp hạng',
-    'value': '',
-  },
-}
+const general_info = computed(() => {
+  return {
+    'start_date': {
+      'key': 'Ngày bắt đầu',
+      'value': props.detail.start_date,
+    },
+    'end_date': {
+      'key': 'Ngày kết thúc',
+      'value': props.detail.end_date,
+    },
+  }
+});
 
-const open = ref(false);
+const regulation_info = computed(() => {
+  return {
+    'quantity_team': {
+      'key': 'Số Đội',
+      'value': props.detail.quantity_team,
+    },
+    'min_age': {
+      'key': 'Độ tuổi',
+      'value': `Từ ${props.detail.min_age} đến ${props.detail.max_age}`,
+    },
+    'min_quantity_soccer': {
+      'key': 'Số cầu thủ',
+      'value': `Từ ${props.detail.min_quantity_soccer} đến ${props.detail.max_quantity_soccer}`,
+    },
+    'max_time_match': {
+      'key': 'Thời gian tối đa một trận',
+      'value': props.detail.max_time_match,
+    },
+    'win_score': {
+      'key': 'Điểm thắng - thua - hòa',
+      'value': `${props.detail.win_score} - ${props.detail.lose_score} - ${props.detail.draw_score}`,
+    },
+    'category_sort': {
+      'key': 'Quy tắc Xếp hạng',
+      'value': '',
+    },
+  }
+});
 
+let open = ref(false);
 </script>

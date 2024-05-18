@@ -17,7 +17,7 @@
         >
           <CInput
             v-model="state.user_email"
-            label="Tài Khoản"
+            label="Email"
             name="user_email"
             autocomplete="off"
             required

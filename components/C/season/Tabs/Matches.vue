@@ -8,7 +8,7 @@
         v-for="(round, round_name) in matches_by_round"
         class="pr-3 w-full max-h-full overflow-auto flex flex-col gap-4"
       >
-        <div class="p-1 bg-gray-200 rounded text-zinc-800 text-center font-bold">{{ round_name }}</div>
+        <div class="p-1 bg-gray-200 rounded text-zinc-800 text-center font-bold">{{ round_name != 'Vòng null' ? round_name : 'Không có Vòng' }}</div>
           <CMatchItem
             v-for="(match, match_index) in round"
             :match="match"

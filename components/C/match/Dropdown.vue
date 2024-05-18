@@ -36,7 +36,7 @@ const items = [
     }
   }, {
     label: 'Xếp Lịch',
-    icon: 'i-heroicons-pencil-20-solid',
+    icon: 'i-material-symbols-calendar-add-on',
     click: () => {
       emit('update-date');
     }

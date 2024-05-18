@@ -124,7 +124,7 @@
       </div>
 
       <div class="flex col-span-1 justify-end items-center">
-        <CMatchAdminDropdown
+        <CMatchDropdown
           v-if="cookie_usr_info.role == 1"
           :match="match"
           @update-date="open_update_modal"

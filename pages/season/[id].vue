@@ -135,6 +135,7 @@
                 >Duyệt</UButton>
                 <UButton
                   @click="reject_regis(selected_regis)"
+                  color="red"
                 >Từ Chối</UButton>
               </div>
             </div>
@@ -165,14 +166,8 @@ const { value: cookie_usr_info } = useCookie('usr_info');
 
 const season_id = route.params.id;
 
-
 let season_info = ref({'data': []});
-season_info.value = await useFetch(`http://localhost:8000/api/season/get/${season_id}`);
-season_info.value = season_info.value.data[0];
-
-useHead({ title: season_info.value.name_season });
-
-const { data: all_teams } = await useFetch('http://localhost:8000/api/match/listteam/' + season_id);
+const all_teams = ref([]);
 
 const filter_teams = computed(() => {
   return {
@@ -181,26 +176,10 @@ const filter_teams = computed(() => {
   )};
 })
 
-// ARRANGE TABLES ------------------------------
-
-const can_arrange = computed(() => {
-  if (cookie_usr_info.role !== 1)
-    return false;
-  return true; // for testing
-  if (filter_teams.value.data.length / season_info.value.quantity_team < 0.5) 
-    return false;
-
-  for (let team of filter_teams.value.data) {
-    if (team.table !== null) return false;
-  }
-  return false;
-})
-
 // REGISTER PANEL ------------------------------
 const regis_pannel_is_open = ref(false);
 
 let all_regis = ref({'data': []});
-all_regis.value = await useFetch(`http://localhost:8000/api/season/get_registration/${season_id}`);
 let selected_regis = ref({});
 
 const regis_columns = [
@@ -236,12 +215,12 @@ watch(() => regis_response.value, async (newVal) => {
     selected_regis.value = {};
     toasts.add({
       title: 'Thành Công',
-      description: newVal.content,
+      description: newVal.value.content,
     });
   } else {
     toasts.add({
       title: 'Thất Bại',
-      description: newVal.content,
+      description: newVal.value.content,
       color: 'red'
     });
   }
@@ -286,4 +265,20 @@ const regis_to_season = () => {
   }
 }
 
+onBeforeMount(async () => {
+  // get season info
+  season_info.value = await useFetch(`http://localhost:8000/api/season/get/${season_id}`);
+  season_info.value = season_info.value.data[0];
+
+  useHead({ title: season_info.value.name_season }); // set page title
+})
+
+onMounted(async () => {
+  // get all teams in season
+  const { data: leaderboard_teams } = await useFetch('http://localhost:8000/api/match/listteam/' + season_id);
+  all_teams.value = leaderboard_teams.value;
+
+  // get all registration
+  all_regis.value = await useFetch(`http://localhost:8000/api/season/get_registration/${season_id}`);
+})
 </script>

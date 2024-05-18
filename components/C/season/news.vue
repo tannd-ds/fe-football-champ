@@ -12,7 +12,17 @@
         />
       </div>
 
-      <div class="grow flex flex-col gap-2 overflow-auto divide-y divide-gray-700">
+      
+      <div 
+        v-if="news_is_loading"
+        class="p-12 flex items-center justify-center"
+      >
+        <CLoadingIcon />
+      </div>
+
+      <div 
+        v-else
+        class="grow flex flex-col gap-2 overflow-auto divide-y divide-gray-700">
         <div v-for="n in news" :key="n.id" class="flex flex-col pt-2 gap-1">
           <div 
             class="text-base font-semibold hover:text-primary truncate cursor-pointer transition-colors duration-300 ease-in-out"
@@ -65,7 +75,8 @@ const props = defineProps({
 const router = useRouter();
 const { value: cookie_usr_info } = useCookie('usr_info');
 
-const news = await $fetch(`http://localhost:8000/api/notification/get_by_season/${props.season_id}`);
+const news = ref([]);
+const news_is_loading = ref(true);
 
 const news_detail_is_open = ref(false);
 const news_detail_is_loading = ref(false);
@@ -88,5 +99,10 @@ const create_news = () => {
     }
   })
 }
+
+onMounted(async () => {
+  news.value = await $fetch(`http://localhost:8000/api/notification/get_by_season/${props.season_id}`);
+  news_is_loading.value = false;
+})
 
 </script>

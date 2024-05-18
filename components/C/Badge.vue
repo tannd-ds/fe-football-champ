@@ -7,6 +7,7 @@
       'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300': data.color === 'purple',
       'bg-gray-100 text-gray-800 dark:bg-gray-500 dark:text-gray-900': data.color === 'gray',
       'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300': data.color === 'yellow',
+      'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300': data.color === 'blue',
     }"
   >
     {{ data.text }}

@@ -38,7 +38,16 @@
             required
           />
 
+          <CSelect
+            v-model="state.role"
+            :options="role_options"
+            label="Vai Trò"
+            name="role"
+            required
+          />
+
           <CTeamSelect 
+            v-if="state.role == '0'"
             v-model="state.team_id" 
             :init-value="state.team_id"
             :null-option="true"
@@ -71,6 +80,11 @@ const state = ref({
   role: '0',
   team_id: '',
 });
+
+const role_options = [
+  { value: '0', name: 'Quản Lý Đội Bóng' },
+  { value: '2', name: 'Cầu Thủ' },
+];
 
 
 if (route.query.user_id) {

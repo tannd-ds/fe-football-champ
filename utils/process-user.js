@@ -15,6 +15,10 @@ export default async function (users) {
       text: 'Quản Lý Đội',
       color: 'green',
     },
+    2: {
+      text: 'Cầu Thủ',
+      color: 'blue',
+    }
   };
 
   for (const user of users) {

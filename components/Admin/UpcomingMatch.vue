@@ -29,6 +29,7 @@
         <div v-else>
           <CMatchCard
             v-for="(match, match_index) in filtered_matches"
+            :index="match_index"
             :match_info="match"
           />
         </div>

@@ -1,7 +1,7 @@
 <template>
   <UDropdown 
     :items="items" 
-    :popper="{ placement: 'bottom-end' }"
+    :popper="{ placement: 'top-end' }"
   >
     <UButton 
       color="white" 

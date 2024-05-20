@@ -1,69 +1,41 @@
 <template>
   <AppCard class="w-full h-full">
-    <div class="w-full flex gap-2 overflow-auto">
-      <div v-for="season in all_seasons" :key = "season.id">
-        <UTooltip 
-          :text="season.name_season"
-          :popper="{ placement: 'top' }"
-        >
-          <div 
-            class="mb-2 px-4 py-2 w-56 cursor-pointer border border-zinc-700 rounded-lg truncate text-center"
-            :class="season.id === chosen_season_id ? 'bg-zinc-700' : 'bg-transparent'"
-            @click="chosen_season_id = season.id"
-            :title="season.name_season"
-          >
-            {{ season.name_season }}
+    <div class="h-full flex flex-col justify-between">
+      <div>
+        <div class="mb-4 text-2xl font-bold select-none">Bảng Xếp Hạng</div>
+        <div class="w-full flex gap-4 overflow-auto">
+          <div v-for="season in all_seasons" :key = "season.id">
+            <UTooltip 
+              :text="season.name_season"
+              :popper="{ placement: 'top' }"
+            >
+              <div 
+                class="mb-2 px-2 py-1 w-44 cursor-pointer border border-zinc-700 rounded-lg truncate text-center text-xs"
+                :class="season.id === chosen_season_id ? 'bg-zinc-700' : 'bg-transparent'"
+                @click="choose_season(season.id)"
+              >
+                {{ season.name_season }}
+              </div>
+            </UTooltip>
           </div>
-        </UTooltip>
-      </div>
-    </div>
-
-    <div>
-      <div 
-        v-if="teams_on_loading"
-        class="p-12 flex items-center justify-center"
-      >
-        <CLoadingIcon />
-      </div>
-
-      <div v-else>
-
-        <div 
-          v-if="teams_info.length > 0"
-          class="flex flex-col gap-4"
-        >
-          <div 
-            v-for="(team, team_index) in teams_info" 
-            :key="team.id"
-            class="p-3 flex items-center gap-1"
-          >
-            <div class="font-black text-3xl w-8">{{ team_index + 1 }}</div>
-            <LazyUAvatar :src="`http://localhost:8000/api/get_img/team__${team.url_image}`" />
-            <div class="grow">{{ team.name_team }}</div>
-            <div class="w-8">{{ team.total }}</div>
-          </div>
-
         </div>
-
-        <div v-else>
-          <div class="p-12 text-center">Không có dữ liệu</div>
-        </div>
-
       </div>
 
+      <div class="h-full flex justify-center items-center text-center">
+        <CLoadingIcon v-if="teams_on_loading" />
+
+        <CTeamLeaderboard v-else-if="teams_info.length > 0" :teams="teams_info" />
+
+        <div v-else>Chưa có Thông tin</div>
+      </div>
     </div>
   </AppCard>
 </template>
 
 <script setup>
 
-const all_seasons = await $fetch('http://localhost:8000/api/season/get_simple');
-
+const all_seasons = ref([]);
 const chosen_season_id = ref(-1);
-if (all_seasons.length != 0) {
-  chosen_season_id.value = all_seasons[0].id;
-} 
-
 const teams_info = ref([]);
 const teams_on_loading = ref(false);
 
@@ -79,6 +51,18 @@ const fetch_teams = async () => {
   teams_on_loading.value = false;
 }
 
-watch(() => chosen_season_id.value, fetch_teams, { immediate: true });
+const choose_season = (season_id) => {
+  chosen_season_id.value = season_id;
+  fetch_teams();
+}
+
+onMounted(async () => {
+  all_seasons.value = await $fetch('http://localhost:8000/api/season/get_simple');
+
+  if (all_seasons.value.length != 0)
+    chosen_season_id.value = all_seasons.value[0].id;
+
+  fetch_teams();
+})
 
 </script>

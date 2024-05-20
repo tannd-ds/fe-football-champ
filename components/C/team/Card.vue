@@ -1,9 +1,9 @@
 <template>
   <div
+    v-if="info.team_id != -1 && still_exist"
     class="relative w-full aspect-square p-4 bg-zinc-900 rounded-lg bg-opacity-80
         border border-zinc-800
         transition-all duration-200 ease-in-out"
-    v-if="info.team_id != -1 && still_exist"
   >
     <div 
       class="flex flex-col gap-2 items-center"

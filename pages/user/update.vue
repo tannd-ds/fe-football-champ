@@ -13,11 +13,12 @@
           @submit="handleSubmit"
         >
           <CInput
+            :disabled="cookie_usr_info.role != 1"
             v-model="state.user_name"
             label="Tài Khoản"
             name="user_name"
             autocomplete="off"
-            required
+            :required="!route.query.user_id"
           />
 
           <CInput
@@ -26,7 +27,7 @@
             label="Mail"
             name="user_email"
             autocomplete="off"
-            required
+            :required="!route.query.user_id"
           />
 
           <CInput
@@ -35,15 +36,14 @@
             name="user_password"
             input-type="password"
             autocomplete="off"
-            required
           />
 
           <CSelect
+            v-if="cookie_usr_info.role == 1"
             v-model="state.role"
             :options="role_options"
             label="Vai Trò"
             name="role"
-            required
           />
 
           <CTeamSelect 
@@ -54,7 +54,7 @@
           />
 
           <div>
-            <UButton type="submit">Thêm</UButton>
+            <UButton type="submit">{{ route.query.user_id == null ? 'Thêm' : 'Sửa'}}</UButton>
           </div>
         </UForm>
       </div>
@@ -68,6 +68,7 @@ import { z } from 'zod';
 const router = useRouter();
 const route = useRoute();
 const toasts = useToast();
+const cookie_usr_info = useCookie('usr_info');
 
 let PAGE_TITLE = 'Tạo Tài Khoản Mới';
 let fetch_api = 'http://localhost:8000/api/register';

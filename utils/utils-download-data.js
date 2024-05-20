@@ -11,62 +11,45 @@ export default async function (data) {
   */
   const toasts = useToast();
 
-  const dataType = ref("Text");
+  try {
+    if (data.format === "csv") {
 
-  if (data.format === "csv") {
-    const res = useFileSystemAccess({
-      suggestedName: `${data.name}.csv`,
-      dataType,
-      types: [
-        {
-          description: "CSV",
-          accept: {
-            "text/csv": [".csv"],
-          },
-        },
-      ],
-      excludeAcceptAllOption: true,
-    });
-    
-    res.data.value = convertToCSV(data.data);
+      const csvData = convertToCSV(data.data);
 
-    await res.saveAs();
-    
+      const link = document.createElement('a');
+      link.href = `data:text/csv,${encodeURIComponent(csvData)}`;
+      link.download = `${data.name}.csv`;
+      link.click();
+      
+      toasts.add({
+        title: "Downloaded",
+        description: `Đã tải xuống ${data.name}`,
+        color: "green"
+      });
+
+      return 1;
+    } else {
+      const link = document.createElement('a');
+      link.href = `data:application/json,${encodeURIComponent(JSON.stringify(data.data))}`;
+      link.download = `${data.name}.json`;
+      link.click();
+
+      toasts.add({
+        title: "Thành công",
+        description: `Đã tải xuống ${data.name}`,
+        color: "green"
+      });
+
+      return 1;
+    }
+  } catch (error) {
     toasts.add({
-      title: "Downloaded",
-      description: `Đã tải xuống ${data.name}`,
-      color: "green"
+      title: "Lỗi",
+      description: "Có lỗi xảy ra khi tải xuống dữ liệu",
+      color: "red"
     });
 
-    return 1;
-  } else {
-
-    const res = useFileSystemAccess({
-      suggestedName: `${data.name}.json`,
-      dataType,
-      types: [
-        {
-          description: "JSON",
-          accept: {
-            "application/json": [".json"],
-          },
-        },
-      ],
-      excludeAcceptAllOption: true,
-    });
-    res.data.value = JSON.stringify(data.data);
-
-    // save the file and show the "downloaded file" toast
-
-    await res.saveAs();
-
-    toasts.add({
-      title: "Thành công",
-      description: `Đã tải xuống ${data.name}`,
-      color: "green"
-    });
-
-    return 1;
+    return 0;
   }
 }
 

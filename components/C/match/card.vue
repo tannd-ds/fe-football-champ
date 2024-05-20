@@ -1,5 +1,8 @@
 <template>
-  <div class="group">
+  <div 
+    class="group list-fade-in"
+    :style="{ animationDelay: `${props.index * 0.064}s`}"
+  >
     <div 
       class="w-full h-full py-4 cursor-pointer peer"
       @click="to_match_detail"
@@ -38,6 +41,10 @@
 <script setup>
 
 const props = defineProps({
+  index: {
+    type: Number,
+    default: 0,
+  },
   match_info: Object,
 })
 

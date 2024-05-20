@@ -47,7 +47,10 @@
         </div>
 
         <div class="h-[58vh]">
-          <CSeasonLeaderboard :teams="filter_teams" />  
+          <CSeasonLeaderboard 
+            :teams="filter_teams"
+            :loading="all_teams_loading"
+          />  
         </div>
 
         <UButton
@@ -169,11 +172,12 @@ const season_id = route.params.id;
 let season_info = ref({'data': []});
 const all_teams = ref([]);
 
+const all_teams_loading = ref(true);
+
 const filter_teams = computed(() => {
-  return {
-    data: all_teams.value.filter(
+  return all_teams.value.filter(
     (team) => team.season_id == season_id && team.name_team != null
-  )};
+  );
 })
 
 // REGISTER PANEL ------------------------------
@@ -238,7 +242,7 @@ const regis_to_season = () => {
 
   if (cookie_usr_info.team_id) {
     // check if team already in season
-    for (let team of filter_teams.value.data) {
+    for (let team of filter_teams.value) {
       if (team.team_id == cookie_usr_info.team_id) {
         toasts.add({
           title: 'Thất Bại',
@@ -277,6 +281,7 @@ onMounted(async () => {
   // get all teams in season
   const { data: leaderboard_teams } = await useFetch('http://localhost:8000/api/match/listteam/' + season_id);
   all_teams.value = leaderboard_teams.value;
+  all_teams_loading.value = false;
 
   // get all registration
   all_regis.value = await useFetch(`http://localhost:8000/api/season/get_registration/${season_id}`);

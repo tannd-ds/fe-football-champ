@@ -12,6 +12,7 @@
           <CMatchItem
             v-for="(match, match_index) in round"
             :match="match"
+            :index="match_index"
             @delete="update_matches"
             @update-match-date="update_matches"
           />

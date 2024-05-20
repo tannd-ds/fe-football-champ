@@ -84,13 +84,12 @@ useHead({
   title: PAGE_TITLE,
 });
 
-let seasons = ref({'data': []});
+let seasons = ref([]);
 
 async function fetch_seasons(api='http://localhost:8000/api/season/get') {
   let { data: response } = await useFetch(api);
   return response.value;
 }
-seasons.value = await fetch_seasons();
 
 const columns = [
   { key: 'name', label: 'Tên Mùa Giải', sortable: true}, 
@@ -209,4 +208,13 @@ let onNameClick = (row) => {
     query: route.query 
   });
 }
+
+onMounted(async () => {
+  const data = ref(null);
+  while(!data.value) {
+    data.value = await fetch_seasons();
+    await nextTick();
+  }
+  seasons.value = data.value;
+})
 </script>

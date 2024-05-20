@@ -29,6 +29,7 @@
         <div v-else>
           <CMatchCard
             v-for="(match, match_index) in filtered_matches"
+            :index="match_index"
             :match_info="match"
           />
         </div>
@@ -41,7 +42,7 @@
 <script setup>
 
 const { value: cookie_usr_info } = useCookie('usr_info');
-const { data: all_matches } = await useFetch('http://localhost:8000/api/match/get/upcoming/');
+const all_matches = ref([]);
 
 const show_this_team_only = ref(false);
 
@@ -57,6 +58,10 @@ const filtered_matches = computed(() => {
     return matches;
   }
   return all_matches.value;
+});
+
+onMounted(async () => {
+  all_matches.value = await $fetch('http://localhost:8000/api/match/get/upcoming/');
 });
 
 </script>

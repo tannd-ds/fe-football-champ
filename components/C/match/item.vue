@@ -4,7 +4,9 @@
         border border-zinc-800
         transition-all duration-200 ease-in-out"
   >
-    <div class="w-full justify-between items-center grid grid-cols-11 select-none">
+    <div class="w-full justify-between items-center grid grid-cols-11 select-none list-fade-in"
+      :style="{ animationDelay: `${index * 0.064}s` }"
+    >
       <div class="ml-4 col-span-2 flex flex-col items-start class">
         <UModal 
           v-model="update_time"
@@ -146,6 +148,10 @@
 
 <script setup>
 const props = defineProps({
+  index: {
+    type: Number,
+    default: 0,
+  },
   match: Object,
 })
 

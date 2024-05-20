@@ -1,15 +1,14 @@
 <template>
-  <TableBaseViewer 
-    :data="props.teams" 
-    :columns="teams_columns" 
-    table-name="team"
-    :use-small-text="true"
-    class="shrink"
-  >
-    <template #header>
-      <div>Bảng Xếp Hạng</div>
-    </template>
-  </TableBaseViewer>
+  <AppCard class="h-full">
+    <div class="w-full h-full flex flex-col">
+      <div class="mb-4 text-2xl font-bold select-none">Bảng Xếp Hạng</div>
+
+      <CTeamLeaderboard 
+        :teams="teams"
+        :loading="loading"
+      />
+    </div>
+  </AppCard>
 </template>
 
 <script setup>
@@ -18,6 +17,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  loading: {
+    type: Boolean,
+    required: false,
+  }
 })
 
 const teams_columns = [

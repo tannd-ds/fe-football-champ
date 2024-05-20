@@ -96,15 +96,29 @@ useHead({
   title: PAGE_TITLE,
 });
 
-async function fetch_soccers(api='http://localhost:8000/api/soccer') {
-  let { data: response } = await useFetch(api);
-  response.value = await processSoccer(response.value);
+let soccers = ref([]);
 
-  return response.value;
+async function fetch_soccers(api='http://localhost:8000/api/soccer') {
+  const soccer_data = ref(null)
+  while (!soccer_data.value) {
+    let { data } = await useFetch(api);
+    soccer_data.value = data.value;
+    await nextTick();
+  }
+  soccer_data.value = await processSoccer(soccer_data.value);
+  return soccer_data.value;
 }
 
-let soccers = ref({'data': []});
-soccers.value = await fetch_soccers();
+async function fetch_team_list() {
+  const team_list_data = ref(null);
+  while (!team_list_data.value) {
+    const { data } = await useFetch('http://localhost:8000/api/team/get');
+    team_list_data.value = data.value;
+    await nextTick();
+  }
+  return team_list_data.value;
+}
+
 
 const columns = [
   { key: 'url_image', label: ''},
@@ -127,7 +141,7 @@ const items = (row) => [
     label: 'Xóa',
     icon: 'i-heroicons-trash-20-solid',
     click: async () => {
-      if (confirm('Bạn có chắc chắn muốn xóa mùa giải này không?')) {
+      if (confirm('Bạn có chắc chắn muốn xóa Cầu thủ này không?')) {
         const res = await useFetch('http://localhost:8000/api/soccer/delete/' + row.id);
         // TODO: Handle if delete fail
         soccers.value = await fetch_soccers();
@@ -151,12 +165,14 @@ const status_options = [{
   color: 'purple',
 }]
 
-const team_list = await useFetch('http://localhost:8000/api/team/get');
-const team_options = team_list.data.value.map((team) => {
-  return {
-    label: team.name_team,
-    value: team.id,
-  }
+const team_list = ref([]);
+const team_options = computed(() => {
+  return team_list.value.map((team) => {
+    return {
+      label: team.name_team,
+      value: team.id,
+    }
+  })
 })
 
 const selected_category = ref([]);
@@ -211,6 +227,11 @@ const reset_filters = () => {
 
 const any_filter_selected = computed(() => {
   return selected_category.value.length > 0 || selected_team.value.length > 0 || selected_soccer_name.value != '';
+})
+
+onMounted(async () => {
+  soccers.value = await fetch_soccers();
+  team_list.value = await fetch_team_list();
 })
 
 </script>

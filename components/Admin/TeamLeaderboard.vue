@@ -21,26 +21,12 @@
         </div>
       </div>
 
-      <div>
-        <div 
-          v-if="teams_on_loading"
-          class="p-12 flex items-center justify-center"
-        >
-          <CLoadingIcon />
-        </div>
+      <div class="h-full flex justify-center items-center text-center">
+        <CLoadingIcon v-if="teams_on_loading" />
 
-        <div v-else>
-          <div 
-            v-if="teams_info.length > 0"
-          >
-            <CTeamLeaderboard :teams="teams_info" />
-          </div>
+        <CTeamLeaderboard v-else-if="teams_info.length > 0" :teams="teams_info" />
 
-          <div v-else>
-            <div class="p-12 text-center">Không có dữ liệu</div>
-          </div>
-
-        </div>
+        <div v-else>Chưa có Thông tin</div>
       </div>
     </div>
   </AppCard>

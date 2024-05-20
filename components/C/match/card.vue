@@ -2,6 +2,7 @@
   <div 
     class="group list-fade-in"
     :style="{ animationDelay: `${props.index * 0.064}s`}"
+
   >
     <div 
       class="w-full h-full py-4 cursor-pointer peer"

@@ -18,8 +18,7 @@
 
 <script setup>
 
-const { data : stats } = await useFetch('http://localhost:8000/api/admin/number_statistics');
-
+const stats = ref([]);
 // add color to each stats
 const colors = ['bg-green-500', 'bg-orange-500', 'bg-red-600', 'bg-indigo-500']
 const icons  = [
@@ -28,8 +27,15 @@ const icons  = [
   'i-heroicons-user-circle-solid',
   'i-heroicons-newspaper-solid',
 ]
-for (let i = 0; i < stats.value.length; i++) {
-  stats.value[i].color = colors[i];
-  stats.value[i].icon = icons[i];
-}
+
+onMounted(async () => {
+  const { data : response } = await useFetch('http://localhost:8000/api/admin/number_statistics');
+  stats.value = response.value;
+
+  for (let i = 0; i < stats.value.length; i++) {
+    stats.value[i].color = colors[i];
+    stats.value[i].icon = icons[i];
+  }
+});
+
 </script>

@@ -48,12 +48,9 @@
 
 <script setup>
 
-const all_seasons = await $fetch('http://localhost:8000/api/season/get_simple');
+const all_seasons = ref([]);
 
 const chosen_season_id = ref(-1);
-if (all_seasons.length != 0) {
-  chosen_season_id.value = all_seasons[0].id;
-} 
 
 const teams_info = ref([]);
 const teams_on_loading = ref(false);
@@ -71,5 +68,13 @@ const fetch_teams = async () => {
 }
 
 watch(() => chosen_season_id.value, fetch_teams, { immediate: true });
+
+onMounted(async () => {
+  all_seasons.value = await $fetch('http://localhost:8000/api/season/get_simple');
+
+  if (all_seasons.length != 0) {
+    chosen_season_id.value = all_seasons[0].id;
+  } 
+});
 
 </script>

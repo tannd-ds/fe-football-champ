@@ -90,7 +90,6 @@ async function fetch_seasons(api='http://localhost:8000/api/season/get') {
   let { data: response } = await useFetch(api);
   return response.value;
 }
-seasons.value = await fetch_seasons();
 
 const columns = [
   { key: 'name', label: 'Tên Mùa Giải', sortable: true}, 
@@ -209,4 +208,8 @@ let onNameClick = (row) => {
     query: route.query 
   });
 }
+
+onMounted(async () => {
+  seasons.value = await fetch_seasons();
+});
 </script>

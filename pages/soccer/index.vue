@@ -104,7 +104,6 @@ async function fetch_soccers(api='http://localhost:8000/api/soccer') {
 }
 
 let soccers = ref({'data': []});
-soccers.value = await fetch_soccers();
 
 const columns = [
   { key: 'url_image', label: ''},
@@ -151,13 +150,20 @@ const status_options = [{
   color: 'purple',
 }]
 
-const team_list = await useFetch('http://localhost:8000/api/team/get');
-const team_options = team_list.data.value.map((team) => {
-  return {
-    label: team.name_team,
-    value: team.id,
-  }
+const team_list = ref([]);
+const team_options = computed(() => {
+  return team_list.value.map((team) => {
+    return {
+      label: team.name_team,
+      value: team.id,
+    }
+  })
 })
+
+const fetch_team_list = async () => {
+  const { data: response } = await useFetch('http://localhost:8000/api/team/get');
+  team_list.value = response.value;
+}
 
 const selected_category = ref([]);
 const selected_team = ref([]);
@@ -211,6 +217,11 @@ const reset_filters = () => {
 
 const any_filter_selected = computed(() => {
   return selected_category.value.length > 0 || selected_team.value.length > 0 || selected_soccer_name.value != '';
+})
+
+onMounted(async () => {
+  fetch_team_list();
+  soccers.value = await fetch_soccers();
 })
 
 </script>

@@ -10,9 +10,9 @@
               :popper="{ placement: 'top' }"
             >
               <div 
-                class="mb-2 px-4 py-2 w-52 cursor-pointer border border-zinc-700 rounded-lg truncate text-center text-sm"
+                class="mb-2 px-2 py-1 w-44 cursor-pointer border border-zinc-700 rounded-lg truncate text-center text-xs"
                 :class="season.id === chosen_season_id ? 'bg-zinc-700' : 'bg-transparent'"
-                @click="chosen_season_id = season.id"
+                @click="choose_season(season.id)"
               >
                 {{ season.name_season }}
               </div>
@@ -34,13 +34,8 @@
 
 <script setup>
 
-const all_seasons = await $fetch('http://localhost:8000/api/season/get_simple');
-
+const all_seasons = ref([]);
 const chosen_season_id = ref(-1);
-if (all_seasons.length != 0) {
-  chosen_season_id.value = all_seasons[0].id;
-} 
-
 const teams_info = ref([]);
 const teams_on_loading = ref(false);
 
@@ -56,6 +51,18 @@ const fetch_teams = async () => {
   teams_on_loading.value = false;
 }
 
-watch(() => chosen_season_id.value, fetch_teams, { immediate: true });
+const choose_season = (season_id) => {
+  chosen_season_id.value = season_id;
+  fetch_teams();
+}
+
+onMounted(async () => {
+  all_seasons.value = await $fetch('http://localhost:8000/api/season/get_simple');
+
+  if (all_seasons.value.length != 0)
+    chosen_season_id.value = all_seasons.value[0].id;
+
+  fetch_teams();
+})
 
 </script>

@@ -69,7 +69,6 @@ async function fetch_teams(api='http://localhost:8000/api/team/get') {
 }
 
 let team_info = ref({'data': []});
-team_info.value = await fetch_teams();
 
 const columns = [
   { key: 'url_image', label: ''},
@@ -154,6 +153,10 @@ const reset_filters = () => {
 
 const any_filter_selected = computed(() => {
   return search_team_name.value;
+})
+
+onMounted(async () => {
+  team_info.value = await fetch_teams();
 })
 
 </script>

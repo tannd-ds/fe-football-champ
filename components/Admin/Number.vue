@@ -5,7 +5,7 @@
       :key="stat.id" 
       class="relative rounded-lg p-6 shadow-lg dark:text-white overflow-hidden card-fade-in"
       :class="stat.color"
-      :style="{ animationDelay: `${state_index * 0.1}s`}"
+      :style="{ animationDelay: stat.delay}"
     >
       <dt class="text-lg leading-7 text-zinc-200 font-bold select-none">{{ stat.name }}</dt>
       <dd class="order-first text-8xl font-bold tracking-tight text-white select-none">{{ stat.value }}</dd>
@@ -17,6 +17,9 @@
 </template>
 
 <script setup>
+
+import { useGeneralStore } from '~/stores/generalStore';
+const general_store = useGeneralStore();
 
 const stats = ref([]);
 
@@ -34,6 +37,8 @@ onMounted(async () => {
   for (let i = 0; i < stats.value.length; i++) {
     stats.value[i].color = colors[i];
     stats.value[i].icon = icons[i];
+    stats.value[i].delay = `${general_store.n_elements * 0.1 }s`;
+    general_store.increase_n_elements();
   }
 });
 

@@ -1,56 +1,47 @@
 <template>
   <AppCard class="w-full h-full">
-    <div class="w-full flex gap-2 overflow-auto">
-      <div v-for="season in all_seasons" :key = "season.id">
-        <UTooltip 
-          :text="season.name_season"
-          :popper="{ placement: 'top' }"
-        >
-          <div 
-            class="mb-2 px-4 py-2 w-56 cursor-pointer border border-zinc-700 rounded-lg truncate text-center"
-            :class="season.id === chosen_season_id ? 'bg-zinc-700' : 'bg-transparent'"
-            @click="chosen_season_id = season.id"
-            :title="season.name_season"
-          >
-            {{ season.name_season }}
+    <div class="h-full flex flex-col justify-between">
+      <div>
+        <div class="mb-4 text-2xl font-bold select-none">Bảng Xếp Hạng</div>
+        <div class="w-full flex gap-4 overflow-auto">
+          <div v-for="season in all_seasons" :key = "season.id">
+            <UTooltip 
+              :text="season.name_season"
+              :popper="{ placement: 'top' }"
+            >
+              <div 
+                class="mb-2 px-4 py-2 w-52 cursor-pointer border border-zinc-700 rounded-lg truncate text-center text-sm"
+                :class="season.id === chosen_season_id ? 'bg-zinc-700' : 'bg-transparent'"
+                @click="chosen_season_id = season.id"
+              >
+                {{ season.name_season }}
+              </div>
+            </UTooltip>
           </div>
-        </UTooltip>
-      </div>
-    </div>
-
-    <div>
-      <div 
-        v-if="teams_on_loading"
-        class="p-12 flex items-center justify-center"
-      >
-        <CLoadingIcon />
+        </div>
       </div>
 
-      <div v-else>
-
+      <div>
         <div 
-          v-if="teams_info.length > 0"
-          class="flex flex-col gap-4"
+          v-if="teams_on_loading"
+          class="p-12 flex items-center justify-center"
         >
-          <div 
-            v-for="(team, team_index) in teams_info" 
-            :key="team.id"
-            class="p-3 flex items-center gap-1"
-          >
-            <div class="font-black text-3xl w-8">{{ team_index + 1 }}</div>
-            <LazyUAvatar :src="`http://localhost:8000/api/get_img/team__${team.url_image}`" />
-            <div class="grow">{{ team.name_team }}</div>
-            <div class="w-8">{{ team.total }}</div>
-          </div>
-
+          <CLoadingIcon />
         </div>
 
         <div v-else>
-          <div class="p-12 text-center">Không có dữ liệu</div>
+          <div 
+            v-if="teams_info.length > 0"
+          >
+            <CTeamLeaderboard :teams="teams_info" />
+          </div>
+
+          <div v-else>
+            <div class="p-12 text-center">Không có dữ liệu</div>
+          </div>
+
         </div>
-
       </div>
-
     </div>
   </AppCard>
 </template>

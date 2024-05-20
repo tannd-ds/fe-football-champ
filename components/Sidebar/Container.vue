@@ -78,7 +78,7 @@ const direct_btns = [
 ]
 
 const is_active = (path) => {
-  return String(route.path) == path;
+  return route.path.split('/')[1] == path.split('/')[1];
 }
 
 </script>

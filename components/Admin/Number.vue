@@ -1,10 +1,11 @@
 <template>
   <div class="grid grid-cols-4 gap-x-8 gap-y-20 text-center">
     <div 
-      v-for="stat in stats" 
+      v-for="(stat, state_index) in stats" 
       :key="stat.id" 
-      class="relative rounded-lg p-6 shadow-lg dark:text-white overflow-hidden"
+      class="relative rounded-lg p-6 shadow-lg dark:text-white overflow-hidden card-fade-in"
       :class="stat.color"
+      :style="{ animationDelay: `${state_index * 0.1}s`}"
     >
       <dt class="text-lg leading-7 text-zinc-200 font-bold select-none">{{ stat.name }}</dt>
       <dd class="order-first text-8xl font-bold tracking-tight text-white select-none">{{ stat.value }}</dd>

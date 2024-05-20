@@ -26,7 +26,8 @@
     <!-- Data -->
     <div
       v-for="(team, team_index) in props.teams"
-        class="relative h-12 shrink-0 overflow-visible"
+      class="relative h-12 shrink-0 overflow-visible list-fade-in"
+      :style="{ animationDelay: `${team_index * 0.064}s` }"
     >
       <div class="group absolute h-12 w-full flex items-center gap-2
         -skew-x-3 hover:scale-[102%] hover:-translate-x-1 transition-all duration-200 ease-in-out

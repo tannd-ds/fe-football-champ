@@ -54,7 +54,7 @@
         <TabPanels class="grow flex overflow-auto" :style="{height: `calc(100% - 0.5rem - 72px)`}">
           <TabPanel class="w-full h-full flex flex-col items-center">
             <CReportTabsLeaderboard 
-              class="w-full section-to-print"
+              class="w-full lg:max-w-[75%]"
               :chosen_season_id="chosen_season_id"
             />
           </TabPanel>

@@ -5,6 +5,7 @@
       :options="props.options" 
       option-attribute="name"
       :disabled="props.disabled"
+      placeholder="Lựa chọn..."
     />
   </UFormGroup>
 </template>

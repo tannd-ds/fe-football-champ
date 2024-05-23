@@ -32,6 +32,7 @@ const fetch_soccers = async () => {
     return;
   }
   soccers_info.value = await $fetch(`http://localhost:8000/api/season/top_soccers/${props.chosen_season_id}`);
+  soccers_info.value = await processSoccer(soccers_info.value);
   soccers_on_loading.value = false;
 }
 

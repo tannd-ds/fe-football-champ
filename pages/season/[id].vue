@@ -53,26 +53,30 @@
           />  
         </div>
 
-        <UButton
-          v-if="cookie_usr_info.role === 1"
-          label="Đơn Đăng Ký"
-          size="lg"
-          icon="i-heroicons-inbox-stack-20-solid"
-          @click="regis_pannel_is_open = true"
-          :disabled="all_regis.data.length == 0"
+        <div class="w-full flex flex-col card-fade-in" 
+          :style="{ animationDelay: `${general_store.n_elements *0.128}s`}"
         >
-          <template #trailing>
-              <span 
-                v-if="all_regis.data.length"
-                class="
-                  py-1 px-1 min-w-[24px] min-h-[24px] grid place-items-center 
-                  rounded-full bg-red-500 text-xs font-medium leading-none text-white content-['']
-                "
-              >
-                {{ all_regis.data.length }}
-              </span>
-            </template>
-        </UButton>
+          <UButton
+            v-if="cookie_usr_info.role === 1"
+            label="Đơn Đăng Ký"
+            size="lg"
+            icon="i-heroicons-inbox-stack-20-solid"
+            @click="regis_pannel_is_open = true"
+            :disabled="all_regis.data.length == 0"
+          >
+            <template #trailing>
+                <span 
+                  v-if="all_regis.data.length"
+                  class="
+                    py-1 px-1 min-w-[24px] min-h-[24px] grid place-items-center 
+                    rounded-full bg-red-500 text-xs font-medium leading-none text-white content-['']
+                  "
+                >
+                  {{ all_regis.data.length }}
+                </span>
+              </template>
+          </UButton>
+        </div>
       </div>
     </div>
 
@@ -161,6 +165,9 @@
 </template>
 
 <script setup>
+
+import { useGeneralStore } from '~/stores/generalStore';
+const general_store = useGeneralStore();
 
 const route = useRoute();
 const router = useRouter();

@@ -39,7 +39,7 @@
           />
 
           <CSelect
-            v-if="cookie_usr_info.role == 1"
+            v-if="cookie_usr_info.role == 1 && cookie_usr_info.id != route.query.user_id"
             v-model="state.role"
             :options="role_options"
             label="Vai Trò"

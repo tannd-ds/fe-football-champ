@@ -17,7 +17,7 @@
         >
           <CInput
             v-model="state.user_name"
-            label="Tài Khoản"
+            label="Tên Người Dùng"
             name="user_name"
             autocomplete="off"
             required
@@ -120,7 +120,7 @@ const handleSubmit = async () => {
 }
 
 const schema = z.object({
-  user_name: z.string().min(1, { message: 'Vui lòng nhập tài khoản'}),
+  user_name: z.string().min(1, { message: 'Vui lòng nhập Tên người dùng'}),
   user_email: z.string().email({ message: 'Vui lòng nhập email hợp lệ'}),
   user_password: z.string().min(1, { message: 'Vui lòng nhập mật khẩu'}),
 });

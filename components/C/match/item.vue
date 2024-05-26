@@ -38,25 +38,28 @@
                 </div>
               </div>
 
-              <UFormGroup
-                label="Thời Gian"
-              >
-                <UInput
-                  class="grow"
-                  v-model="state.datetime"
-                  label="Ngày"
-                  name="date"
-                  type="datetime-local"
-                />
-              </UFormGroup>
+              <Form :validate="validate">
+                <UFormGroup
+                  label="Thời Gian"
+                >
+                  <UInput
+                    class="grow"
+                    v-model="state.datetime"
+                    label="Ngày"
+                    name="date"
+                    type="datetime-local"
+                  />
+                </UFormGroup>
 
-              <div class="flex justify-center">
-                <UButton
-                  class="mt-4"
-                  label="Cập Nhật"
-                  @click="fetch_update_time"
-                />
-              </div>
+                <div class="flex justify-center">
+                  <UButton
+                    class="mt-4"
+                    type="submit"
+                    label="Cập Nhật"
+                    @click="fetch_update_time"
+                  />
+                </div>
+              </Form>
             </div>
           </AppCard>
         </UModal>
@@ -225,6 +228,21 @@ async function fetch_update_time() {
     });
   }
 
+}
+
+const validate = () => {
+  let errors = [];
+
+  if (state.value.datetime == '') {
+    errors.push({
+      message: 'Chưa chọn thời gian',
+      path: 'date'
+    });
+  }
+
+  errors.push('NO');
+
+  return errors;
 }
 
 </script>

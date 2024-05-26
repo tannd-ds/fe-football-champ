@@ -55,7 +55,6 @@ const columns = [
   { key: 'name_season', label: 'Mùa Giải'},
   { key: 'date_signin', label: 'Ngày Đăng Ký'},
   { key: 'badge', label: 'Trạng Thái'},
-  { key: 'table_id', label: 'Bảng'},
 ]
 
 </script>

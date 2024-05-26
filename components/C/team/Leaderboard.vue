@@ -30,13 +30,17 @@
       :style="{ animationDelay: `${team_index * 0.064}s` }"
     >
       <div class="group absolute h-12 w-full flex items-center gap-2
-        -skew-x-3 hover:scale-[102%] hover:-translate-x-1 transition-all duration-200 ease-in-out
+        -skew-x-3 transition-all duration-200 ease-in-out
         transform-gpu">
         <div class="shrink-0 w-10 h-full flex items-center justify-center bg-zinc-200 text-xl text-zinc-800 font-black">
           {{team_index + 1}}
         </div>
-        <div class="grow h-full w-full p-2 flex items-center gap-2 bg-zinc-800 text-zinc-200 font-normal
-          transition-all duration-200 ease-in-out">
+        <div 
+          class="grow h-full w-full p-2 flex items-center gap-2 bg-zinc-800 text-zinc-200 font-normal
+            hover:cursor-pointer
+            transition-all duration-200 ease-in-out"
+          @click="router.push(`/team/${team.team_id}`)"  
+        >
           <LazyUAvatar 
             :src="`http://localhost:8000/api/get_img/team__${team.url_image}`"
             alt="team_1_logo" 
@@ -59,6 +63,8 @@
 </template>
 
 <script setup>
+const router = useRouter();
+
 const props = defineProps({
   teams: {
     type: Object,

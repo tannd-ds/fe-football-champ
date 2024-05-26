@@ -44,7 +44,7 @@ const items = [
     label: 'Xóa',
     icon: 'i-heroicons-trash-20-solid',
     click: async () => {
-      if (!confirm('Bạn có chắc chắn muốn xóa mùa giải này không?'))
+      if (!confirm('Bạn có chắc chắn muốn xóa Trận đấu này không?'))
         return;
 
       const { data: res } = await useFetch('http://localhost:8000/api/match/delete/' + props.match.schedule_id);

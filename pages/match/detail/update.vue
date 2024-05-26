@@ -4,100 +4,102 @@
       {{ PAGE_TITLE }}
     </template>
     <template #main>
-      <UForm 
-        class="flex flex-col gap-3" 
-        :state="state" 
-        :schema="schema"
-        :validate="validate"
-        @submit="handleSubmit"
-      >
-        <div>Trận: {{ match_details.team_1_name }} vs. {{ match_details.team_2_name }}</div>
-
-        <CSelect
-          v-model="state.team_id"
-          :options="listteam_options"
-          label="Đội Bóng"
-          name="team_id"
-          required
-        />
-
-        <CSelect
-          v-model="state.soccer_id"
-          :options="soccers_options"
-          label="Cầu Thủ"
-          name="soccer_id"
-          :disabled="!state.team_id"
-          required
-        />
-
-        <div class="mt-8 flex items-center justify-center gap-16">
-          <div
-            v-for="method in methods"
-            class="
-                w-36 h-36 flex flex-col gap-3 items-center justify-center border border-gray-600 rounded-lg 
-                cursor-pointer transition-all duration-300 ease-in-out"
-            :class="{
-              'bg-primary-500 text-zinc-800': chosen_method === method.value,
-            }"
-            @click="chosen_method = method.value"
-          >
-            <UIcon 
-              class="text-5xl"
-              :name="method.icon" 
-            />
-            <span> {{ method.label }} </span>
-          </div>
-        </div>
-
-        <TransitionGroup name="list" tag="div">
-          <CSelect
-            v-if="chosen_method === 'foul'"
-            class="w-full"
-            v-model="state.category_goal"
-            :options="category_foul_options"
-            label="Loại Phạm Lỗi"
-            name="category_goal"
-          />
+      <ClientOnly>
+        <UForm 
+          class="flex flex-col gap-3" 
+          :state="state" 
+          :schema="schema"
+          :validate="validate"
+          @submit="handleSubmit"
+        >
+          <div>Trận: {{ match_details.team_1_name }} vs. {{ match_details.team_2_name }}</div>
 
           <CSelect
-            v-if="chosen_method === 'goal'"
-            class="w-full"
-            v-model="state.category_goal"
-            :options="category_goal_options"
-            label="Loại Bàn Thắng"
-            name="category_goal"
-          />
-        </TransitionGroup>
-
-        <div>
-          <UFormGroup 
-            size="xl" 
-            label="Thời Điểm" 
-            name="time_goal_range"
+            v-model="state.team_id"
+            :options="listteam_options"
+            label="Đội Bóng"
+            name="team_id"
             required
-          >
-          </UFormGroup>
+          />
 
-          <div class="flex gap-2 items-center">
-            <URange 
-              v-model="state.time_goal" 
-              :min="0"
-              :max="time_splits"
-            />
-            <UInput 
-              class="w-[100px]"
-              v-model="state.time_goal" 
-              type="number" 
-              size="xl"
-            />
+          <CSelect
+            v-model="state.soccer_id"
+            :options="soccers_options"
+            label="Cầu Thủ"
+            name="soccer_id"
+            :disabled="!state.team_id"
+            required
+          />
+
+          <div class="mt-8 flex items-center justify-center gap-16">
+            <div
+              v-for="method in methods"
+              class="
+                  w-36 h-36 flex flex-col gap-3 items-center justify-center border border-gray-600 rounded-lg 
+                  cursor-pointer transition-all duration-300 ease-in-out"
+              :class="{
+                'bg-primary-500 text-zinc-800': chosen_method === method.value,
+              }"
+              @click="chosen_method = method.value"
+            >
+              <UIcon 
+                class="text-5xl"
+                :name="method.icon" 
+              />
+              <span> {{ method.label }} </span>
+            </div>
           </div>
-        </div>
+
+          <TransitionGroup name="list" tag="div">
+            <CSelect
+              v-if="chosen_method === 'foul'"
+              class="w-full"
+              v-model="state.category_goal"
+              :options="category_foul_options"
+              label="Loại Phạm Lỗi"
+              name="category_goal"
+            />
+
+            <CSelect
+              v-if="chosen_method === 'goal'"
+              class="w-full"
+              v-model="state.category_goal"
+              :options="category_goal_options"
+              label="Loại Bàn Thắng"
+              name="category_goal"
+            />
+          </TransitionGroup>
+
+          <div>
+            <UFormGroup 
+              size="xl" 
+              label="Thời Điểm" 
+              name="time_goal_range"
+              required
+            >
+            </UFormGroup>
+
+            <div class="flex gap-2 items-center">
+              <URange 
+                v-model="state.time_goal" 
+                :min="0"
+                :max="time_splits"
+              />
+              <UInput 
+                class="w-[100px]"
+                v-model="state.time_goal" 
+                type="number" 
+                size="xl"
+              />
+            </div>
+          </div>
 
 
-        <div>
-          <UButton type="submit">Submit</UButton>
-        </div>
-      </UForm>
+          <div>
+            <UButton type="submit">Submit</UButton>
+          </div>
+        </UForm>
+      </ClientOnly>
     </template>
   </AppForm>
 </template>
@@ -178,11 +180,16 @@ const methods = [
 
 const chosen_method = ref('goal');
 
-const category_goal_options = [
-  { name: 'Loại 1', value: '1', },
-  { name: 'Loại 2', value: '2', },
-  { name: 'Loại 3', value: '3', },
-];
+const category_goal_options = computed(() => {
+  let options = [];
+  for (let i = 0; i < match_details.value.quantity_category_goal; i++) {
+    options.push({
+      name: `Loại ${String.fromCharCode(65 + i)}`,
+      value: i,
+    })
+  }
+  return options;
+})
 
 const category_foul_options = [
   { name: 'Thẻ Vàng', value: 'yellow_card', },

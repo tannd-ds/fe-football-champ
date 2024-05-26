@@ -1,12 +1,21 @@
 <template>
-  <AppCard class="w-[75%] h-[96vh]">
+  <AppCard class="w-[75%] h-[96vh] print:h-full section-to-print">
     <div class="h-full flex flex-col justify-start gap-4">
       <div class="flex justify-between" ref="el">
-        <div class="text-3xl font-bold select-none section-to-print">
+        <div class="text-3xl font-bold select-none print:hidden">
           Báo cáo Mùa giải
         </div>
+        <div class="hidden print:block">
+          <div class="text-3xl font-bold select-none">
+            {{ all_seasons.find(season => season.id == chosen_season_id)?.name_season }}
+          </div>
+          <div class="text-xl font-bold select-none">
+            Báo cáo Mùa giải - {{ tab_items[current_tab_index].label }}
+          </div>
+        </div>
         <UButton 
-          @click="console.log('ok')"
+          class="print:hidden"
+          @click="print_report"
           label="Xuất Báo Cáo"
           icon="i-material-symbols-download-rounded" 
         />
@@ -16,8 +25,9 @@
         as="div" 
         class="w-full flex flex-col gap-4"
         :style="{ height: `calc(100% - ${height}px - 1rem)`}"
+        @change="change_tab"
       >
-        <div class="flex gap-2 items-end">
+        <div class="flex gap-2 items-end print:hidden">
 
           <div class="flex items-center gap-2">
             <CSelect
@@ -51,10 +61,10 @@
           </TabList>
         </div>
 
-        <TabPanels class="grow flex overflow-auto" :style="{height: `calc(100% - 0.5rem - 72px)`}">
+        <TabPanels class="grow flex overflow-auto print:overflow-visible">
           <TabPanel class="w-full h-full flex flex-col items-center">
             <CReportTabsLeaderboard 
-              class="w-full lg:max-w-[75%]"
+              class="w-full lg:max-w-[75%] print:max-w-none page-break"
               :chosen_season_id="chosen_season_id"
             />
           </TabPanel>
@@ -63,7 +73,7 @@
             class="w-full h-full flex flex-col items-center"
           >
             <CReportTabsTopSoccers
-              class="w-full lg:max-w-[75%]"
+              class="w-full lg:max-w-[75%] print:max-w-none"
               :chosen_season_id="chosen_season_id"
             />
           </TabPanel>
@@ -90,6 +100,8 @@ const tab_items = [{
   label: 'Cầu Thủ Ghi Bàn',
 }]
 
+const current_tab_index = ref(0);
+
 const all_seasons = ref([]);
 const chosen_season_id = ref("-1");
 
@@ -109,20 +121,27 @@ onMounted(async () => {
     chosen_season_id.value = String(all_seasons.value[0].id);
 })
 
+const print_report = () => {
+  print();
+}
+
+const change_tab = (tab) => {
+  current_tab_index.value = tab;
+}
 </script>
 
 <style scoped>
 @media print {
-  body {
-    visibility: hidden;
-  }
+
   .section-to-print {
     visibility: visible;
     position: absolute;
-    left: 0;
-    top: 0;
     width: 100%;
     height: 100vh;
+  } 
+  
+  .page-break {
+    page-break-inside: auto;
   }
 }
 </style>

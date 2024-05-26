@@ -1,7 +1,6 @@
 <template>
   <div 
-    id="sidebar-container"
-    class="py-8 w-[380px] h-screen bg-zinc-900 bg-opacity-90 flex flex-col justify-between items-center"
+    class="py-8 w-[380px] h-screen bg-zinc-900 bg-opacity-90 flex flex-col justify-between items-center print:hidden"
   >
     <div class="w-full px-8 flex flex-col gap-8">
       <SidebarLogo />

@@ -8,6 +8,7 @@
         class="flex flex-col gap-3" 
         :state="state" 
         :schema="schema"
+        :validate="validate"
         @submit="handleSubmit"
       >
         <div>Trận: {{ match_details.team_1_name }} vs. {{ match_details.team_2_name }}</div>
@@ -199,18 +200,57 @@ watch(() => state.value.time_goal, (val) => {
 const validate = (state) => {
   const errors = [];
 
-  if (!chosen_method.value == 'goal') {
-    goal_options_value = category_goal_options.map((goal) => goal.value);
-    if (!goal_options_value.includes(state.category_goal)) {
-      errors.push('Loại bàn thắng không hợp lệ');
-    }
-    
-  } else if (!chosen_method.value == 'foul') {
-    foul_options_value = category_foul_options.map((foul) => foul.value);
-    if (!foul_options_value.includes(state.category_goal)) {
-      errors.push('Loại phạm lỗi không hợp lệ');
+  if (!state.team_id) {
+    errors.push({
+      message: 'Chưa chọn đội bóng',
+      path: 'team_id'
+    });
+  }
+
+  if (!state.soccer_id) {
+    errors.push({
+      message: 'Chưa chọn cầu thủ',
+      path: 'soccer_id'
+    });
+  }
+
+  // check if soccer is in the team
+  if (state.soccer_id) {
+    let soccer_ids = soccers_options.value.map((soccer) => String(soccer.value));
+    if (!soccer_ids.includes(state.soccer_id)) {
+      errors.push({
+        message: 'Cầu thủ không thuộc đội bóng',
+        path: 'soccer_id'
+      });
     }
   }
+
+  if (!state.category_goal) {
+    errors.push({
+      message: 'Chưa chọn loại bàn thắng',
+      path: 'category_goal'
+    });
+  }
+
+  if (chosen_method.value == 'goal') {
+    const goal_options_value = category_goal_options.map((goal) => goal.value);
+    if (!goal_options_value.includes(state.category_goal)) {
+      errors.push({
+        message: 'Loại bàn thắng không hợp lệ',
+        path: 'category_goal'
+      });
+    }
+    
+  } else if (chosen_method.value == 'foul') {
+    const foul_options_value = category_foul_options.map((foul) => foul.value);
+    if (!foul_options_value.includes(state.category_goal)) {
+      errors.push({
+        message: 'Loại phạm lỗi không hợp lệ',
+        path: 'category_goal'
+      });
+    }
+  }
+  return errors;
 }
 
 const handleSubmit = async () => {
@@ -253,9 +293,6 @@ let time_splits = String(match_details.value.max_time_match).split(':');
 time_splits = parseInt(time_splits[0]) * 60 + parseInt(time_splits[1]);
 
 const schema = z.object({
-  team_id: z.string().min(1, 'Chưa chọn đội bóng'),
-  soccer_id: z.string().min(1, 'Chưa chọn cầu thủ'),
-  category_goal: z.string(),
   // Time goal has to be between 0 and max_time_match
   time_goal: z.any()
     .refine(val => {

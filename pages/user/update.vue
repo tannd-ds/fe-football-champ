@@ -48,10 +48,17 @@
 
           <CTeamSelect 
             v-if="state.role == '0'"
+            :disabled="cookie_usr_info.role != 1"
             v-model="state.team_id" 
             :init-value="state.team_id"
             :null-option="true"
           />
+          <span 
+            v-if="cookie_usr_info.role == 0"
+            class="text-sm text-gray-500"
+          >
+            Để thay đổi đội bóng, liên hệ Admin!
+          </span>
 
           <div>
             <UButton type="submit">{{ route.query.user_id == null ? 'Thêm' : 'Sửa'}}</UButton>

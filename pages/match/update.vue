@@ -8,9 +8,10 @@
         class="flex flex-col gap-3" 
         :state="state" 
         :schema="schema"
+        :validate="validate"
         @submit="handleSubmit"
       >
-        <div>Giải Đấu: {{ route.query.season_id }}</div>
+        <div>Mùa Giải: {{ season_info.name_season }}</div>
 
         <div class="flex flex-col items-center gap-4">
           <span class="font-bold">Chọn 2 đội đấu</span>
@@ -53,7 +54,7 @@
         />
 
         <div>
-          <UButton type="submit">Submit</UButton>
+          <UButton type="submit">OK</UButton>
         </div>
       </UForm>
     </template>
@@ -75,7 +76,6 @@ useHead({
   title: PAGE_TITLE,
 });
 
-
 const state = ref({
   season_id: route.query.season_id,
   date: '',
@@ -84,10 +84,11 @@ const state = ref({
   team_id_2: '',
 });
 
-let listteam = await useFetch(`http://localhost:8000/api/match/listteam/${route.query.season_id}`);
+const season_info = ref({});
+const listteam = ref([]);
 
 const listteam_options = computed(() => {
-  return listteam.data.value.map((team) => {
+  return listteam.value.map((team) => {
     let is_disabled = (team.team_id == state.value.team_id_1 || team.team_id == state.value.team_id_2);
     return {
       name: team.name_team,
@@ -132,16 +133,40 @@ const schema = z.object({
     z.string().min(1, { message: 'Chọn 1 Đội Thi Đấu' }),
   date:
     z.string()
-      .min(1, { message: 'Thời gian không được để trống' })
-      .refine(
-        data => new Date(data) > new Date(),
-        { message: 'Thời gian không được nhỏ hơn hiện tại' }
-      )
-}).refine(
-  data => data.team_id_1 !== data.team_id_2, {
-    message: '2 đội không được giống nhau',
-  }
-);
+});
 
-console.log(schema);
+const validate = (state) => {
+  const errors = [];
+  const team_id_1 = state.team_id_1;
+  const team_id_2 = state.team_id_2;
+
+  if (team_id_1 === team_id_2) {
+    errors.push({
+      message: '2 đội không được giống nhau',
+      path: 'team_id_2'
+    });
+  }
+
+  // make sure the date is in range of the season
+  const season_start = new Date(season_info.value.start_date);
+  const season_end = new Date(season_info.value.end_date);
+  const match_date = new Date(state.date);
+
+  if (match_date < season_start || match_date > season_end) {
+    errors.push({
+      message: 'Thời gian thi đấu không nằm trong mùa giải',
+      path: 'date'
+    });
+  }
+
+  return errors;
+}
+
+onMounted(async () => {
+  const { data: season_data } = await useFetch(`http://localhost:8000/api/season/get/${route.query.season_id}`);
+  season_info.value = season_data.value[0];
+
+  const { data: listteam_data } = await useFetch(`http://localhost:8000/api/match/listteam/${route.query.season_id}`);
+  listteam.value = listteam_data.value;
+});
 </script>

@@ -2,7 +2,7 @@
   <AppCard class="h-full">
     <div class="w-full h-full flex flex-col">
       <div class="mb-4 flex justify-between">
-        <div class="text-2xl font-bold">Bản Tin</div>
+        <div class="text-2xl font-bold">Bảng Tin</div>
         <UButton 
           v-if="cookie_usr_info.role == 1"
           color="primary"

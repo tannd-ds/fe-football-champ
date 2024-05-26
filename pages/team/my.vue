@@ -32,9 +32,9 @@ useHead({
   title: PAGE_TITLE,
 });
 
-onBeforeMount(() => {
-  const { value: cookie_usr_info } = useCookie('usr_info');
+const { value: cookie_usr_info } = useCookie('usr_info');
+onMounted(() => {
   if (cookie_usr_info.team_id != null)
     router.push(`/team/${cookie_usr_info.team_id}`);
-})
+});
 </script>

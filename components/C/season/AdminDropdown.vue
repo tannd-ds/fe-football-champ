@@ -25,7 +25,18 @@ const items = [
   }, {
     label: 'Xếp Bảng Đấu',
     icon: 'i-material-symbols-table-chart-sharp',
-    click: () => {
+    click: async () => {
+      const { data } = await useFetch(`http://localhost:8000/api/match/get/by_season/${season_id}`);
+
+      // check if any match has "date" file not null
+      let has_date = data.value.some((match) => match.date !== null);
+
+      if (has_date) {
+        if (!confirm('Xếp bảng đấu sẽ xóa hết dữ liệu trận đấu đã có, bạn có chắc chắn muốn tiếp tục?')) {
+          return;
+        }
+      }
+
       router.push(`/season/arrange/${season_id}`);
     }
   }], [{

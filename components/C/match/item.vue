@@ -38,25 +38,31 @@
                 </div>
               </div>
 
-              <UFormGroup
-                label="Thời Gian"
+              <UForm 
+                :state="state"
+                :validate="validate"
+                @submit.prevent="handleSubmit"
               >
-                <UInput
-                  class="grow"
-                  v-model="state.datetime"
-                  label="Ngày"
+                <UFormGroup
+                  label="Thời Gian"
                   name="date"
-                  type="datetime-local"
-                />
-              </UFormGroup>
+                >
+                  <UInput
+                    class="grow"
+                    v-model="state.datetime"
+                    type="datetime-local"
+                  />
+                </UFormGroup>
 
-              <div class="flex justify-center">
-                <UButton
-                  class="mt-4"
-                  label="Cập Nhật"
-                  @click="fetch_update_time"
-                />
-              </div>
+                <div class="flex justify-center">
+                  <UButton
+                    type="submit"
+                    class="mt-4"
+                    label="Cập Nhật"
+                    @click.prevent="handleSubmit"
+                  />
+                </div>
+              </UForm>
             </div>
           </AppCard>
         </UModal>
@@ -226,5 +232,36 @@ async function fetch_update_time() {
   }
 
 }
+
+const handleSubmit = () => {
+  fetch_update_time();
+}
+
+const validate = (state) => {
+  let errors = [];
+
+  if (state.datetime == '' || state.datetime == null) {
+    errors.push({
+      message: 'Chưa chọn thời gian',
+      path: 'date'
+    });
+  } else {
+    // check if the time is in range of season
+    let match_time = new Date(state.datetime);
+    let season_start = new Date(props.match.start_date);
+    let season_end = new Date(props.match.end_date); 
+
+    if (match_time < season_start || match_time > season_end) {
+      errors.push({
+        message: 'Thời gian không nằm trong thời gian diễn ra giải đấu',
+        path: 'date'
+      });
+    }
+  }
+
+  return errors;
+}
+
+
 
 </script>

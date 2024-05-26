@@ -191,10 +191,14 @@ const category_goal_options = computed(() => {
   return options;
 })
 
-const category_foul_options = [
-  { name: 'Thẻ Vàng', value: 'yellow_card', },
-  { name: 'Thẻ Đỏ', value: 'red_card', },
-];
+// This is not neccessarily a computed property, but for the sake of consistency
+// with category_goal_options, I will make it a computed property
+const category_foul_options = computed(() => {
+  return [
+    { name: 'Thẻ Vàng', value: 'yellow_card', },
+    { name: 'Thẻ Đỏ', value: 'red_card', },
+  ]
+});
 
 watch(() => state.value.time_goal, (val) => {
   if (parseInt(val) < 0) {
@@ -240,7 +244,7 @@ const validate = (state) => {
   }
 
   if (chosen_method.value == 'goal') {
-    const goal_options_value = category_goal_options.map((goal) => goal.value);
+    const goal_options_value = category_goal_options.value.map((option) => String(option.value));
     if (!goal_options_value.includes(state.category_goal)) {
       errors.push({
         message: 'Loại bàn thắng không hợp lệ',
@@ -249,7 +253,7 @@ const validate = (state) => {
     }
     
   } else if (chosen_method.value == 'foul') {
-    const foul_options_value = category_foul_options.map((foul) => foul.value);
+    const foul_options_value = category_foul_options.value.map((option) => String(option.value));
     if (!foul_options_value.includes(state.category_goal)) {
       errors.push({
         message: 'Loại phạm lỗi không hợp lệ',

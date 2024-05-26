@@ -122,13 +122,29 @@ async function fetch_team_list() {
 
 const columns = [
   { key: 'url_image', label: ''},
-  { key: 'name', label: 'Tên', sortable: true}, 
+  { key: 'name', label: 'Tên'}, 
   { key: 'birthday', label: 'Ngày Sinh', sortable: true}, 
-  { key: 'badge', label: 'Loại Cầu Thủ', sortable: true}, 
+  { key: 'badge', label: 'Loại Cầu Thủ', sort: SortFn}, 
   { key: 'team_name', label: 'Đội Bóng', sortable: true}, 
   { key: 'total_goal', label: 'Tổng Bàn Thắng', sortable: true}, 
   { key: 'actions' },
 ]
+
+function SortFn (a, b, direction) {
+  console.log(a, b, direction);
+  const a_value = parseInt(a.value);
+  const b_value = parseInt(b.value);
+
+  if (a_value === b_value) {
+    return 0
+  }
+
+  if (direction === 'asc') {
+    return a_value < b_value ? -1 : 1
+  } else {
+    return a_value > b_value ? -1 : 1
+  }
+}
 
 const items = (row) => [
   [{

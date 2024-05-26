@@ -114,8 +114,12 @@ const columns = [
   { key: 'birthday', label: 'Ngày Sinh', sortable: true}, 
   { key: 'badge', label: 'Loại Cầu Thủ', sortable: true}, 
   { key: 'total_goal', label: 'Tổng Bàn Thắng', sortable: true}, 
-  { key: 'actions'}
 ]
+
+// Only admin or manager can edit and delete season
+if (cookie_usr_info.role === 1 || cookie_usr_info.team_id === team_info.value.id) {
+  columns.push({ key: 'actions' });
+}
 
 const items = (row) => [
   [{

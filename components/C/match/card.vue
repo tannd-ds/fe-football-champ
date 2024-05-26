@@ -1,6 +1,6 @@
 <template>
   <div 
-    class="group list-fade-in"
+    class="group"
     :style="{ animationDelay: `${props.index * 0.064}s`}"
   >
     <div 

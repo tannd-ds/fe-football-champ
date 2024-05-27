@@ -154,7 +154,7 @@ const validate = (state) => {
 
   if (match_date < season_start || match_date > season_end) {
     errors.push({
-      message: 'Thời gian thi đấu không nằm trong mùa giải',
+      message: `Thời gian thi đấu không nằm trong mùa giải (${season_info.value.start_date} - ${season_info.value.end_date})`,
       path: 'date'
     });
   }

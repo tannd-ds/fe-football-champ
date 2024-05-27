@@ -62,17 +62,17 @@
             size="lg"
             icon="i-heroicons-inbox-stack-20-solid"
             @click="regis_pannel_is_open = true"
-            :disabled="all_regis.data.length == 0"
+            :disabled="all_regis.length == 0"
           >
             <template #trailing>
                 <span 
-                  v-if="all_regis.data.length"
+                  v-if="all_regis.length"
                   class="
                     py-1 px-1 min-w-[24px] min-h-[24px] grid place-items-center 
                     rounded-full bg-red-500 text-xs font-medium leading-none text-white content-['']
                   "
                 >
-                  {{ all_regis.data.length }}
+                  {{ all_regis.length }}
                 </span>
               </template>
           </UButton>
@@ -276,21 +276,35 @@ const regis_to_season = () => {
   }
 }
 
-onBeforeMount(async () => {
+onMounted(async () => {
   // get season info
-  season_info.value = await useFetch(`http://localhost:8000/api/season/get/${season_id}`);
-  season_info.value = season_info.value.data[0];
+  const season_data = ref(null)
+  while (!season_data.value) {
+    let { data } = await useFetch(`http://localhost:8000/api/season/get/${season_id}`);
+    season_data.value = data.value;
+    await nextTick();
+  }
+  season_info.value = season_data.value[0];
 
   useHead({ title: season_info.value.name_season }); // set page title
-})
 
-onMounted(async () => {
   // get all teams in season
-  const { data: leaderboard_teams } = await useFetch('http://localhost:8000/api/match/listteam/' + season_id);
-  all_teams.value = leaderboard_teams.value;
+  const leaderboard_teams_data = ref(null);
+  while (!leaderboard_teams_data.value) {
+    const { data } = await useFetch('http://localhost:8000/api/match/listteam/' + season_id);
+    leaderboard_teams_data.value = data.value;
+    await nextTick();
+  }
+  all_teams.value = leaderboard_teams_data.value;
   all_teams_loading.value = false;
 
   // get all registration
-  all_regis.value = await useFetch(`http://localhost:8000/api/season/get_registration/${season_id}`);
+  const all_regis_data = ref(null);
+  while (!all_regis_data.value) {
+    const { data } = await useFetch(`http://localhost:8000/api/season/get_registration/${season_id}`);
+    all_regis_data.value = data.value;
+    await nextTick();
+  }
+  all_regis.value = all_regis_data.value;
 })
 </script>
